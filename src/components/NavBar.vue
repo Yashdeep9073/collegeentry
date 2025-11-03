@@ -7,7 +7,7 @@
         class="flex items-center gap-2 font-bold text-xl cursor-pointer"
         @click="goHomeWithHash"
       >
-        <img src="../assets/college-entry.svg" alt="logo" class="h-8" />
+        <img src="../assets/white-logo.svg" alt="logo" class="h-10" />
       </div>
 
       <ul class="hidden lg:flex items-center gap-6 text-sm font-medium">
@@ -41,14 +41,14 @@
     </span>
 
     <ul
-        class="absolute left-0 top-full bg-white text-gray-900 w-48 mt-3 rounded-lg shadow-2xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 transform group-hover:translate-y-0 translate-y-2"
+        class="absolute left-0 top-full bg-white text-gray-900 w-48 mt-3 rounded-lg shadow-2xl  opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 transform group-hover:translate-y-0 translate-y-2"
     >
-        <li class="px-4 py-2.5 hover:bg-orange-50 hover:text-[#FF5C00] cursor-pointer text-sm border-b">
+        <li class="px-4 py-2.5 hover:bg-orange-50 hover:text-[#FF5C00] cursor-pointer text-sm ">
             Boards
         </li>
         <router-link
             to="/contact-us"
-            class="block px-4 py-2.5 hover:bg-orange-50 hover:text-[#FF5C00] cursor-pointer text-sm border-b"
+            class="block px-4 py-2.5 hover:bg-orange-50 hover:text-[#FF5C00] cursor-pointer text-sm "
         >
             Contact Us
         </router-link>

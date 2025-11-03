@@ -1,203 +1,324 @@
 <script setup>
-import { ref, watch, computed } from 'vue';
+import { ref, onMounted } from "vue";
 
-const props = defineProps({
-  isOpen: {
-    type: Boolean,
-    required: true,
-  },
-  activeTab: {
-    type: String,
-    required: true,
+const API_URL_FETCH_WEBSITE_MEDIA = import.meta.env.VITE_FETCH_WEBSITE_MEDIA;
+import { useMediaStore } from "../../store/mediaStore";
+const mediaStore = useMediaStore();
+const showModal = ref(false);
+
+const images = ref([]);
+const currentIndex = ref(0);
+
+onMounted(async () => {
+  try {
+    const res = await fetch(API_URL_FETCH_WEBSITE_MEDIA);
+    const result = await res.json();
+
+    images.value = result.data
+      .filter((item) => item.category === "BANNER")
+      .map((item) => encodeURI(item.url));
+
+    if (images.value.length === 0) {
+      images.value = [
+        "https://images.pexels.com/photos/1454360/pexels-photo-1454360.jpeg",
+      ];
+    }
+
+    setInterval(() => {
+      currentIndex.value = (currentIndex.value + 1) % images.value.length;
+    }, 4000);
+  } catch (error) {
+    console.log("Banner Fetch Error:", error);
   }
 });
 
-const emit = defineEmits(['close', 'update:activeTab']);
+const tabs = ["Colleges", "Exams", "Courses"];
+const activeTab = ref("Colleges");
+const placeholderText = ref("Enter College Name");
 
-// Local state for search and filtering
-const localSearchText = ref('');
-const tabs = ["Colleges", "Exams", "Courses"]; // Reduced tabs for simplicity, use all your tabs if needed
-const popularSearches = ref([
-    { name: 'Chhattisgarh Pre Agriculture Test (CG PAT)', type: 'Exam' },
-    { name: 'AIFD WAT', type: 'Exam' },
-    { name: 'M.Des [Master of Design]', type: 'Course' },
-    { name: 'DECE LE', type: 'Exam' },
-    { name: 'CMAT', type: 'Exam' },
-    { name: 'JEPBN', type: 'Exam' },
+function changeTab(tab) {
+  activeTab.value = tab;
+  placeholderText.value =
+    tab === "Colleges"
+      ? "Enter College Name"
+      : tab === "Exams"
+      ? "Enter Exam Name"
+      : "Enter Course Name";
+}
+
+const searchText = ref("");
+const popular = ref([
+  { name: "FDDI AIST", type: "Exam" },
+  { name: "MAH MArch CET", type: "Exam" },
+  { name: "Lucknow University Entrance Exam", type: "Exam" },
+  { name: "HPU B.Ed Entrance Exam", type: "Exam" },
+  { name: "BCA [Bachelor of Computer Application]", type: "Course" },
+  { name: "Master's in City Planning (MCP)", type: "Course" },
 ]);
 
-// Computed property for placeholder text based on the active tab
-const placeholderText = computed(() => {
-    return `Search ${props.activeTab}...`;
-});
+function openSearchModal() {
+  showModal.value = true;
+}
 
-// Function to handle tab change within the modal
-const handleTabChange = (tab) => {
-    emit('update:activeTab', tab);
-    localSearchText.value = ''; // Clear search when tab changes
-};
+function closeModal() {
+  showModal.value = false;
+}
 
-// Function to close the modal
-const closeModal = () => {
-    emit('close');
-    localSearchText.value = ''; // Clear search on close
-};
-
-// Watch for the modal opening to focus the input
-watch(() => props.isOpen, (newVal) => {
-    if (newVal) {
-        document.body.style.overflow = 'hidden'; // Prevent background scroll
-        // Focus the input field when modal opens
-        setTimeout(() => {
-            document.getElementById('modal-search-input').focus();
-        }, 100); 
-    } else {
-        document.body.style.overflow = ''; // Re-enable background scroll
-    }
-});
-
-// Mock Search Results (Filter popular searches or a larger list based on input)
-const searchResults = computed(() => {
-    const query = localSearchText.value.toLowerCase();
-
-    if (query.length < 3) {
-        return popularSearches.value; // Show popular searches if query is short
-    }
-    
-    // Simple filter logic for demo
-    return popularSearches.value.filter(item => 
-        item.name.toLowerCase().includes(query)
-    );
-});
-
-// Handle the actual search submit
-const handleSearchSubmit = () => {
-    if (localSearchText.value.length > 2) {
-        // In a real app, this would trigger navigation or an API call
-        alert(`Searching for "${localSearchText.value}" in ${props.activeTab}`);
-        closeModal();
-    }
-};
 
 </script>
 
 <template>
-  <Transition name="modal">
-    <div v-if="isOpen" class="modal-backdrop" @click.self="closeModal">
-      <div class="modal-container">
-        
-        <div class="p-8 bg-white border-b border-gray-100 shadow-sm sticky top-0 z-10">
-            <div class="flex justify-center space-x-6 mb-6">
-                <button
-                    v-for="tab in tabs"
-                    :key="tab"
-                    @click="handleTabChange(tab)"
-                    :class="{
-                        'text-red-500 border-b-2 border-red-500 font-semibold': activeTab === tab,
-                        'text-gray-500 hover:text-red-500': activeTab !== tab,
-                    }"
-                    class="py-2 px-3 text-lg transition duration-150"
-                >
-                    {{ tab }}
-                </button>
-            </div>
+  <div
+    v-if="images.length"
+    class="banner"
+    :style="`background-image: url('${images[currentIndex]}')`"
+  >
+    <div class="overlay">
+      <h1>College Entry: One Platform. Endless Educational Possibilities</h1>
 
-            <form @submit.prevent="handleSearchSubmit" class="flex max-w-2xl mx-auto border border-gray-300 rounded-lg overflow-hidden shadow-lg">
-                <input
-                    id="modal-search-input"
-                    type="text"
-                    v-model="localSearchText"
-                    :placeholder="placeholderText"
-                    class="flex-grow px-5 py-3 text-lg text-gray-700 focus:outline-none"
-                />
-                <button 
-                    type="submit" 
-                    class="bg-red-500 text-white px-8 py-3 font-bold hover:bg-red-600 transition duration-150"
-                >
-                    Search
-                </button>
-            </form>
-        </div>
-
-        <div class="max-w-2xl mx-auto mt-6 px-4 pb-12">
-            <p v-if="localSearchText.length < 3" class="text-sm text-gray-500 mb-4 font-medium">
-                Type 3 or more characters for search results
-            </p>
-
-            <h3 v-if="localSearchText.length < 3" class="text-base font-bold text-gray-700 mb-3 flex items-center">
-                <i class="fas fa-star text-yellow-500 mr-2"></i> Popular Searches
-            </h3>
-            
-            <div class="space-y-1">
-                <div 
-                    v-for="(item, index) in searchResults" 
-                    :key="index"
-                    class="flex justify-between items-center p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition duration-100"
-                    @click="localSearchText = item.name; handleSearchSubmit()"
-                >
-                    <span class="text-gray-800 font-medium">{{ item.name }}</span>
-                    <span class="text-xs font-semibold text-gray-400 border border-gray-200 px-2 py-0.5 rounded-full">{{ item.type }}</span>
-                </div>
-
-                <div v-if="localSearchText.length >= 3 && searchResults.length === 0" class="text-center py-8">
-                    <p class="text-gray-500">No results found for "{{ localSearchText }}" in {{ activeTab }}.</p>
-                </div>
-            </div>
-        </div>
-
-        <button class="modal-close-btn" @click="closeModal">
-            <i class="fas fa-times text-2xl"></i>
+      <!-- Tabs -->
+      <div class="tabs">
+        <button
+          v-for="tab in tabs"
+          :key="tab"
+          :class="{ active: activeTab === tab }"
+          @click="changeTab(tab)"
+        >
+          {{ tab }}
         </button>
       </div>
+
+      <!-- Search Box -->
+      <div class="search-box" @click="openSearchModal">
+        <input
+          class="text-black"
+          type="text"
+          v-model="searchText"
+          :placeholder="placeholderText"
+          readonly
+        />
+        <button @click.stop="openSearchModal">
+          <i class="fa fa-search"></i> Search
+        </button>
+      </div>
+
+      <div class="dots">
+        <span
+          v-for="(img, i) in images"
+          :key="i"
+          :class="{ active: currentIndex === i }"
+          @click="currentIndex = i"
+        ></span>
+      </div>
     </div>
-  </Transition>
+  </div>
+
+  <!-- Full Page Search Modal -->
+  <div v-if="showModal" class="modal-page">
+    <div class="modal-header">
+      <input
+        type="text"
+        v-model="searchText"
+        placeholder="Search Colleges, Courses, Exams"
+      />
+      <button class="search-btn">Search</button>
+      <button class="close-btn" @click="closeModal">&times;</button>
+    </div>
+
+    <p class="hint">Type 3 or more characters for search results</p>
+
+  
+
+    <div class="section popular">
+      <div class="section-header">
+        <span class="icon">⭐</span>
+        <strong>Popular Searches</strong>
+      </div>
+      <ul>
+        <li v-for="(p, index) in popular" :key="index">
+          <span>{{ p.name }}</span>
+          <span class="type">{{ p.type }}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
 </template>
 
 <style scoped>
-/* Full Screen Modal Styles */
-.modal-backdrop {
+/* ---------- Banner ---------- */
+.banner {
+  height: 450px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  transition: background 0.5s ease-in-out;
+}
+
+.overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  text-align: center;
+  color: white;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+/* ---------- Tabs ---------- */
+.tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.tabs button {
+  padding: 10px 22px;
+  border-radius: 6px;
+  background: white;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  color: #333;
+}
+
+.tabs button.active {
+  background: #0055ff;
+  color: white;
+}
+
+/* ---------- Search Box ---------- */
+.search-box {
+  display: flex;
+  width: 60%;
+  max-width: 600px;
+  background: white;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.search-box input {
+  flex: 1;
+  border: none;
+  padding: 12px;
+  font-size: 16px;
+}
+
+.search-box button {
+  background: #ff5c00;
+  border: none;
+  padding: 12px 20px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* ---------- Full Page Modal ---------- */
+.modal-page {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(255, 255, 255, 0.98); /* Near-white opaque background */
-  display: flex;
-  justify-content: center;
-  z-index: 1000; /* Ensure it's above everything */
-  overflow-y: auto;
-}
-
-.modal-container {
   width: 100%;
-  position: relative;
+  height: 100%;
+  background: #f3f2ef;
+  padding: 80px 120px;
+  z-index: 2000;
+  overflow-y: auto;
+  box-sizing: border-box;
 }
 
-/* Close button style */
-.modal-close-btn {
-  position: fixed;
-  top: 30px;
-  right: 30px;
+.modal-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto 20px auto;
+}
+
+.modal-header input {
+  flex: 1;
+  padding: 14px 16px;
+  border: 1px solid #ccc;
+  border-right: none;
+  border-radius: 4px 0 0 4px;
+  font-size: 16px;
+}
+
+.search-btn {
+  background: #ff5c5c;
+  color: white;
+  border: none;
+  padding: 14px 24px;
+  border-radius: 0 4px 4px 0;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-btn {
   background: none;
   border: none;
-  color: #333;
+  font-size: 26px;
+  margin-left: 12px;
   cursor: pointer;
-  padding: 10px;
-  z-index: 1010;
-  transition: transform 0.2s;
+  color: #444;
 }
 
-.modal-close-btn:hover {
-    color: #ff5c00;
-    transform: rotate(90deg);
+.hint {
+  color: #666;
+  margin: 10px auto 30px auto;
+  font-size: 15px;
+  max-width: 1100px;
 }
 
-/* Transition styles */
-.modal-enter-active, .modal-leave-active {
-  transition: opacity 0.3s ease;
+/* ---------- Sections ---------- */
+.section {
+  max-width: 1100px;
+  margin: 0 auto 40px auto;
 }
 
-.modal-enter-from, .modal-leave-to {
-  opacity: 0;
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.section-header .clear {
+  margin-left: auto;
+  color: #ff5c5c;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.section ul li {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-top: 1px solid #ddd;
+  font-size: 15px;
+}
+
+.section ul li:first-child {
+  border-top: none;
+}
+
+.type {
+  color: #777;
+  font-size: 14px;
 }
 </style>

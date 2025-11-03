@@ -58,7 +58,7 @@ const scrollingList = [...trendingList.value, ...trendingList.value];
 /* Items */
 .track span {
   font-size: 18px;
-  color: #ff4d4f;
+  color: #155DFC;
   font-weight: 500;
   cursor: pointer;
   white-space: nowrap;

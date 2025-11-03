@@ -24,9 +24,7 @@ function goToCollege(college) {
 <template>
   <div class="featured-container">
     <div class="section-header">
-      <span></span>
       <h2>Popular Colleges</h2>
-      <span></span>
     </div>
 
     <!-- Loading State -->
@@ -37,7 +35,7 @@ function goToCollege(college) {
       Failed to load colleges: {{ collegeStore.error }}
     </div>
 
-    <!-- Slider (only if data available) -->
+    <!-- Colleges Slider -->
     <Swiper
       v-else
       :modules="[Navigation, Autoplay]"
@@ -55,14 +53,14 @@ function goToCollege(college) {
       }"
     >
       <SwiperSlide
-        v-for="(college, index) in collegeStore.collegeList"
+        v-for="(college, index) in collegeStore.collegeList.slice(0, 10)"
         :key="college.id || index"
       >
-       <div class="college-card" @click="goToCollege(college)">
+        <div class="college-card" @click="goToCollege(college)">
           <img
             :src="college.details.thumbnail || fallbackImage"
             class="college-img"
-            :alt="college.name"
+            alt="college image"
           />
           <h3>{{ college.name }}</h3>
           <p class="location">{{ college.location }}</p>
@@ -105,12 +103,22 @@ function goToCollege(college) {
 
 /* College Card */
 .college-card {
+  /* Set a fixed height for consistency */
+  height: 320px; /* Adjust this value as needed based on your design */
+
+  /* Make it a Flex container to control vertical alignment */
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  justify-content: flex-start; /* Align content from the top */
+
   background: #fff;
   border-radius: 12px;
-  overflow: hidden;
+  overflow: hidden; /* Crucial: Hides content that exceeds the fixed height */
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
   transition: transform 0.3s ease;
+  cursor: pointer; /* Added cursor to signal clickability */
 }
+
 .college-card:hover {
   transform: translateY(-6px);
 }
@@ -122,63 +130,35 @@ function goToCollege(college) {
 }
 
 h3 {
+  /* Enforce a fixed height for the heading area */
+  height: 48px; /* Should accommodate 2-3 lines of text (e.g., 2 lines * 24px line-height) */
+
   margin-top: 12px;
   font-size: 18px;
   font-weight: 600;
+  padding: 0 10px; /* Add some horizontal padding */
+
+  /* Text Truncation for multiple lines (Cross-Browser) */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limit to 2 lines */
+  -webkit-box-orient: vertical;
 }
 
 .location {
   font-size: 14px;
   color: #777;
   margin-bottom: 15px;
+  padding: 0 10px; /* Match horizontal padding with h3 */
+  /* This ensures the location is always at the bottom of the content area */
 }
 
 .loading,
 .error {
   text-align: center;
+  color: #666;
   font-size: 16px;
-  color: #555;
   margin-top: 20px;
-}
-
-.custom-buttons {
-  position: relative;
-}
-.btn-prev,
-.btn-next {
-  position: absolute;
-  top: -60px;
-  background: #fff;
-  border: none;
-  font-size: 25px;
-  font-weight: bold;
-  padding: 10px 16px;
-  border-radius: 50%;
-  cursor: pointer;
-  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.25);
-  transition: 0.3s;
-}
-.btn-prev:hover,
-.btn-next:hover {
-  background: #f26c6c;
-  color: #fff;
-}
-.btn-prev {
-  left: 10%;
-}
-.btn-next {
-  right: 10%;
-}
-
-@media (max-width: 640px) {
-  .btn-prev,
-  .btn-next {
-    top: -45px;
-    font-size: 20px;
-    padding: 8px 12px;
-  }
-  .college-img {
-    height: 160px;
-  }
 }
 </style>

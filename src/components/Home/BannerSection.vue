@@ -50,9 +50,24 @@ function changeTab(tab) {
 }
 
 const searchText = ref("");
-// function handleSearch() {
-//   alert(`${activeTab.value} search: ${searchText.value}`);
-// }
+const popular = ref([
+  { name: "FDDI AIST", type: "Exam" },
+  { name: "MAH MArch CET", type: "Exam" },
+  { name: "Lucknow University Entrance Exam", type: "Exam" },
+  { name: "HPU B.Ed Entrance Exam", type: "Exam" },
+  { name: "BCA [Bachelor of Computer Application]", type: "Course" },
+  { name: "Master's in City Planning (MCP)", type: "Course" },
+]);
+
+function openSearchModal() {
+  showModal.value = true;
+}
+
+function closeModal() {
+  showModal.value = false;
+}
+
+
 </script>
 
 <template>
@@ -77,14 +92,17 @@ const searchText = ref("");
       </div>
 
       <!-- Search Box -->
-      <div class="search-box">
+       <div class="search-box" @click="openSearchModal">
         <input
           class="text-black"
           type="text"
           v-model="searchText"
           :placeholder="placeholderText"
+          readonly
         />
-        <button>Search</button>
+        <button @click.stop="openSearchModal">
+          <i class="fa fa-search"></i> Search
+        </button>
       </div>
 
       <div class="dots">
@@ -98,8 +116,34 @@ const searchText = ref("");
     </div>
   </div>
 
-  <!-- Optional: show loading state -->
-  <div v-else class="banner-loading">Loading banners...</div>
+<div v-if="showModal" class="modal-page">
+    <div class="modal-header">
+      <input
+        type="text"
+        v-model="searchText"
+        placeholder="Search Colleges, Courses, Exams"
+      />
+      <button class="search-btn"> <i class="fa fa-search"></i>Search</button>
+      <button class="close-btn" @click="closeModal">&times;</button>
+    </div>
+
+    <p class="hint">Type 3 or more characters for search results</p>
+
+  
+
+    <div class="section popular">
+      <div class="section-header">
+        <span class="icon">⭐</span>
+        <strong>Popular Searches</strong>
+      </div>
+      <ul>
+        <li v-for="(p, index) in popular" :key="index">
+          <span>{{ p.name }}</span>
+          <span class="type">{{ p.type }}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
 </template>
 
 <style>
@@ -111,6 +155,17 @@ const searchText = ref("");
   transition: background 0.5s ease-in-out;
 }
 
+.overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  text-align: center;
+  color: white;
+  padding: 20px;
+}
 .dots {
   position: absolute;
   bottom: 20px;
@@ -185,13 +240,22 @@ h1 {
   overflow: hidden;
 }
 
+.search-box {
+  display: flex;
+  width: 60%;
+  max-width: 600px;
+  background: white;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
 .search-box input {
   flex: 1;
   border: none;
   padding: 12px;
   font-size: 16px;
 }
-
 .search-box input:focus {
   outline: none;
 }
@@ -204,4 +268,166 @@ h1 {
   font-weight: bold;
   cursor: pointer;
 }
+
+/* ---------- Full Page Modal ---------- */
+/* ---------- Full Page Modal ---------- */
+.modal-page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #f3f2ef;
+  padding: 80px 120px; /* For large screens */
+  z-index: 2000;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto 20px auto;
+}
+
+.modal-header input {
+  flex: 1;
+  padding: 14px 16px;
+  border: 1px solid #ccc;
+  border-right: none;
+  border-radius: 4px 0 0 4px;
+  font-size: 16px;
+}
+
+.search-btn {
+  background: #ff5c5c;
+  color: white;
+  border: none;
+  padding: 14px 24px;
+  border-radius: 0 4px 4px 0;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 26px;
+  margin-left: 12px;
+  cursor: pointer;
+  color: #444;
+}
+
+.hint {
+  color: #666;
+  margin: 10px auto 30px auto;
+  font-size: 15px;
+  max-width: 1100px;
+}
+
+/* ---------- Sections ---------- */
+.section {
+  max-width: 1100px;
+  margin: 0 auto 40px auto;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.section ul li {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+}
+
+.section ul li .type {
+  color: #777;
+  font-size: 14px;
+}
+
+/* ------------------------------------ */
+/* RESPONSIVE FIXES                     */
+/* ------------------------------------ */
+@media (max-width: 768px) {
+  .modal-page {
+    padding: 20px;
+  }
+
+  .modal-header {
+    flex-wrap: nowrap;
+    margin-bottom: 10px;
+  }
+
+  .modal-header input {
+    padding: 12px;
+  }
+
+  .search-btn {
+    padding: 12px 18px;
+  }
+
+  .close-btn {
+    margin-left: 8px;
+    font-size: 24px;
+  }
+
+  .hint {
+    margin: 10px 0 20px 0;
+    text-align: center;
+  }
+
+  .section, .section ul {
+    padding: 0 10px;
+  }
+}
+
+@media (max-width: 500px) {
+  .modal-header {
+    flex-wrap: wrap;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: white;
+    position: relative;
+  }
+
+  .modal-header input {
+    width: 100%;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px 4px 0 0;
+  }
+
+  .search-btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 0 0 4px 4px;
+    order: 1;
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2001;
+  }
+
+  .section ul li {
+    flex-direction: column;
+    gap: 5px;
+  }
+}
+
 </style>

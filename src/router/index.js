@@ -39,8 +39,8 @@ import Verify from "../components/auth/Verify.vue";
 import ContactUs from "../pages/ContactUs.vue";
 
 const routes = [
-  { path: "/", component: HomePage },
-  { path: "/colleges", component: AllColleges },
+  { path: "/",name: "home", component: HomePage , meta: { title: "College Entry " }, },
+  { path: "/colleges",name: "College", component: AllColleges , meta:{ title: "Top Colleges in India 2025"} },
   { path: "/courses", component: AllCourses },
   { path: "/exams", component: AllExams },
   { path: "/scholarships", component: Scholarships },
