@@ -176,7 +176,9 @@ Below are the styles needed for the new design. Note that I've adjusted the prim
     border-radius: 11px;
     font-family: "Inter", sans-serif;
   }
-
+.form_container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
   /* Override to make it responsive */
   @media (max-width: 640px) {
     .form_container {

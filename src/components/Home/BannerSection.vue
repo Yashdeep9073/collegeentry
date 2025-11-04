@@ -10,7 +10,7 @@ import banner4 from "../../assets/6.webp";
 const showModal = ref(false);
 
 // ✅ Just use local images array
-const images = ref([banner1, banner2, banner3,banner4]);
+const images = ref([banner1, banner2, banner3, banner4]);
 const currentIndex = ref(0);
 
 onMounted(() => {
@@ -52,7 +52,6 @@ function closeModal() {
 }
 </script>
 
-
 <template>
   <div
     v-if="images.length"
@@ -75,7 +74,7 @@ function closeModal() {
       </div>
 
       <!-- Search Box -->
-       <div class="search-box" @click="openSearchModal">
+      <div class="search-box" @click="openSearchModal">
         <input
           class="text-black"
           type="text"
@@ -99,20 +98,18 @@ function closeModal() {
     </div>
   </div>
 
-<div v-if="showModal" class="modal-page">
+  <div v-if="showModal" class="modal-page">
     <div class="modal-header">
       <input
         type="text"
         v-model="searchText"
         placeholder="Search Colleges, Courses, Exams"
       />
-      <button class="search-btn"> <i class="fa fa-search"></i>Search</button>
+      <button class="search-btn"><i class="fa fa-search"></i>Search</button>
       <button class="close-btn" @click="closeModal">&times;</button>
     </div>
 
     <p class="hint">Type 3 or more characters for search results</p>
-
-  
 
     <div class="section popular">
       <div class="section-header">
@@ -254,7 +251,7 @@ h1 {
 
 /* ---------- Full Page Modal ---------- */
 /* ---------- Full Page Modal ---------- */
-.modal-page {
+.modal-page{
   position: fixed;
   top: 0;
   left: 0;
@@ -265,6 +262,9 @@ h1 {
   z-index: 2000;
   overflow-y: auto;
   box-sizing: border-box;
+}
+.modal-page::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 .modal-header {
@@ -372,7 +372,8 @@ h1 {
     text-align: center;
   }
 
-  .section, .section ul {
+  .section,
+  .section ul {
     padding: 0 10px;
   }
 }
@@ -412,14 +413,7 @@ h1 {
     gap: 5px;
   }
 }
-
 </style>
-
-
-
-
-
-
 
 <!-- <script setup>
 import { ref, onMounted } from "vue";
@@ -490,5 +484,3 @@ function closeModal() {
   showModal.value = false;
 }
 </script> -->
-
-
