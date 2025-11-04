@@ -39,13 +39,23 @@ import Verify from "../components/auth/Verify.vue";
 import ContactUs from "../pages/ContactUs.vue";
 
 const routes = [
-  { path: "/",name: "home", component: HomePage , meta: { title: "College Entry " }, },
-  { path: "/colleges",name: "College", component: AllColleges , meta:{ title: "Top Colleges in India 2025"} },
+  {
+    path: "/",
+    name: "home",
+    component: HomePage,
+    meta: { title: "College Entry " },
+  },
+  {
+    path: "/colleges",
+    name: "College",
+    component: AllColleges,
+    meta: { title: "Top Colleges in India 2025" },
+  },
   { path: "/courses", component: AllCourses },
   { path: "/exams", component: AllExams },
   { path: "/scholarships", component: Scholarships },
   { path: "/verify-email", name: "VerifyEmail", component: Verify },
-  { path: "/contact-us", name: "VerifyEmail", component: ContactUs },
+  { path: "/contact-us", name: "ContactUs", component: ContactUs },
 
   {
     path: "/colleges/:slug",
