@@ -13,7 +13,7 @@ const testimonials = ref([]);
 const fetchTestimonials = async () => {
   try {
     const response = await axios.get(API_URL_FETCH_TESTIMONIALS);
-    testimonials.value = response.data.data; 
+    testimonials.value = response.data.data;
   } catch (error) {
     console.error("Error fetching testimonials:", error);
   }
@@ -25,43 +25,40 @@ onMounted(fetchTestimonials);
 <template>
   <div class="featured-container">
     <div class="section-header">
-      <span></span>
       <h2>What People Are Saying</h2>
-      <span></span>
     </div>
 
-   <Swiper
-  :modules="[Navigation, Autoplay]"
-  class="college-slider"
-  :slides-per-view="4"
-  :space-between="25"
-  :loop="true"
-  :speed="800"
-  :autoplay="{ delay: 2000, disableOnInteraction: false }"
-  :navigation="{ nextEl: '.btn-next', prevEl: '.btn-prev' }"
-  :breakpoints="{
-    320: { slidesPerView: 1 },
-    640: { slidesPerView: 2 },
-    1024: { slidesPerView: 4 },
-  }"
->
-  <SwiperSlide v-for="item in testimonials" :key="item.id">
-    <div class="college-card p-6 text-center flex flex-col items-center">
-      <img
-        :src="item.image || 'https://via.placeholder.com/150'"
-        class="w-24 h-24 object-cover rounded-full border shadow mb-4"
-      />
+    <Swiper
+      :modules="[Navigation, Autoplay]"
+      class="college-slider"
+      :slides-per-view="4"
+      :space-between="25"
+      :loop="true"
+      :speed="800"
+      :autoplay="{ delay: 2000, disableOnInteraction: false }"
+      :navigation="{ nextEl: '.btn-next', prevEl: '.btn-prev' }"
+      :breakpoints="{
+        320: { slidesPerView: 1 },
+        640: { slidesPerView: 2 },
+        1024: { slidesPerView: 4 },
+      }"
+    >
+      <SwiperSlide v-for="item in testimonials" :key="item.id">
+        <div class="college-card p-6 text-center flex flex-col items-center">
+          <img
+            :src="item.image || 'https://via.placeholder.com/150'"
+            class="w-24 h-24 object-cover rounded-full border shadow mb-4"
+          />
 
-      <h3 class="text-lg font-semibold">{{ item.authorName }}</h3>
-      <p class="text-orange-600 text-sm mb-3">{{ item.authorTitle }}</p>
+          <h3 class="text-lg font-semibold">{{ item.authorName }}</h3>
+          <p class="text-orange-600 text-sm mb-3">{{ item.authorTitle }}</p>
 
-      <p class="text-gray-600 text-sm leading-relaxed px-2">
-        {{ item.content }}
-      </p>
-    </div>
-  </SwiperSlide>
-</Swiper>
-
+          <p class="text-gray-600 text-sm leading-relaxed px-2">
+            {{ item.content }}
+          </p>
+        </div>
+      </SwiperSlide>
+    </Swiper>
   </div>
 </template>
 
