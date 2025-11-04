@@ -1,38 +1,22 @@
 <script setup>
 import { ref, onMounted } from "vue";
 
-const API_URL_FETCH_WEBSITE_MEDIA = import.meta.env.VITE_FETCH_WEBSITE_MEDIA;
-import { useMediaStore } from "../../store/mediaStore";
-const mediaStore = useMediaStore();
+// ✅ Import Local Images
+import banner1 from "../../assets/slider3.webp";
+import banner2 from "../../assets/2.webp";
+import banner3 from "../../assets/5.webp";
+import banner4 from "../../assets/6.webp";
+
 const showModal = ref(false);
 
-const images = ref([]);
+// ✅ Just use local images array
+const images = ref([banner1, banner2, banner3,banner4]);
 const currentIndex = ref(0);
 
-onMounted(async () => {
-  try {
-    const res = await fetch(API_URL_FETCH_WEBSITE_MEDIA);
-
-    const result = await res.json();
-
-    // Filter only BANNER images
-    images.value = result.data
-      .filter((item) => item.category === "BANNER")
-      .map((item) => encodeURI(item.url));
-
-    // If no banner returned, fallback to default
-    if (images.value.length === 0) {
-      images.value = [
-        "https://images.pexels.com/photos/1454360/pexels-photo-1454360.jpeg",
-      ];
-    }
-
-    setInterval(() => {
-      currentIndex.value = (currentIndex.value + 1) % images.value.length;
-    }, 4000);
-  } catch (error) {
-    console.log("Banner Fetch Error:", error);
-  }
+onMounted(() => {
+  setInterval(() => {
+    currentIndex.value = (currentIndex.value + 1) % images.value.length;
+  }, 4000);
 });
 
 const tabs = ["Colleges", "Exams", "Courses"];
@@ -66,9 +50,8 @@ function openSearchModal() {
 function closeModal() {
   showModal.value = false;
 }
-
-
 </script>
+
 
 <template>
   <div
@@ -431,3 +414,81 @@ h1 {
 }
 
 </style>
+
+
+
+
+
+
+
+<!-- <script setup>
+import { ref, onMounted } from "vue";
+
+const API_URL_FETCH_WEBSITE_MEDIA = import.meta.env.VITE_FETCH_WEBSITE_MEDIA;
+import { useMediaStore } from "../../store/mediaStore";
+const mediaStore = useMediaStore();
+const showModal = ref(false);
+
+const images = ref([]);
+const currentIndex = ref(0);
+
+onMounted(async () => {
+  try {
+    const res = await fetch(API_URL_FETCH_WEBSITE_MEDIA);
+
+    const result = await res.json();
+
+    // Filter only BANNER images
+    images.value = result.data
+      .filter((item) => item.category === "MAIN_BANNER")
+      .map((item) => encodeURI(item.url));
+
+    // If no banner returned, fallback to default
+    if (images.value.length === 0) {
+      images.value = [
+        "https://images.pexels.com/photos/1454360/pexels-photo-1454360.jpeg",
+      ];
+    }
+
+    setInterval(() => {
+      currentIndex.value = (currentIndex.value + 1) % images.value.length;
+    }, 4000);
+  } catch (error) {
+    console.log("Banner Fetch Error:", error);
+  }
+});
+
+const tabs = ["Colleges", "Exams", "Courses"];
+const activeTab = ref("Colleges");
+const placeholderText = ref("Enter College Name");
+
+function changeTab(tab) {
+  activeTab.value = tab;
+  placeholderText.value =
+    tab === "Colleges"
+      ? "Enter College Name"
+      : tab === "Exams"
+      ? "Enter Exam Name"
+      : "Enter Course Name";
+}
+
+const searchText = ref("");
+const popular = ref([
+  { name: "FDDI AIST", type: "Exam" },
+  { name: "MAH MArch CET", type: "Exam" },
+  { name: "Lucknow University Entrance Exam", type: "Exam" },
+  { name: "HPU B.Ed Entrance Exam", type: "Exam" },
+  { name: "BCA [Bachelor of Computer Application]", type: "Course" },
+  { name: "Master's in City Planning (MCP)", type: "Course" },
+]);
+
+function openSearchModal() {
+  showModal.value = true;
+}
+
+function closeModal() {
+  showModal.value = false;
+}
+</script> -->
+
+

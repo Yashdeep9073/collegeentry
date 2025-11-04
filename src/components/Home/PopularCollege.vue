@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, computed } from "vue"; // 👈 Import computed
 import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -19,6 +19,23 @@ function goToCollege(college) {
   const slug = college.name.toLowerCase().replace(/\s+/g, "-"); // convert name → slug
   router.push(`/colleges/${slug}`);
 }
+
+// 🎯 NEW COMPUTED PROPERTY: Sorts colleges by ranking (lowest number first)
+const sortedColleges = computed(() => {
+  // 1. Create a shallow copy of the list to avoid mutating the original store state.
+  const colleges = [...collegeStore.collegeList];
+
+  // 2. Sort the list by the 'ranking' inside the 'details' object.
+  return colleges.sort((a, b) => {
+    // Handle potential missing or null rankings by treating them as a very high number (Infinity), 
+    // which pushes them to the end of the list.
+    const rankA = a.details?.ranking || Infinity;
+    const rankB = b.details?.ranking || Infinity;
+
+    // Sort Ascending (a - b) means the lowest number (best rank) comes first.
+    return rankA - rankB;
+  }).slice(0, 10); // Keep the slice here to only show the top 10 ranked colleges.
+});
 </script>
 
 <template>
@@ -27,15 +44,12 @@ function goToCollege(college) {
       <h2>Popular Colleges</h2>
     </div>
 
-    <!-- Loading State -->
     <div v-if="collegeStore.loading" class="loading">Loading colleges...</div>
 
-    <!-- Error State -->
     <div v-else-if="collegeStore.error" class="error">
       Failed to load colleges: {{ collegeStore.error }}
     </div>
 
-    <!-- Colleges Slider -->
     <Swiper
       v-else
       :modules="[Navigation, Autoplay]"
@@ -53,8 +67,7 @@ function goToCollege(college) {
       }"
     >
       <SwiperSlide
-        v-for="(college, index) in collegeStore.collegeList.slice(0, 10)"
-        :key="college.id || index"
+        v-for="(college, index) in sortedColleges" :key="college.id || index"
       >
         <div class="college-card" @click="goToCollege(college)">
           <img

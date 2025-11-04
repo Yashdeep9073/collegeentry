@@ -91,3 +91,58 @@ const slideNext = () => swiperInstance.value?.slideNext();
   transform: scale(1.12);
 }
 </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <script setup>
+import { Swiper, SwiperSlide } from "swiper/vue";
+import "swiper/css";
+import "swiper/css/navigation"; // ✅ important
+import "swiper/css/pagination"; // ✅ important if we add dots later
+import { Navigation, Autoplay } from "swiper/modules";
+import { onMounted, ref } from "vue";
+import cityImage from "../../assets/download.jpg";
+import axios from "axios";
+const API_URL_FETCH_CITIES = import.meta.env.VITE_FETCH_ALL_CITIES;
+const swiperInstance = ref(null);
+
+const cities = ref([]);
+
+const fetchCities = async () => {
+  try {
+    const response = await axios.get(API_URL_FETCH_CITIES);
+    cities.value = response.data.data;
+  } catch (error) {
+    console.error("Error fetching cities:", error);
+  }
+};
+
+onMounted(fetchCities);
+
+const onSwiper = (swiper) => {
+  swiperInstance.value = swiper;
+};
+
+const slidePrev = () => swiperInstance.value?.slidePrev();
+const slideNext = () => swiperInstance.value?.slideNext();
+</script> -->
+
+
+
