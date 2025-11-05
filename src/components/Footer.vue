@@ -1,73 +1,122 @@
-<script setup>
-</script>
-
 <template>
-  <footer class="bg-[#1D2A44] text-white">
-    
-    <!-- Top Section -->
-    <div class="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-6">
+  <footer class="bg-gray-900 text-gray-300 py-10 md:py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-12">
+        <div>
+          <div class="flex items-center mb-4">
+            <img src="../assets/white-logo.svg" alt="">
+          </div>
 
-      <!-- Logo -->
-      <div class="flex items-center gap-3">
-        <img
-          src="../assets/college-entry.svg"
-          alt="logo"
-          class="h-10 w-auto"
-        />
-      </div>
+          <address class="not-italic text-sm space-y-1">
+            <p>Office No: 36, Second Floor, D-185, Phase 8B,</p>
+            <p>Industrial Area, Sector 74, Sahibzada</p>
+            <p>Ajit Singh Nagar, Punjab 160055</p>
+          </address>
 
-      <!-- Social -->
-      <div class="flex items-center gap-4 text-white">
-        <span class="text-sm">Connect with us</span>
-
-        <a href="#" class="hover:text-blue-300 transition">
-          <i class="fa-brands fa-facebook text-xl"></i>
-        </a>
-        <a href="#" class="hover:text-blue-300 transition">
-          <i class="fa-brands fa-x-twitter text-xl"></i>
-        </a>
-        <a href="#" class="hover:text-blue-300 transition">
-          <i class="fa-brands fa-instagram text-xl"></i>
-        </a>
-        <a href="#" class="hover:text-blue-300 transition">
-          <i class="fa-brands fa-linkedin text-xl"></i>
-        </a>
-        <a href="#" class="hover:text-blue-300 transition">
-          <i class="fa-brands fa-youtube text-xl"></i>
-        </a>
-      </div>
-
-      <!-- Contact Info -->
-      <div class="flex items-center gap-6 text-sm">
-        <div class="flex items-center gap-2">
-          <i class="fa-solid fa-phone"></i> +91-9870443528, 7657999786
+          <div class="flex space-x-4 mt-6">
+            <a
+              href="#"
+              aria-label="Facebook"
+              class="hover:text-white transition duration-150"
+            >
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a
+              href="#"
+              aria-label="Twitter"
+              class="hover:text-white transition duration-150"
+            >
+              <i class="fab fa-x-twitter"></i>
+            </a>
+            <a
+              href="#"
+              aria-label="Instagram"
+              class="hover:text-white transition duration-150"
+            >
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a
+              href="#"
+              aria-label="LinkedIn"
+              class="hover:text-white transition duration-150"
+            >
+              <i class="fab fa-linkedin-in"></i>
+            </a>
+          </div>
         </div>
-        <div class="flex items-center gap-2">
-          <i class="fa-solid fa-envelope"></i>  info@collegeentry.in
+
+        <div v-for="(section, index) in footerLinks" :key="index">
+          <h4
+            class="text-lg font-semibold text-white mb-4 uppercase border-b-2 border-orange-500 inline-block pb-1"
+          >
+            {{ section.title }}
+          </h4>
+          <ul class="space-y-2 text-sm">
+            <li v-for="link in section.links" :key="link.name">
+              <a
+                :href="link.url"
+                class="hover:text-white transition duration-150"
+              >
+                {{ link.name }}
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
 
-    <!-- Divider -->
-    <div class="border-t border-gray-600"></div>
-
-    <!-- Bottom Menu -->
-    <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center text-sm">
-      <div class="flex gap-6">
-        <a href="#" class="hover:text-gray-300">About Us</a>
-        <a href="#" class="hover:text-gray-300">Contact Us</a>
-        <a href="#" class="hover:text-gray-300">Privacy Policy</a>
-        <a href="#" class="hover:text-gray-300">Terms & Conditions</a>
-      </div>
-
-      <p class="mt-4 md:mt-0 text-gray-300">
-© 2025 College Entry | All Rights Reserved
-
-      </p>
+    <div
+      class="  mt-10 pt-6 text-center text-sm text-white"
+    >
+      &copy; 2025 College Entry | All Rights Reserved
     </div>
 
+    <slot name="floating-buttons"></slot>
   </footer>
 </template>
 
-<style scoped>
-</style>
+<script setup>
+import { ref, computed } from "vue";
+
+// Dynamic year for copyright
+
+// Link Data Structure
+const footerLinks = ref([
+  {
+    title: "Top College",
+    links: [
+      { name: "Motherhood University", url: "#" },
+      { name: "Graphic Era Hill University", url: "#" },
+      { name: "Sanskaram University", url: "#" },
+      { name: "Sharda University", url: "#" },
+      { name: "Tulas Institute", url: "#" },
+      { name: "KR Mangalam University", url: "#" },
+    ],
+  },
+  {
+    title: "Top Courses",
+    links: [
+      { name: "Architecture", url: "#" },
+      { name: "Arts", url: "#" },
+      { name: "Commerce", url: "#" },
+      { name: "Computer", url: "#" },
+      { name: "Design", url: "#" },
+      { name: "Education", url: "#" },
+    ],
+  },
+  {
+    title: "Top Exams",
+    links: [{ name: "JEE Advanced", url: "#" }],
+  },
+  {
+    title: "Our Policies",
+    links: [
+      { name: "Advertise With Us", url: "#" },
+      { name: "Terms & Conditions", url: "#" },
+      { name: "Privacy Policy", url: "#" },
+    ],
+  },
+]);
+</script>
+
+<style scoped></style>

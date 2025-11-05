@@ -6,11 +6,12 @@ import banner1 from "../../assets/slider3.webp";
 import banner2 from "../../assets/2.webp";
 import banner3 from "../../assets/5.webp";
 import banner4 from "../../assets/6.webp";
+import banner5 from "../../assets/1.webp";
 
 const showModal = ref(false);
 
 // ✅ Just use local images array
-const images = ref([banner1, banner2, banner3, banner4]);
+const images = ref([banner1, banner2, banner3, banner4,banner5]);
 const currentIndex = ref(0);
 
 onMounted(() => {
@@ -217,17 +218,8 @@ h1 {
   max-width: 600px;
   background: white;
   border-radius: 6px;
-  overflow: hidden;
-}
-
-.search-box {
-  display: flex;
-  width: 60%;
-  max-width: 600px;
-  background: white;
-  border-radius: 6px;
-  overflow: hidden;
   cursor: pointer;
+  overflow: hidden;
 }
 
 .search-box input {
@@ -379,6 +371,25 @@ h1 {
 }
 
 @media (max-width: 500px) {
+
+
+   .search-box {
+    width: 90%;
+    max-width: 100%;
+    flex-direction: column; /* stack input + button */
+    border-radius: 6px;
+    overflow: visible;
+  }
+
+  .search-box input {
+    width: 100%;
+    padding: 14px;
+    border-radius: 6px 6px 0 0;
+  }
+
+  .search-box button {
+   display: none;
+  }
   .modal-header {
     flex-wrap: wrap;
     border: 1px solid #ccc;
@@ -407,11 +418,17 @@ h1 {
     right: 10px;
     z-index: 2001;
   }
+  
 
   .section ul li {
     flex-direction: column;
     gap: 5px;
   }
+
+
+
+  
+ 
 }
 </style>
 

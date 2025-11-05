@@ -297,28 +297,6 @@
         </div>
 
         <div class="flex gap-3 mt-8 pt-4 border-t border-gray-200">
-          <!-- <button
-            @click="applyFilters"
-            class="flex-1 bg-[#ff4d4f] text-white px-4 py-3 rounded-xl font-semibold shadow-lg shadow-blue-500/50 hover:bg-[#ff575a] transition duration-300"
-          >
-            <span class="flex items-center justify-center gap-2">
-              <svg
-                class="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M5 13l4 4L19 7"
-                ></path>
-              </svg>
-              Apply Filters
-            </span>
-          </button> -->
           <button
             @click="clearFilters"
             class="flex-1 border border-gray-300 text-gray-700 rounded-xl px-4 py-3 hover:bg-gray-100 transition duration-300"
@@ -353,7 +331,31 @@
           </div>
         </div>
 
-        <div class="space-y-6">
+        <!-- Loading State -->
+        <div v-if="loading" class="text-center py-10">
+          <div
+            class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#ff4d4f]"
+          ></div>
+          <p class="mt-4 text-gray-600">Loading colleges...</p>
+        </div>
+
+        <!-- Error State -->
+        <div
+          v-else-if="error"
+          class="text-center py-10 bg-white rounded-xl shadow-lg text-gray-600"
+        >
+          <p class="text-xl font-semibold mb-3">Error Loading Colleges 😞</p>
+          <p>{{ error }}</p>
+          <button
+            @click="fetchColleges"
+            class="mt-4 bg-[#ff4d4f] text-white px-6 py-3 rounded-xl font-semibold hover:bg-[#ff575a] transition duration-300"
+          >
+            Try Again
+          </button>
+        </div>
+
+        <!-- Success State -->
+        <div v-else class="space-y-6">
           <div
             v-for="college in paged"
             :key="college.id"
@@ -361,6 +363,7 @@
           >
             <div class="w-full md:w-64 flex-shrink-0">
               <img
+                @click="goToCollege(college)"
                 :src="college.image"
                 :alt="college.name"
                 class="w-full h-48 object-cover rounded-xl shadow-md"
@@ -380,7 +383,7 @@
                 class="flex flex-col sm:flex-row items-start justify-between gap-3"
               >
                 <div>
-                  <h2
+                  <h2 @click ="goToCollege(college)"
                     class="text-xl font-bold text-gray-900 hover:text-blue-600 transition cursor-pointer"
                   >
                     {{ college.name }}
@@ -510,191 +513,16 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { useRouter } from "vue-router";
 
-/* ------------ Sample Colleges Data ------------ */
-const allColleges = ref([
-  {
-    id: 1,
-    name: "Indian Institute of Technology Delhi",
-    state: "Delhi",
-    city: "New Delhi",
-    stream: "Engineering",
-    type: "Government",
-    degree: "UG",
-    exam: "JEE Advanced",
-    programMode: "Offline",
-    fees: 210000,
-    rating: 4.8,
-    placement: 92,
-    image:
-      "https://images.shiksha.com/mediadata/images/1639126992phpIbmG6H.jpeg",
-    description:
-      "IIT Delhi is a top-tier engineering institute offering undergraduate and postgraduate programs with strong research and placement records. It is consistently ranked among the best in India and globally.",
-  },
-  {
-    id: 2,
-    name: "Indian Institute of Technology Bombay",
-    state: "Maharashtra",
-    city: "Mumbai",
-    stream: "Engineering",
-    type: "Government",
-    degree: "UG",
-    exam: "JEE Advanced",
-    programMode: "Offline",
-    fees: 215000,
-    rating: 4.7,
-    placement: 94,
-    image:
-      "https://images.shiksha.com/mediadata/images/1639122003php9QnE6Z.jpeg",
-    description:
-      "IIT Bombay is globally recognized for engineering, design and entrepreneurship, with strong industry ties and placements. The campus provides a vibrant academic and cultural experience.",
-  },
-  {
-    id: 3,
-    name: "IIM Ahmedabad",
-    state: "Gujarat",
-    city: "Ahmedabad",
-    stream: "Management",
-    type: "Government",
-    degree: "PG",
-    exam: "CAT",
-    programMode: "Offline",
-    fees: 2300000, // Increased for a higher fee range option
-    rating: 4.9,
-    placement: 98,
-    image:
-      "https://images.shiksha.com/mediadata/images/articles/1693564201phpMtpJkA.jpeg",
-    description:
-      "IIM Ahmedabad is a leading management institute with exceptional placements and a strong academic reputation. It is the gold standard for business education in India.",
-  },
-  {
-    id: 4,
-    name: "BITS Pilani",
-    state: "Rajasthan",
-    city: "Pilani",
-    stream: "Engineering",
-    type: "Private",
-    degree: "UG",
-    exam: "BITSAT",
-    programMode: "Offline",
-    fees: 430000,
-    rating: 4.6,
-    placement: 89,
-    image:
-      "https://images.shiksha.com/mediadata/images/1551330208php0FpjXu.jpeg",
-    description:
-      "BITS Pilani is a premier private university known for high-quality engineering and science programs with active campus life and an excellent peer group.",
-  },
-  {
-    id: 5,
-    name: "University of Delhi (DU)",
-    state: "Delhi",
-    city: "New Delhi",
-    stream: "Arts & Commerce",
-    type: "Government",
-    degree: "UG",
-    exam: "CUET",
-    programMode: "Offline",
-    fees: 35000,
-    rating: 4.3,
-    placement: 65,
-    image:
-      "https://images.shiksha.com/mediadata/images/1532590222phpDQGOPe.jpeg",
-    description:
-      "University of Delhi offers a wide array of colleges and courses across arts, commerce and sciences with a diverse student community and rich history.",
-  },
-  {
-    id: 6,
-    name: "Manipal Institute of Technology",
-    state: "Karnataka",
-    city: "Manipal",
-    stream: "Engineering",
-    type: "Private",
-    degree: "UG",
-    exam: "MET",
-    programMode: "Offline",
-    fees: 270000,
-    rating: 4.2,
-    placement: 78,
-    image:
-      "https://www.manipal.edu/content/dam/manipal/mu/assets/images/Faculty/engineeringcollege.jpg",
-    description:
-      "MIT Manipal offers strong campus facilities and good placement opportunities in engineering and allied fields. It is a highly reputed private institution.",
-  },
-  {
-    id: 7,
-    name: "SRM University, Chennai",
-    state: "Tamil Nadu",
-    city: "Chennai",
-    stream: "Engineering",
-    type: "Private",
-    degree: "UG",
-    exam: "SRMJEE",
-    programMode: "Offline",
-    fees: 190000,
-    rating: 4.0,
-    placement: 75,
-    image:
-      "https://images.shiksha.com/mediadata/images/1672395562phpVvT4tL.jpeg",
-    description:
-      "SRM University offers diverse engineering programs with strong industry collaborations and modern infrastructure.",
-  },
-  {
-    id: 8,
-    name: "Narsee Monjee Institute of Management Studies (NMIMS)",
-    state: "Maharashtra",
-    city: "Mumbai",
-    stream: "Management",
-    type: "Private",
-    degree: "PG",
-    exam: "NMAT",
-    programMode: "Offline",
-    fees: 1150000,
-    rating: 4.5,
-    placement: 90,
-    image:
-      "https://images.shiksha.com/mediadata/images/1684307507php1l3e7A.jpeg",
-    description:
-      "NMIMS is a renowned private institution for management and other professional courses, offering excellent career prospects.",
-  },
-  {
-    id: 9,
-    name: "IGNOU",
-    state: "Delhi",
-    city: "New Delhi",
-    stream: "Arts & Commerce",
-    type: "Government",
-    degree: "UG",
-    exam: "None",
-    programMode: "Distance",
-    fees: 10000,
-    rating: 3.5,
-    placement: 50,
-    image:
-      "https://images.shiksha.com/mediadata/images/articles/1690967000php8r4VqP.jpeg",
-    description:
-      "Indira Gandhi National Open University (IGNOU) is a central university providing distance education across various streams.",
-  },
-  {
-    id: 10,
-    name: "Amity University Online",
-    state: "Uttar Pradesh",
-    city: "Noida",
-    stream: "Management",
-    type: "Private",
-    degree: "PG",
-    exam: "None",
-    programMode: "Online",
-    fees: 150000,
-    rating: 3.9,
-    placement: 60,
-    image:
-      "https://images.shiksha.com/mediadata/images/1683884878php4N0A7V.jpeg",
-    description:
-      "Amity University Online offers flexible and accredited online degree programs for working professionals and students.",
-  },
-]);
+const router = useRouter();
+const FETCH_ALL_COLLEGES_URL = import.meta.env.VITE_FETCH_COLLEGES_FILTER;
+import { ref, computed, onMounted } from "vue";
+
+/* ------------ Reactive Data ------------ */
+const allColleges = ref([]);
+const loading = ref(false);
+const error = ref(null);
 
 /* ------------ Filter Options ------------ */
 const streams = [
@@ -704,7 +532,6 @@ const streams = [
   "Arts & Commerce",
   "Design",
 ];
-// Added more states/cities to make filters more useful
 const states = [
   "Delhi",
   "Maharashtra",
@@ -713,6 +540,8 @@ const states = [
   "Karnataka",
   "Tamil Nadu",
   "Uttar Pradesh",
+  "Uttarakhand",
+  "Haryana",
 ];
 const cities = [
   "New Delhi",
@@ -722,6 +551,9 @@ const cities = [
   "Manipal",
   "Chennai",
   "Noida",
+  "Roorkee",
+  "Kurukshetra",
+  "Gurugram",
 ];
 const exams = [
   "JEE Advanced",
@@ -742,7 +574,6 @@ const feeRanges = [
 ];
 
 /* ------------ Reactive Filters ------------ */
-// Changed default fee range to be more inclusive
 const filters = ref({
   search: "",
   stream: [],
@@ -750,18 +581,104 @@ const filters = ref({
   city: "",
   collegeType: [],
   degree: "",
-  programMode: "", // Single select for mode
+  programMode: "",
   exams: [],
-  feeRange: { label: "All", min: 0, max: 9999999 }, // Default to "All" range
+  feeRange: { label: "All", min: 0, max: 9999999 },
   rating: 0,
 });
 
 const sortBy = ref("relevance");
 const page = ref(1);
 const perPage = ref(5);
-const MAX_PAGES_TO_SHOW = 5; // For cleaner pagination component
+const MAX_PAGES_TO_SHOW = 5;
 
-/* ------------ Helpers ------------ */
+/* ------------ API Integration ------------ */
+async function fetchColleges() {
+  loading.value = true;
+  error.value = null;
+
+  try {
+    const response = await fetch(FETCH_ALL_COLLEGES_URL);
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch colleges: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (data.message === "Colleges fetched successfully" && data.data) {
+      // Transform API data to match our component structure
+      allColleges.value = data.data.map((college) => ({
+        id: college.id,
+        name: college.name,
+        state: extractState(college.location),
+        city: extractCity(college.location),
+        stream: "Engineering", // Default value - you can update this based on actual data
+        type: mapOwnershipToType(college.ownership), // This is the key fix
+        degree: "UG", // Default value
+        exam: "None", // Default value
+        programMode: "Offline", // Default value
+        fees: generateRandomFee(), // Generate random fee for now
+        rating: generateRandomRating(), // Generate random rating for now
+        placement: generateRandomPlacement(), // Generate random placement for now
+        image:
+          college.details?.image ||
+          "https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+        description: generateDescription(college.name, college.ownership),
+      }));
+    } else {
+      throw new Error("Invalid data format received from API");
+    }
+  } catch (err) {
+    console.error("Error fetching colleges:", err);
+    error.value = err.message;
+  } finally {
+    loading.value = false;
+  }
+}
+
+/* ------------ Helper Functions ------------ */
+function extractState(location) {
+  if (!location) return "Unknown";
+  const parts = location.split(",");
+  return parts[parts.length - 1].trim();
+}
+
+function extractCity(location) {
+  if (!location) return "Unknown";
+  const parts = location.split(",");
+  return parts[0].trim();
+}
+function goToCollege(college) {
+  const slug = college.name.toLowerCase().replace(/\s+/g, "-"); // convert name → slug
+  router.push(`/colleges/${slug}`);
+}
+function mapOwnershipToType(ownership) {
+  if (ownership === "GOVERNMENT") return "Government";
+  if (ownership === "PRIVATE") return "Private";
+  return ownership; // fallback
+}
+
+function generateRandomFee() {
+  // Generate random fee between 50,000 and 20,00,000
+  return Math.floor(Math.random() * 1950000) + 50000;
+}
+
+function generateRandomRating() {
+  // Generate random rating between 3.0 and 5.0
+  return (Math.random() * 2 + 3).toFixed(1);
+}
+
+function generateRandomPlacement() {
+  // Generate random placement between 60% and 95%
+  return Math.floor(Math.random() * 35) + 60;
+}
+
+function generateDescription(name, ownership) {
+  const type = ownership === "PRIVATE" ? "private" : "government";
+  return `${name} is a renowned ${type} institution offering quality education with modern facilities and experienced faculty. The college provides a conducive learning environment for students to excel in their chosen fields.`;
+}
+
 const formatFee = (n) => {
   if (n >= 10000000) return "₹" + (n / 10000000).toFixed(2) + "Cr / year";
   if (n >= 100000) return "₹" + (n / 100000).toLocaleString() + "L / year";
@@ -777,20 +694,19 @@ const btnClass = (arrOrVal, val) => {
     ? "bg-[#ff4d4f] text-white shadow-md"
     : "bg-gray-100 text-gray-700 hover:bg-[#ffebeb] hover:text-[#ff4d4f]";
 };
+
 function toggleValue(key, val) {
   const arr = filters.value[key];
   if (Array.isArray(arr)) {
     const i = arr.indexOf(val);
     i === -1 ? arr.push(val) : arr.splice(i, 1);
   } else {
-    // If not an array, it's a single selection toggle
     filters.value[key] = filters.value[key] === val ? "" : val;
   }
-  // Auto-apply on toggle of simple buttons/checkboxes
   applyFilters();
 }
 
-/* ------------ Computed Filter Logic (Optimized) ------------ */
+/* ------------ Computed Filter Logic ------------ */
 const filtered = computed(() => {
   let list = allColleges.value.slice();
 
@@ -810,8 +726,9 @@ const filtered = computed(() => {
 
   // 2. Multi-select filters
   if (f.stream.length) list = list.filter((c) => f.stream.includes(c.stream));
-  if (f.collegeType.length)
+  if (f.collegeType.length) {
     list = list.filter((c) => f.collegeType.includes(c.type));
+  }
   if (f.exams.length) list = list.filter((c) => f.exams.includes(c.exam));
 
   // 3. Single-select filters
@@ -834,7 +751,6 @@ const filtered = computed(() => {
   if (sortBy.value === "rating_desc") list.sort((a, b) => b.rating - a.rating);
   else if (sortBy.value === "fees_asc") list.sort((a, b) => a.fees - b.fees);
   else if (sortBy.value === "fees_desc") list.sort((a, b) => b.fees - a.fees);
-  // 'relevance' sort is implied by not sorting, maintaining the original order or search engine's ranking
 
   return list;
 });
@@ -845,7 +761,6 @@ const totalPages = computed(() =>
 );
 
 const paged = computed(() => {
-  // Ensure the current page is valid after filtering/sorting
   if (page.value > totalPages.value) page.value = totalPages.value;
   if (page.value < 1) page.value = 1;
 
@@ -853,14 +768,12 @@ const paged = computed(() => {
   return filtered.value.slice(start, start + perPage.value);
 });
 
-// Advanced pagination range logic (to only show a few pages at a time)
 const paginationRange = computed(() => {
   const range = [];
   const total = totalPages.value;
   const current = page.value;
   const max = MAX_PAGES_TO_SHOW;
 
-  // Always show first page
   if (total > 0) range.push(1);
 
   let start = Math.max(
@@ -869,7 +782,6 @@ const paginationRange = computed(() => {
   );
   let end = Math.min(total - 1, current + Math.floor(max / 2));
 
-  // Adjust start/end if they hit the bounds
   if (current < Math.floor(max / 2) + 2) {
     end = Math.min(total - 1, max - 1);
   }
@@ -877,14 +789,12 @@ const paginationRange = computed(() => {
     start = Math.max(2, total - max + 2);
   }
 
-  // Add ellipses and pages
   if (start > 2) range.push("...");
   for (let i = start; i <= end; i++) {
     if (i > 1 && i < total) range.push(i);
   }
   if (end < total - 1) range.push("...");
 
-  // Always show last page if it's not the first page
   if (total > 1 && !range.includes(total)) range.push(total);
 
   return range
@@ -894,7 +804,7 @@ const paginationRange = computed(() => {
 
 /* ------------ Controls ------------ */
 function applyFilters() {
-  page.value = 1; // Always reset to page 1 on filter change
+  page.value = 1;
 }
 
 function clearFilters() {
@@ -907,7 +817,6 @@ function clearFilters() {
     degree: "",
     programMode: "",
     exams: [],
-    // Set feeRange back to the new default 'All'
     feeRange: { label: "All", min: 0, max: 9999999 },
     rating: 0,
   };
@@ -918,21 +827,26 @@ function clearFilters() {
 const prevPage = () => {
   if (page.value > 1) page.value--;
 };
+
 const nextPage = () => {
   if (page.value < totalPages.value) page.value++;
 };
+
+/* ------------ Lifecycle ------------ */
+onMounted(() => {
+  fetchColleges();
+});
 </script>
 
 <style scoped>
-/* Custom Scrollbar for better UX */
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #cbd5e1; /* gray-300 */
+  background-color: #cbd5e1;
   border-radius: 3px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #f1f5f9; /* gray-100 */
+  background: #f1f5f9;
 }
 </style>

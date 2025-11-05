@@ -1,25 +1,41 @@
 <script setup>
-import { ref } from "vue";
-// Simulate props or local data for the university details
-const university = ref({
-  name: "Lovely Professional University (LPU)",
-  location: "Phagwara, Punjab",
-  rating: "4.2",
-  reviews: "32k",
-  author: "Mayank Goyal",
-  lastUpdated: "Oct 28, 2025",
+import { useCollegeStore } from "../../store/collegeNameStore";
+import { useRoute } from "vue-router";
+import { onMounted, computed, ref } from "vue";
+
+const route = useRoute();
+const collegeStore = useCollegeStore();
+
+const slug = route.params.slug;
+
+// Convert slug → Normal Name: "punjab-university" → "punjab university"
+const collegeName = slug.replace(/-/g, " ");
+
+// Fetch data on page load
+onMounted(() => {
+  collegeStore.fetchCollegeByName(collegeName);
 });
+
+// For easy usage in template
+const university = computed(() => collegeStore.college);
 </script>
 
 <template>
-  <section class="bg-white border-b border-gray-100 py-6 sm:py-8 shadow-sm">
+  <section
+    v-if="university"
+    class="bg-white border-b border-gray-100 py-6 sm:py-8 shadow-sm"
+  >
     <div class="max-w-6xl mx-auto px-4 lg:px-6">
       <div class="text-xs text-gray-500 flex items-center gap-1.5 mb-4">
         <a href="/" class="hover:text-blue-600 transition duration-150">Home</a>
         <span class="text-gray-400">/</span>
-        <a href="#" class="hover:text-blue-600 transition duration-150">Colleges</a>
+        <a href="#" class="hover:text-blue-600 transition duration-150"
+          >Colleges</a
+        >
         <span class="text-gray-400">/</span>
-        <span class="text-gray-800 font-medium truncate">{{ university.name }}</span>
+        <span class="text-gray-800 font-medium truncate">{{
+          university?.name
+        }}</span>
       </div>
 
       <div class="flex flex-col lg:flex-row justify-between gap-6 lg:gap-10">
@@ -27,36 +43,42 @@ const university = ref({
           <h1
             class="text-3xl md:text-4xl font-extrabold text-gray-900 leading-snug"
           >
-            {{ university.name }}: Admission 2025, Courses, Fees, Cutoff, Placement, Ranking
+            {{ university?.name }}: Admission 2025, Courses, Fees, Cutoff,
+            Placement, Ranking
           </h1>
 
           <div class="mt-4 space-y-3">
-            <div
-              class="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm md:text-base text-gray-600"
-            >
-              <span class="flex items-center gap-1.5 font-medium">
-                <i class="fas fa-map-marker-alt text-red-500"></i>
-                {{ university.location }}
-              </span>
+          <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm md:text-base text-gray-600">
+  <span class="flex items-center gap-1.5 font-medium">
+    <i class="fas fa-map-marker-alt text-red-500"></i>
+    {{ university?.location }}
+  </span>
 
-              <span
-                class="flex items-center gap-1 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md"
-              >
-                <i class="fas fa-star"></i>
-                {{ university.rating }} ({{ university.reviews }} Reviews)
-              </span>
-            </div>
+  <span
+    class="flex items-center gap-1 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md"
+  >
+    <i class="fas fa-star"></i>
+    {{ university?.details?.rating || "N/A" }} ({{ university?.totalReviews || 0 }} Reviews)
+  </span>
+</div>
 
-            <div class="flex flex-wrap gap-x-6 gap-y-1 text-xs text-gray-500">
-              <span class="flex items-center gap-1">
-                <i class="fas fa-user-circle"></i>
-                Authored by {{ university.author }}
-              </span>
-              <span class="flex items-center gap-1">
-                <i class="fas fa-clock"></i>
-                Updated {{ university.lastUpdated }}
-              </span>
-            </div>
+
+           <div class="flex flex-wrap gap-x-6 gap-y-1 text-xs text-gray-500">
+
+  <span class="flex items-center gap-1">
+    <img
+      :src="university?.admin?.image"
+      alt="Admin Image"
+      class="w-6 h-6 rounded-full object-cover"
+    />
+    Authored by {{ university?.admin?.name }}
+  </span>
+
+  <span class="flex items-center gap-1">
+    <i class="fas fa-clock"></i>
+    Updated {{ new Date(university?.createdAt).toLocaleDateString() }}
+  </span>
+</div>
           </div>
         </div>
 
@@ -85,8 +107,8 @@ const university = ref({
       </div>
     </div>
   </section>
+  <section v-else class="text-center py-10 text-gray-500">
+    Loading college data...
+  </section>
 </template>
 
-<style scoped>
-/* Assuming you have Font Awesome for icons (fas fa-...) or use similar icons */
-</style>
