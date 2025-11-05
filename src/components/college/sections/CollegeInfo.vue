@@ -362,7 +362,7 @@ const goToCoursesTab = () => {
       <h3
         class="text-xl font-bold text-gray-800 mb-5 border-b pb-3 border-gray-200"
       >
-        📚 {{ university.shortName || university.name }} Courses & Fees 2025
+        📚 {{ university?.shortName || university?.name }} Courses & Fees 2025
       </h3>
 
       <div class="overflow-x-auto">
