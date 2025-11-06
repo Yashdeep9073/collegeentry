@@ -33,10 +33,11 @@ import Specializations from "../components/courseDetails/section/Specializations
 import Fees from "../components/courseDetails/section/Fees.vue";
 import Placement from "../components/courseDetails/section/Placement.vue";
 import AllExams from "../pages/Exams/AllExams.vue";
-import Scholarships from "../pages/scolership/scholarships.vue";
+
 import NotFound from "../pages/NotFound.vue";
 import Verify from "../components/auth/Verify.vue";
 import ContactUs from "../pages/ContactUs.vue";
+import Scholarship from "../pages/Scholarship/Scholarship.vue";
 
 const routes = [
   {
@@ -53,7 +54,7 @@ const routes = [
   },
   { path: "/courses", component: AllCourses },
   { path: "/exams", component: AllExams },
-  { path: "/scholarships", component: Scholarships },
+  { path: "/scholarships", component: Scholarship },
   { path: "/verify-email", name: "VerifyEmail", component: Verify },
   { path: "/contact-us", name: "ContactUs", component: ContactUs },
 

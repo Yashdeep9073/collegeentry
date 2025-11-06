@@ -25,7 +25,7 @@ const university = computed(() => collegeStore.college);
     v-if="university"
     class="bg-white border-b border-gray-100 py-6 sm:py-8 shadow-sm"
   >
-    <div class="max-w-6xl mx-auto px-4 lg:px-6">
+    <div class="max-w-6xl applyBackground mx-auto px-4 lg:px-6">
       <div class="text-xs text-gray-500 flex items-center gap-1.5 mb-4">
         <a href="/" class="hover:text-blue-600 transition duration-150">Home</a>
         <span class="text-gray-400">/</span>
@@ -111,4 +111,11 @@ const university = computed(() => collegeStore.college);
     Loading college data...
   </section>
 </template>
+
+
+<style scoped>
+.applyBackground {
+  background-image:;
+}
+</style>
 
