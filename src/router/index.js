@@ -38,6 +38,10 @@ import NotFound from "../pages/NotFound.vue";
 import Verify from "../components/auth/Verify.vue";
 import ContactUs from "../pages/ContactUs.vue";
 import Scholarship from "../pages/Scholarship/Scholarship.vue";
+import CompairColleges from "../pages/Colleges/CompairColleges.vue";
+import Terms from "../pages/Static/Terms.vue";
+import PrivacyPolicy from "../pages/Static/PrivacyPolicy.vue";
+import About from "../pages/Static/About.vue";
 
 const routes = [
   {
@@ -52,11 +56,39 @@ const routes = [
     component: AllColleges,
     meta: { title: "Top Colleges in India 2025" },
   },
-  { path: "/courses", component: AllCourses },
-  { path: "/exams", component: AllExams },
-  { path: "/scholarships", component: Scholarship },
+  {
+    path: "/courses",
+    component: AllCourses,
+    meta: { title: "Top Courses in India 2025" },
+  },
+  { path: "/exams", component: AllExams ,  meta: { title: "Top Exams in India 2025 - College Entry" },},
+  { path: "/scholarships", component: Scholarship , meta: { title: "Top Scholarships in India and Abroad 2025 - College Entry" } },
   { path: "/verify-email", name: "VerifyEmail", component: Verify },
-  { path: "/contact-us", name: "ContactUs", component: ContactUs },
+  { path: "/contact-us", name: "ContactUs", component: ContactUs , meta: { title: "Contact Us" } },
+  {
+    path: "/college-compare",
+    name: "college-compare",
+    component: CompairColleges,
+    meta: { title: "Compare Colleges" },
+  },
+  {
+    path: "/terms-and-conditions",
+    name: "terms-and-conditions",
+    component: Terms,
+    meta: { title: "Terms and Conditions" },
+  },
+  {
+    path: "/about-us",
+    name: "about-us",
+    component: About,
+    meta: { title: "About Us" },
+  },
+  {
+    path: "/privacy-policy",
+    name: "privacy-policy",
+    component: PrivacyPolicy,
+    meta: { title: "Privacy Policy" },
+  },
 
   {
     path: "/colleges/:slug",

@@ -442,7 +442,7 @@
                 <button
                   class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl text-base font-semibold transition shadow-lg shadow-red-500/50"
                 >
-                  Apply Now 🔥
+                  Apply Now 
                 </button>
                 <button
                   class="border border-[#ff4d4f] text-[#ff4d4f] px-6 py-3 rounded-xl text-sm font-semibold hover:bg-blue-50 transition"

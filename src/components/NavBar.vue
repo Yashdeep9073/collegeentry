@@ -26,37 +26,42 @@
           >Scholarships</router-link
         >
         <li class="hover:text-gray-200 cursor-pointer">Admission 2025</li>
-        <li class="hover:text-gray-200 cursor-pointer">News</li>
+        <li class="hover:text-gray-200 cursor-pointer">Article</li>
 
-      <li class="relative group cursor-pointer">
-    <span class="flex items-center hover:text-gray-200">
-        More
-        <svg
-            class="inline-block ml-1 w-3 h-3 transition-transform duration-200 group-hover:rotate-180"
-            fill="white"
-            viewBox="0 0 20 20"
-        >
-            <path d="M5.23 7.21L10 12l4.77-4.79z" />
-        </svg>
-    </span>
+        <li class="relative group cursor-pointer">
+          <span class="flex items-center hover:text-gray-200">
+            More
+            <svg
+              class="inline-block ml-1 w-3 h-3 transition-transform duration-200 group-hover:rotate-180"
+              fill="white"
+              viewBox="0 0 20 20"
+            >
+              <path d="M5.23 7.21L10 12l4.77-4.79z" />
+            </svg>
+          </span>
 
-    <ul
-        class="absolute left-0 top-full bg-white text-gray-900 w-48 mt-3 rounded-lg shadow-2xl  opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 transform group-hover:translate-y-0 translate-y-2"
-    >
-        <li class="px-4 py-2.5 hover:bg-orange-50 hover:text-[#FF5C00] cursor-pointer text-sm ">
-            Boards
+          <ul
+            class="absolute left-0 top-full bg-white text-gray-900 w-48 mt-3 rounded-lg shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 transform group-hover:translate-y-0 translate-y-2"
+          >
+            <li
+              class="px-4 py-2.5 hover:bg-orange-50 hover:text-[#FF5C00] cursor-pointer text-sm"
+            >
+              Boards
+            </li>
+            <router-link
+              to="/contact-us"
+              class="block px-4 py-2.5 hover:bg-orange-50 hover:text-[#FF5C00] cursor-pointer text-sm"
+            >
+              Contact Us
+            </router-link>
+            <router-link
+              to="/about-us"
+              class="block px-4 py-2.5 hover:bg-orange-50 hover:text-[#FF5C00] cursor-pointer text-sm"
+            >
+              About Us
+            </router-link>
+          </ul>
         </li>
-        <router-link
-            to="/contact-us"
-            class="block px-4 py-2.5 hover:bg-orange-50 hover:text-[#FF5C00] cursor-pointer text-sm "
-        >
-            Contact Us
-        </router-link>
-        <li class="px-4 py-2.5 hover:bg-orange-50 hover:text-[#FF5C00] cursor-pointer text-sm">
-            About Us
-        </li>
-    </ul>
-</li>
       </ul>
 
       <div class="hidden lg:flex gap-3 items-center">

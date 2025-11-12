@@ -24,9 +24,7 @@ onMounted(fetchNews);
 <template>
   <div class="featured-container">
     <div class="section-header">
-      
-      <h2>Latest News</h2>
-   
+      <h2>Latest Article</h2>
     </div>
 
     <Swiper

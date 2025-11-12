@@ -53,12 +53,12 @@
           </h4>
           <ul class="space-y-2 text-sm">
             <li v-for="link in section.links" :key="link.name">
-              <a
-                :href="link.url"
+              <router-link
+                :to="link.url"
                 class="hover:text-white transition duration-150"
               >
                 {{ link.name }}
-              </a>
+              </router-link>
             </li>
           </ul>
         </div>
@@ -112,8 +112,8 @@ const footerLinks = ref([
     title: "Our Policies",
     links: [
       { name: "Advertise With Us", url: "#" },
-      { name: "Terms & Conditions", url: "#" },
-      { name: "Privacy Policy", url: "#" },
+      { name: "Terms & Conditions", url: "/terms-and-conditions" },
+      { name: "Privacy Policy", url: "/privacy-policy" },
     ],
   },
 ]);

@@ -154,7 +154,7 @@ const selectCategory = (category) => {
             <h4 class="text-base font-semibold text-gray-800 group-hover:text-red-600 transition duration-150 line-clamp-2 mb-1">
               {{ scholarship.name }}
             </h4>
-            <p class="text-xs text-gray-500">Getmyuni Context Team</p>
+            <p class="text-xs text-gray-500">College Entry Context Team</p>
             <p class="text-xs font-medium text-red-500 mt-2">{{ scholarship.status }}</p>
           </div>
         </a>

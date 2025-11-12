@@ -159,7 +159,7 @@ const goToCoursesTab = () => {
       class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 relative"
     >
       <h3 class="text-xl font-bold text-gray-800 mb-4">
-        📚 About {{ university?.name }}
+         About {{ university?.name }}
       </h3>
       <div
         class="text-gray-700 leading-relaxed transition-max-height duration-500 ease-in-out overflow-hidden"
