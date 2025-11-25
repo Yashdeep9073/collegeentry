@@ -100,7 +100,7 @@ const selectCategory = (category) => {
         <input
           v-model="searchInput"
           type="text"
-          placeholder="🔍 Search for Scholarship Details"
+          placeholder=" Search for Scholarship Details"
           class="w-full px-5 py-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500 text-gray-700 shadow-sm transition duration-150"
         />
       </div>

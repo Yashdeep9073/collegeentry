@@ -75,11 +75,11 @@ const searchInput = ref('');
         <input
           v-model="searchInput"
           type="text"
-          placeholder="🔍 Search for Courses, Degree or Certification"
+          placeholder=" Search for Courses, Degree or Certification"
           class="w-full px-5 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-700 shadow-sm"
         />
         <button
-          class="sm:w-auto px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-150 shadow-md"
+          class="sm:w-auto px-6 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-800 transition duration-150 shadow-md"
         >
           Search
         </button>

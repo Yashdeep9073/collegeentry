@@ -127,7 +127,7 @@ const searchInput = ref("");
           <input
             v-model="searchInput"
             type="text"
-            placeholder="🔍 Search for an Entrance Exam"
+            placeholder=" Search for an Entrance Exam"
             class="w-full px-5 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-700 shadow-sm"
             style="height: 50px"
           />
