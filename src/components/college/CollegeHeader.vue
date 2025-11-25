@@ -29,10 +29,13 @@ watch(university, (val) => {
 <template>
   <section
     v-if="university"
-    class="bg-white border-b border-gray-100 py-6 sm:py-8 shadow-sm"
+    class="bg-cover bg-center bg-no-repeat bg-fixed relative"
+    :style="{
+      backgroundImage: `url(${university?.details?.thumbnail})`,
+    }"
   >
     <div class="max-w-6xl applyBackground mx-auto px-4 lg:px-6">
-      <div class="text-xs text-gray-500 flex items-center gap-1.5 mb-4">
+      <div class="text-xs text-gray-800 flex items-center gap-1.5 mb-4">
         <a href="/" class="hover:text-blue-600 transition duration-150">Home</a>
         <span class="text-gray-400">/</span>
         <a href="#" class="hover:text-blue-600 transition duration-150"
@@ -55,7 +58,7 @@ watch(university, (val) => {
 
           <div class="mt-4 space-y-3">
             <div
-              class="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm md:text-base text-gray-600"
+              class="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm md:text-base text-gray-800"
             >
               <span class="flex items-center gap-1.5 font-medium">
                 <i class="fas fa-map-marker-alt text-red-500"></i>
@@ -73,7 +76,7 @@ watch(university, (val) => {
               </span>
             </div>
 
-            <div class="flex flex-wrap gap-x-6 gap-y-1 text-xs text-gray-500">
+            <div class="flex flex-wrap gap-x-6 gap-y-1 text-xs text-gray-800">
               <span class="flex items-center gap-1">
                 <img
                   :src="university?.admin?.image"
@@ -103,13 +106,13 @@ watch(university, (val) => {
             Compare Colleges
           </router-link>
           <button
-            class="w-full sm:w-auto px-5 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200 text-sm font-semibold shadow-lg shadow-red-200 flex items-center justify-center gap-2"
+            class="w-full sm:w-auto px-5 py-2.5 rounded-lg bg-gradient-to-r from-[#E04A00] via-[#FF5C00] to-[#FFA040] text-white text-sm font-semibold shadow-lg shadow-red-200 flex items-center justify-center gap-2"
           >
             <i class="fas fa-paper-plane"></i>
-             Apply Now
+            Apply Now
           </button>
           <button
-            class="w-full sm:w-auto px-5 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition duration-200 text-sm font-semibold flex items-center justify-center gap-2"
+            class="w-full sm:w-auto px-5 py-2.5 border border-gray-500 text-gray-800 rounded-lg hover:bg-gray-100 transition duration-200 text-sm font-semibold flex items-center justify-center gap-2"
           >
             <i class="fas fa-download"></i>
             Download Brochure

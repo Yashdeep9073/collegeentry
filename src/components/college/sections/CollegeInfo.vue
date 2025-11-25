@@ -1,14 +1,14 @@
 <script setup>
 import { ref, computed } from "vue";
-import { useRouter } from "vue-router"; // Import useRouter for navigation
+import { useRouter } from "vue-router";
 import { useCollegeStore } from "../../../store/collegeNameStore";
 
 const collegeStore = useCollegeStore();
-
 const router = useRouter();
 
 // For easy usage in template
 const university = computed(() => collegeStore.college);
+
 // --- Data for Latest Updates Section ---
 const allUpdates = ref([
   {
@@ -57,30 +57,16 @@ const showFullAbout = ref(false);
 // --- Data for Highlights Table ---
 const dynamicHighlights = computed(() => {
   if (!university.value) return [];
-
   const u = university.value;
-
   return [
     { label: "Institution Name", value: u.name, icon: "fa-university" },
     { label: "Location", value: u.location, icon: "fa-map-marker-alt" },
     { label: "Ownership", value: u.ownership, icon: "fa-landmark" },
-    {
-      label: "Year of Establishment",
-      value: u.establishedYear,
-      icon: "fa-calendar-alt",
-    },
+    { label: "Year of Establishment", value: u.establishedYear, icon: "fa-calendar-alt" },
     { label: "Affiliation", value: u.affiliation, icon: "fa-scroll" },
     { label: "Accredited by", value: u.accreditation, icon: "fa-certificate" },
-    {
-      label: "Approved By",
-      value: u.isApproved ? "Yes" : "No",
-      icon: "fa-check-circle",
-    },
-    {
-      label: "Average Fees",
-      value: `₹${Math.round(u.details.averageFees)}`,
-      icon: "fa-wallet",
-    },
+    { label: "Approved By", value: u.isApproved ? "Yes" : "No", icon: "fa-check-circle" },
+    { label: "Average Fees", value: `₹${Math.round(u.details.averageFees)}`, icon: "fa-wallet" },
     { label: "Ranking (India)", value: `#${u.ranking}`, icon: "fa-trophy" },
     { label: "Contact", value: u.contactNumber, icon: "fa-phone-alt" },
     { label: "Website", value: u.website, icon: "fa-link" },
@@ -105,335 +91,254 @@ const displayedRankings = computed(() => {
     ? rankings.value
     : rankings.value.slice(0, initialRankingsToShow);
 });
+
 // --- Data for Courses & Fees Table ---
 const allCourses = computed(() => {
   return university.value?.courses || [];
 });
-const initialCoursesToShow = 10; // Show all 10 rows for now, but use v-for
 
 // --- Navigation Function ---
 const goToCoursesTab = () => {
-  // Navigate to the dedicated 'Courses & Fees' tab
-  // You'll need to adjust the path based on your Vue Router setup
-  // Assuming the path is something like /college-details/LPU-Phagwara/courses-fees
   router.push({ path: "/colleges/LPU-Phagwara/courses-fees" });
 };
+
+// --- ADVERTISEMENT / BANNER DATA ---
+// You can replace this later with data from your API
+const adBanners = ref([
+  {
+    id: 101,
+    imageUrl: "https://placehold.co/400x500/e2e8f0/1e293b?text=Ad+Banner+1\n(Static)",
+    link: "#",
+    alt: "Admission Open 2025"
+  },
+  {
+    id: 102,
+    imageUrl: "https://placehold.co/400x300/fee2e2/991b1b?text=Ad+Banner+2\n(Scholarship)",
+    link: "#",
+    alt: "Scholarship Offers"
+  }
+]);
 </script>
 
 <template>
-  <div class="space-y-8">
-    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-      <h3
-        class="text-xl font-bold text-gray-800 mb-5 border-b pb-3 border-gray-200"
-      >
-        📢 Latest Update for {{ university?.shortName || university?.name }}
-      </h3>
-      <div class="space-y-6">
-        <div
-          v-for="update in displayedUpdates"
-          :key="update.id"
-          class="border-b border-gray-100 pb-4 last:border-b-0"
-        >
-          <div class="flex items-start text-red-600 font-medium mb-2">
-            <i class="fas fa-calendar-alt text-lg mr-2 mt-1 flex-shrink-0"></i>
-            <span class="text-base md:text-lg">
-              {{ update.date }} - {{ update.title }}
-            </span>
-          </div>
-          <p class="text-gray-700 leading-relaxed pl-8 pr-4 text-sm">
-            {{ update.description }}
-          </p>
-        </div>
-      </div>
-      <div v-if="hasMoreUpdates" class="text-center pt-4">
-        <button
-          @click="toggleShowMore"
-          class="text-blue-600 hover:text-blue-800 font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out text-sm"
-        >
-          {{ showAllUpdates ? "Show Less" : "Show More" }}
-        </button>
-      </div>
-    </div>
-
-    <div
-      class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 relative"
-    >
-      <h3 class="text-xl font-bold text-gray-800 mb-4">
-         About {{ university?.name }}
-      </h3>
-      <div
-        class="text-gray-700 leading-relaxed transition-max-height duration-500 ease-in-out overflow-hidden"
-        :class="{
-          'max-h-36 sm:max-h-28': !showFullAbout,
-          'max-h-full': showFullAbout,
-        }"
-      >
-        <p>{{ university?.description }}</p>
-        <div
-          v-if="!showFullAbout"
-          class="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-white to-transparent"
-        ></div>
-      </div>
-      <div class="text-center pt-2 relative">
-        <button
-          @click="showFullAbout = !showFullAbout"
-          class="text-blue-600 hover:text-blue-800 font-semibold py-1 px-4 rounded-md transition duration-200 ease-in-out text-sm"
-        >
-          Show {{ showFullAbout ? "Less" : "More" }}
-        </button>
-      </div>
-    </div>
-
-    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-      <h3
-        class="text-xl font-bold text-gray-800 mb-5 border-b pb-3 border-gray-200"
-      >
-        📋 {{ university?.shortName || university?.name }} Highlights
-      </h3>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4">
-        <!-- Use dynamic highlights based on backend -->
-        <div
-          v-for="item in dynamicHighlights"
-          :key="item.label"
-          class="flex items-center justify-between border-b border-gray-100 pb-2"
-        >
-          <div class="flex items-center text-gray-600 font-medium text-sm">
-            <i
-              :class="[
-                'fas mr-3 text-blue-600 text-lg w-4 text-center',
-                item.icon,
-              ]"
-            ></i>
-            {{ item.label }}
-          </div>
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    
+    <div class="lg:col-span-2 space-y-8">
+      
+      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <h3 class="text-xl font-bold text-gray-800 mb-5 border-b pb-3 border-gray-200">
+          📢 Latest Update for {{ university?.shortName || university?.name }}
+        </h3>
+        <div class="space-y-6">
           <div
-            class="text-gray-900 font-semibold text-sm sm:text-base truncate text-right"
+            v-for="update in displayedUpdates"
+            :key="update.id"
+            class="border-b border-gray-100 pb-4 last:border-b-0"
           >
-            <template v-if="item.label === 'Website'">
-              <a
-                :href="item.value"
-                target="_blank"
-                class="text-blue-600 hover:underline"
-              >
-                {{ cleanUrl(item.value) }}
-              </a>
-            </template>
-            <template v-else>
-              {{ item.value || "N/A" }}
-            </template>
+            <div class="flex items-start text-red-600 font-medium mb-2">
+              <i class="fas fa-calendar-alt text-lg mr-2 mt-1 flex-shrink-0"></i>
+              <span class="text-base md:text-lg">
+                {{ update.date }} - {{ update.title }}
+              </span>
+            </div>
+            <p class="text-gray-700 leading-relaxed pl-8 pr-4 text-sm">
+              {{ update.description }}
+            </p>
+          </div>
+        </div>
+        <div v-if="hasMoreUpdates" class="text-center pt-4">
+          <button
+            @click="toggleShowMore"
+            class="text-blue-600 hover:text-blue-800 font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out text-sm"
+          >
+            {{ showAllUpdates ? "Show Less" : "Show More" }}
+          </button>
+        </div>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 relative">
+        <h3 class="text-xl font-bold text-gray-800 mb-4">
+          About {{ university?.name }}
+        </h3>
+        <div
+          class="text-gray-700 leading-relaxed transition-max-height duration-500 ease-in-out overflow-hidden"
+          :class="{
+            'max-h-36 sm:max-h-28': !showFullAbout,
+            'max-h-full': showFullAbout,
+          }"
+        >
+          <p>{{ university?.description }}</p>
+          <div
+            v-if="!showFullAbout"
+            class="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-white to-transparent"
+          ></div>
+        </div>
+        <div class="text-center pt-2 relative">
+          <button
+            @click="showFullAbout = !showFullAbout"
+            class="text-blue-600 hover:text-blue-800 font-semibold py-1 px-4 rounded-md transition duration-200 ease-in-out text-sm"
+          >
+            Show {{ showFullAbout ? "Less" : "More" }}
+          </button>
+        </div>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <h3 class="text-xl font-bold text-gray-800 mb-5 border-b pb-3 border-gray-200">
+          📋 {{ university?.shortName || university?.name }} Highlights
+        </h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4">
+          <div
+            v-for="item in dynamicHighlights"
+            :key="item.label"
+            class="flex items-center justify-between border-b border-gray-100 pb-2"
+          >
+            <div class="flex items-center text-gray-600 font-medium text-sm">
+              <i
+                :class="[
+                  'fas mr-3 text-blue-600 text-lg w-4 text-center',
+                  item.icon,
+                ]"
+              ></i>
+              {{ item.label }}
+            </div>
+            <div class="text-gray-900 font-semibold text-sm sm:text-base truncate text-right">
+              <template v-if="item.label === 'Website'">
+                <a
+                  :href="item.value"
+                  target="_blank"
+                  class="text-blue-600 hover:underline"
+                >
+                  {{ cleanUrl(item.value) }}
+                </a>
+              </template>
+              <template v-else>
+                {{ item.value || "N/A" }}
+              </template>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <hr class="border-gray-200" />
+      <hr class="border-gray-200" />
 
-    <!-- <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-      <h3
-        class="text-xl font-bold text-gray-800 mb-5 border-b pb-3 border-gray-200"
-      >
-        🏆 LPU Rankings
-      </h3>
-
-      <div class="overflow-x-auto">
-        <table
-          class="min-w-full divide-y divide-gray-200 border border-gray-200"
-        >
-          <thead class="bg-gray-50">
-            <tr>
-              <th
-                scope="col"
-                class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
-              >
-                Publisher
-              </th>
-              <th
-                scope="col"
-                class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
-              >
-                Ranking & Year
-              </th>
-              <th
-                scope="col"
-                class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
-              >
-                Criteria
-              </th>
-            </tr>
-          </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            <tr v-for="ranking in displayedRankings" :key="ranking.id">
-            
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                {{ ranking.rank }} in {{ ranking.year }}
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                {{ ranking.criteria }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div>
+         <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-4">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">🏆 Rankings</h3>
+            <div class="overflow-x-auto">
+              <table class="min-w-full divide-y divide-gray-200 border border-gray-200">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Publisher</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Rank</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Year</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Criteria</th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <tr v-for="ranking in displayedRankings" :key="ranking.id">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                      <div class="flex items-center">
+                        <img v-if="ranking.publisherLogo" :src="ranking.publisherLogo" alt="logo" class="w-6 h-6 mr-2" />
+                        {{ ranking.publisher.toUpperCase() }}
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">#{{ ranking.ranking }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ ranking.year }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ ranking.criteria || "Overall" }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div v-if="rankings.length > initialRankingsToShow" class="text-center pt-4">
+              <button @click="showAllRankings = !showAllRankings" class="text-blue-600 hover:text-blue-800 font-semibold text-sm">
+                {{ showAllRankings ? "Show Less" : "Show More" }}
+              </button>
+            </div>
+         </div>
       </div>
 
-      <div
-        v-if="allRankings.length > initialRankingsToShow"
-        class="text-center pt-4"
-      >
-        <button
-          @click="showAllRankings = !showAllRankings"
-          class="text-blue-600 hover:text-blue-800 font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out text-sm"
-        >
-          {{ showAllRankings ? "Show Less" : "Show More" }}
-        </button>
-      </div>
-    </div> -->
-
-    <div class="overflow-x-auto">
-      <table class="min-w-full divide-y divide-gray-200 border border-gray-200">
-        <thead class="bg-gray-50">
-          <tr>
-            <th
-              class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
-            >
-              Publisher
-            </th>
-            <th
-              class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
-            >
-              Rank
-            </th>
-            <th
-              class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
-            >
-              Year
-            </th>
-            <th
-              class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
-            >
-              Criteria
-            </th>
-          </tr>
-        </thead>
-
-        <tbody class="bg-white divide-y divide-gray-200">
-          <tr v-for="ranking in displayedRankings" :key="ranking.id">
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-              <div class="flex items-center">
-                <img
-                  v-if="ranking.publisherLogo"
-                  :src="ranking.publisherLogo"
-                  alt="logo"
-                  class="w-6 h-6 mr-2"
-                />
-                {{ ranking.publisher.toUpperCase() }}
-              </div>
-            </td>
-
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-              #{{ ranking.ranking }}
-            </td>
-
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-              {{ ranking.year }}
-            </td>
-
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-              {{ ranking.criteria || "Overall" }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div
-      v-if="rankings.length > initialRankingsToShow"
-      class="text-center pt-4"
-    >
-      <button
-        @click="showAllRankings = !showAllRankings"
-        class="text-blue-600 hover:text-blue-800 font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out text-sm"
-      >
-        {{ showAllRankings ? "Show Less" : "Show More" }}
-      </button>
-    </div>
-
-    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-      <h3
-        class="text-xl font-bold text-gray-800 mb-5 border-b pb-3 border-gray-200"
-      >
-        📚 {{ university?.shortName || university?.name }} Courses & Fees 2025
-      </h3>
-
-      <div class="overflow-x-auto">
-        <table
-          class="min-w-full divide-y divide-gray-200 border border-gray-200"
-        >
-          <thead class="bg-blue-50">
-            <tr>
-              <th
-                scope="col"
-                class="px-6 py-3 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider"
-              >
-                Course
-              </th>
-              <th
-                scope="col"
-                class="px-6 py-3 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider"
-              >
-                Average Fees
-              </th>
-              <th
-                scope="col"
-                class="px-6 py-3 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider"
-              >
-                Duration
-              </th>
-              <th
-                scope="col"
-                class="px-6 py-3 text-center text-xs font-semibold text-gray-800 uppercase tracking-wider"
-              >
-                Action
-              </th>
-            </tr>
-          </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            <tr v-for="course in allCourses" :key="course.id">
-              <td
-                class="px-6 py-3 whitespace-nowrap text-sm font-medium text-blue-600 hover:underline cursor-pointer"
-              >
-                {{ course.name }}
-              </td>
-              <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-900">
-                {{ course.fees }}
-              </td>
-              <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-700">
-                {{ course.duration }}
-              </td>
-              <td class="px-6 py-3 whitespace-nowrap text-center">
-                <button
-                  class="px-3 py-1 text-xs font-medium text-red-600 border border-red-400 rounded-md hover:bg-red-50 transition duration-150"
-                >
-                  Apply Now
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <h3 class="text-xl font-bold text-gray-800 mb-5 border-b pb-3 border-gray-200">
+          📚 {{ university?.shortName || university?.name }} Courses & Fees 2025
+        </h3>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200 border border-gray-200">
+            <thead class="bg-blue-50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider">Course</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider">Average Fees</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-800 uppercase tracking-wider">Duration</th>
+                <th class="px-6 py-3 text-center text-xs font-semibold text-gray-800 uppercase tracking-wider">Action</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr v-for="course in allCourses" :key="course.id">
+                <td class="px-6 py-3 whitespace-nowrap text-sm font-medium text-blue-600 hover:underline cursor-pointer">
+                  {{ course.name }}
+                </td>
+                <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-900">{{ course.fees }}</td>
+                <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-700">{{ course.duration }}</td>
+                <td class="px-6 py-3 whitespace-nowrap text-center">
+                  <button class="px-3 py-1 text-xs font-medium text-red-600 border border-red-400 rounded-md hover:bg-red-50 transition duration-150">
+                    Apply Now
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="text-center pt-6">
+          <button
+            @click="goToCoursesTab"
+            class="px-6 py-2 border border-red-500 text-red-600 font-semibold rounded-md hover:bg-red-50 transition duration-200 flex items-center justify-center mx-auto text-sm"
+          >
+            More Courses <i class="fas fa-external-link-alt ml-2 text-xs"></i>
+          </button>
+        </div>
       </div>
 
-      <div class="text-center pt-6">
-        <button
-          @click="goToCoursesTab"
-          class="px-6 py-2 border border-red-500 text-red-600 font-semibold rounded-md hover:bg-red-50 transition duration-200 flex items-center justify-center mx-auto text-sm"
+    </div>
+    <div class="lg:col-span-1">
+      <div class="sticky top-4 space-y-6">
+        
+        <div class="text-xs font-semibold text-gray-400 uppercase tracking-wide text-center">
+          Sponsored
+        </div>
+
+        <div 
+          v-for="ad in adBanners" 
+          :key="ad.id" 
+          class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden group"
         >
-          More Courses <i class="fas fa-external-link-alt ml-2 text-xs"></i>
-        </button>
+          <a :href="ad.link" target="_blank" class="block relative">
+             <img 
+              :src="ad.imageUrl" 
+              :alt="ad.alt" 
+              class="w-full h-auto object-cover transform group-hover:scale-105 transition duration-500 ease-in-out"
+            >
+            <div class="absolute bottom-4 left-0 right-0 text-center">
+                <span class="bg-red-600 text-white text-sm font-bold py-2 px-6 rounded-full shadow-lg group-hover:bg-red-700 transition">
+                    Apply Now
+                </span>
+            </div>
+          </a>
+        </div>
+
+        <div class="bg-blue-50 border border-blue-100 p-5 rounded-lg text-center">
+            <h4 class="font-bold text-gray-800 mb-2">Need Counselling?</h4>
+            <p class="text-sm text-gray-600 mb-4">Get expert guidance for admission 2025.</p>
+            <button class="w-full bg-blue-600 text-white font-semibold py-2 rounded hover:bg-blue-700 transition">
+                Contact Us
+            </button>
+        </div>
+
       </div>
     </div>
-  </div>
+    </div>
 </template>
 
 <style scoped>
-/* Scoped styles remain here */
+/* Scoped styles */
 </style>

@@ -5,7 +5,6 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation, Autoplay } from "swiper/modules";
 
-// 🏫 Import the College Store
 import { useCollegeStore } from "../../store/collegeStore";
 import fallbackImage from "../../assets/college-image.avif"; // fallback image
 
@@ -19,6 +18,7 @@ onMounted(async () => {
   await collegeStore.fetchColleges();
 });
 
+
 function goToCollege(college) {
   const slug = college.name.toLowerCase().replace(/\s+/g, "-"); // convert name → slug
   router.push(`/colleges/${slug}`);
@@ -26,11 +26,9 @@ function goToCollege(college) {
 </script>
 
 <template>
-  <div class="featured-container">
+  <div class="featured-container ">
     <div class="section-header">
-    
       <h2>Featured Colleges</h2>
-    
     </div>
 
     <!-- Loading State -->
@@ -55,24 +53,25 @@ function goToCollege(college) {
       :breakpoints="{
         320: { slidesPerView: 1 },
         640: { slidesPerView: 2 },
-        1024: { slidesPerView: 4 }
+        1024: { slidesPerView: 4 },
       }"
     >
-    <SwiperSlide
-  v-for="(college, index) in collegeStore.collegeList.slice(0, 10)"
-  :key="college.id || index"
->
-  <div class="college-card" @click="goToCollege(college)">
-    <img
-      :src="college.details.thumbnail || fallbackImage"
-      class="college-img"
-      alt="college image"
-    />
-    <h3>{{ college.name }}</h3>
-    <p class="location">{{ college.location }}</p>
-  </div>
-</SwiperSlide>
-
+      <SwiperSlide
+        v-for="(college, index) in collegeStore.collegeList
+          // .filter((college) => college.isFeatured === true)
+          .slice(0, 10)"
+        :key="college.id || index"
+      >
+        <div class="college-card mb-1 mt-1" @click="goToCollege(college)">
+          <img
+            :src="college.details.thumbnail || fallbackImage"
+            class="college-img"
+            alt="college image"
+          />
+          <h3>{{ college.name }}</h3>
+          <p class="location">{{ college.location }}</p>
+        </div>
+      </SwiperSlide>
     </Swiper>
   </div>
 </template>
@@ -112,12 +111,12 @@ function goToCollege(college) {
 .college-card {
   /* Set a fixed height for consistency */
   height: 320px; /* Adjust this value as needed based on your design */
-  
+
   /* Make it a Flex container to control vertical alignment */
   display: flex;
   flex-direction: column; /* Stack items vertically */
   justify-content: flex-start; /* Align content from the top */
-  
+
   background: #fff;
   border-radius: 12px;
   overflow: hidden; /* Crucial: Hides content that exceeds the fixed height */
@@ -139,12 +138,12 @@ function goToCollege(college) {
 h3 {
   /* Enforce a fixed height for the heading area */
   height: 48px; /* Should accommodate 2-3 lines of text (e.g., 2 lines * 24px line-height) */
-  
+
   margin-top: 12px;
   font-size: 18px;
   font-weight: 600;
   padding: 0 10px; /* Add some horizontal padding */
-  
+
   /* Text Truncation for multiple lines (Cross-Browser) */
   overflow: hidden;
   text-overflow: ellipsis;

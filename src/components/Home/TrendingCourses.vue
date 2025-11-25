@@ -13,28 +13,13 @@ const courses = [
   "BSc Nursing",
   "MBA",
   "BTech",
-  "BSc"
+  "BSc",
 ];
 
 const courseContent = {
-  "B.Ed": [
-    "B.Ed Admission",
-    "B.Ed Syllabus",
-    "B.Ed Colleges",
-    "B.Ed Jobs",
-  ],
-  BBA: [
-    "BBA Admission",
-    "BBA Fees",
-    "BBA Syllabus",
-    "BBA Jobs",
-  ],
-  BCA: [
-    "BCA Admission",
-    "BCA Syllabus",
-    "BCA Jobs",
-    "BCA Subjects",
-  ],
+  "B.Ed": ["B.Ed Admission", "B.Ed Syllabus", "B.Ed Colleges", "B.Ed Jobs"],
+  BBA: ["BBA Admission", "BBA Fees", "BBA Syllabus", "BBA Jobs"],
+  BCA: ["BCA Admission", "BCA Syllabus", "BCA Jobs", "BCA Subjects"],
   BCom: [
     "BCom Admission",
     "BCom Specialization",
@@ -48,23 +33,13 @@ const courseContent = {
     "MBA in Finance Jobs",
     "Top MBA Finance Colleges",
   ],
-  MCA: [
-    "MCA Course",
-    "MCA Colleges",
-    "MCA Jobs",
-    "MCA Syllabus",
-  ],
+  MCA: ["MCA Course", "MCA Colleges", "MCA Jobs", "MCA Syllabus"],
   "BSc Nursing": [
     "BSc Nursing Course",
     "BSc Nursing Syllabus",
     "BSc Nursing Jobs",
   ],
-  MBA: [
-    "MBA Admission",
-    "MBA Specializations",
-    "MBA Jobs",
-    "MBA Colleges",
-  ],
+  MBA: ["MBA Admission", "MBA Specializations", "MBA Jobs", "MBA Colleges"],
   BTech: [
     "BTech Admission",
     "BTech Branches",
@@ -77,7 +52,7 @@ const courseContent = {
     "BSc Jobs",
     "BSc Fees",
     "BSc Specialization",
-  ]
+  ],
 };
 
 const setCourse = (course) => {
@@ -88,7 +63,6 @@ const setCourse = (course) => {
 <template>
   <section class="py-14 bg-white">
     <div class="max-w-7xl mx-auto px-4 text-center">
-
       <h2 class="text-2xl md:text-3xl font-semibold text-gray-800 mb-6">
         Trending Courses
       </h2>
@@ -100,9 +74,11 @@ const setCourse = (course) => {
           :key="course"
           @click="setCourse(course)"
           class="px-5 py-2 rounded-full border text-sm transition"
-          :class="activeCourse === course 
-            ? 'bg-red-500 text-white border-red-500 shadow-md' 
-            : 'bg-white text-gray-600 border-red-400 hover:bg-red-50'"
+          :class="
+            activeCourse === course
+              ? 'bg-gradient-to-r from-[#E04A00] via-[#FF5C00] to-[#FFA040] text-white'
+              : 'bg-white text-gray-600 border-red-400 hover:bg-red-50'
+          "
         >
           {{ course }}
         </button>
@@ -123,7 +99,6 @@ const setCourse = (course) => {
           </div>
         </div>
       </transition>
-
     </div>
   </section>
 </template>

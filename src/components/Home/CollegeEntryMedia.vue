@@ -55,7 +55,7 @@ if (certificateImages.value.length === 0) {
       >
         <SwiperSlide v-for="(img, index) in certificateImages" :key="index">
           <div
-            class="relative rounded-xl overflow-hidden shadow-md hover:scale-[1.03] transition duration-300 cursor-pointer"
+            class="relative rounded-xl overflow-hidden shadow-md hover:scale-[1.03] transition duration-300 cursor-pointer mb-1 mt-1"
           >
             <img :src="img" class="w-full h-64 object-contain" />
           </div>

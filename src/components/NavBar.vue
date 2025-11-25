@@ -1,5 +1,8 @@
 <template>
-  <header class="bg-[#FF5C00] text-white shadow sticky top-0 z-50">
+  <header
+  class="bg-gradient-to-r from-[#E04A00] via-[#FF5C00] to-[#FFA040] text-white shadow sticky top-0 z-50"
+>
+
     <nav
       class="max-w-[1300px] mx-auto flex items-center justify-between px-6 py-4"
     >

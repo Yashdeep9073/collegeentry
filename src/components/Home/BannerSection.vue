@@ -11,7 +11,7 @@ import banner5 from "../../assets/1.webp";
 const showModal = ref(false);
 
 // ✅ Just use local images array
-const images = ref([banner1, banner2, banner3, banner4,banner5]);
+const images = ref([banner1, banner2, banner3, banner4, banner5]);
 const currentIndex = ref(0);
 
 onMounted(() => {
@@ -233,7 +233,7 @@ h1 {
 }
 
 .search-box button {
-  background: #ff5c00;
+  background: linear-gradient(90deg, #D83E00, #FF6A00, #FFB15A);
   border: none;
   padding: 12px 20px;
   color: white;
@@ -243,7 +243,7 @@ h1 {
 
 /* ---------- Full Page Modal ---------- */
 /* ---------- Full Page Modal ---------- */
-.modal-page{
+.modal-page {
   position: fixed;
   top: 0;
   left: 0;
@@ -371,9 +371,7 @@ h1 {
 }
 
 @media (max-width: 500px) {
-
-
-   .search-box {
+  .search-box {
     width: 90%;
     max-width: 100%;
     flex-direction: column; /* stack input + button */
@@ -388,7 +386,7 @@ h1 {
   }
 
   .search-box button {
-   display: none;
+    display: none;
   }
   .modal-header {
     flex-wrap: wrap;
@@ -418,17 +416,11 @@ h1 {
     right: 10px;
     z-index: 2001;
   }
-  
 
   .section ul li {
     flex-direction: column;
     gap: 5px;
   }
-
-
-
-  
- 
 }
 </style>
 

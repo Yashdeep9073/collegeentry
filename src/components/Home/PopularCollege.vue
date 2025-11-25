@@ -69,7 +69,7 @@ const sortedColleges = computed(() => {
       <SwiperSlide
         v-for="(college, index) in sortedColleges" :key="college.id || index"
       >
-        <div class="college-card" @click="goToCollege(college)">
+        <div class="college-card mb-1 mt-1" @click="goToCollege(college)">
           <img
             :src="college.details.thumbnail || fallbackImage"
             class="college-img"

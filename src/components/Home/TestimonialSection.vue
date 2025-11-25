@@ -44,7 +44,7 @@ onMounted(fetchTestimonials);
       }"
     >
       <SwiperSlide v-for="item in testimonials" :key="item.id">
-        <div class="college-card p-6 text-center flex flex-col items-center">
+        <div class="college-card p-6 mb-1 mt-1 text-center flex flex-col items-center">
           <img
             :src="item.image || 'https://via.placeholder.com/150'"
             class="w-24 h-24 object-cover rounded-full border shadow mb-4"

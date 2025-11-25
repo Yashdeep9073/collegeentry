@@ -1,23 +1,25 @@
 <script setup>
-import { ref } from "vue";
+import axios from "axios";
+import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 const activeTab = ref("colleges");
+const FETCH_ALL_STREAM_COUNT = import.meta.env.VITE_FETCH_ALL_STREAM_COUNT;
 
 const tabs = ["colleges", "exams", "courses"];
 
 /* ✅ DATA FOR COLLEGES */
-const collegeCategories = [
-  { name: "Agriculture", count: 5, icon: "fa-tractor" },
-  { name: "Computer Science", count: 3143, icon: "fa-computer" },
-  { name: "Engineering", count: 4135, icon: "fa-gears" },
-  { name: "Hotel Management", count: 364, icon: "fa-hotel" },
-  { name: "Management", count: 5499, icon: "fa-chart-line" },
-  { name: "Medical", count: 859, icon: "fa-stethoscope" },
-  { name: "Pharmacy", count: 930, icon: "fa-prescription-bottle-medical" },
-  { name: "Science", count: 4267, icon: "fa-flask" },
-];
+const collegeCategories = ref([
+  { name: "Agriculture", count: 0, icon: "fa-tractor" },
+  { name: "Computer Science", count: 0, icon: "fa-computer" },
+  { name: "Engineering", count: 0, icon: "fa-gears" },
+  { name: "Hotel Management", count: 0, icon: "fa-hotel" },
+  { name: "Management", count: 0, icon: "fa-chart-line" },
+  { name: "Medical", count: 0, icon: "fa-stethoscope" },
+  { name: "Pharmacy", count: 0, icon: "fa-prescription-bottle-medical" },
+  { name: "Science", count: 0, icon: "fa-flask" },
+]);
 
 /* ✅ DATA FOR EXAMS */
 const examCategories = [
@@ -39,16 +41,40 @@ const courseCategories = [
   { name: "BCA", duration: "3 Years", icon: "fa-laptop-code" },
 ];
 
+const fetchCollegeCounts = async () => {
+  try {
+    const res = await axios.get(FETCH_ALL_STREAM_COUNT);
+    const streamData = res.data.data; // [{ name: 'Pharmacy', collegeCount: 12 }, ...]
+
+    collegeCategories.value = collegeCategories.value.map((cat) => {
+      const match = streamData.find(
+        (s) => s.name.toLowerCase() === cat.name.toLowerCase()
+      );
+      return {
+        ...cat,
+        count: match ? match.collegeCount : 0,
+      };
+    });
+  } catch (err) {
+    console.error("Error fetching college counts:", err);
+  }
+};
+
+onMounted(() => {
+  fetchCollegeCounts();
+});
+
 /* ✅ NAVIGATION HANDLERS */
-const goToCollege = (name) => router.push(`/colleges?category=${encodeURIComponent(name)}`);
+const goToCollege = (name) =>
+  router.push(`/colleges?category=${encodeURIComponent(name)}`);
 const goToExam = (name) => router.push(`/exams/${encodeURIComponent(name)}`);
-const goToCourse = (name) => router.push(`/courses/${encodeURIComponent(name)}`);
+const goToCourse = (name) =>
+  router.push(`/courses/${encodeURIComponent(name)}`);
 </script>
 
 <template>
   <section class="py-14 bg-[#f5f4f1]">
     <div class="max-w-7xl mx-auto text-center px-4">
-      
       <h2 class="text-2xl md:text-3xl font-semibold text-gray-800">
         Explore Colleges, Exams & Courses Curated For You
       </h2>
@@ -60,9 +86,11 @@ const goToCourse = (name) => router.push(`/courses/${encodeURIComponent(name)}`)
           :key="tab"
           @click="activeTab = tab"
           class="px-6 py-2 rounded-md border transition capitalize"
-          :class="activeTab === tab 
-          ? 'bg-blue-600 text-white border-blue-600 shadow-md' 
-          : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-100'"
+          :class="
+            activeTab === tab
+              ? 'bg-gradient-to-r from-[#E04A00] via-[#FF5C00] to-[#FFA040] text-white'
+              : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-100'
+          "
         >
           {{ tab }}
         </button>
@@ -118,7 +146,6 @@ const goToCourse = (name) => router.push(`/courses/${encodeURIComponent(name)}`)
           <p class="text-gray-500 text-sm">{{ item.duration }}</p>
         </div>
       </div>
-
     </div>
   </section>
 </template>

@@ -2,7 +2,7 @@
   <section class="bg-gray-50 text-gray-800">
     <div class="relative py-28 overflow-hidden">
       <div
-        class="absolute inset-0 bg-gradient-to-br from-orange-700 to-indigo-900 opacity-90"
+        class="absolute inset-0 bg-gradient-to-r from-[#E04A00] via-[#FF5C00] to-[#FFA040] text-white "
       ></div>
 
       <div class="relative z-10 max-w-6xl mx-auto px-6 text-center text-white">

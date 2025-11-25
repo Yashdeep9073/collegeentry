@@ -118,7 +118,7 @@ const handleSubmit = () => {
             <div class="text-right">
               <button
                 type="submit"
-                class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150"
+                class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm  bg-gradient-to-r from-[#E04A00] via-[#FF5C00] to-[#FFA040] text-white "
               >
                 Submit
               </button>
