@@ -1,8 +1,7 @@
 <template>
   <header
-  class="bg-gradient-to-r from-[#E04A00] via-[#FF5C00] to-[#FFA040] text-white shadow sticky top-0 z-50"
->
-
+    class="bg-gradient-to-r from-[#E04A00] via-[#FF5C00] to-[#FFA040] text-white shadow sticky top-0 z-50"
+  >
     <nav
       class="max-w-[1300px] mx-auto flex items-center justify-between px-6 py-4"
     >
@@ -30,6 +29,35 @@
         >
         <li class="hover:text-gray-200 cursor-pointer">Admission 2025</li>
         <li class="hover:text-gray-200 cursor-pointer">Article</li>
+        <li class="relative group cursor-pointer">
+          <span class="flex items-center hover:text-gray-200">
+            Carrier Assessment
+            <svg
+              class="inline-block ml-1 w-3 h-3 transition-transform duration-200 group-hover:rotate-180"
+              fill="white"
+              viewBox="0 0 20 20"
+            >
+              <path d="M5.23 7.21L10 12l4.77-4.79z" />
+            </svg>
+          </span>
+
+          <ul
+            class="absolute left-0 top-full bg-white text-gray-900 w-48 mt-3 rounded-lg shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 transform group-hover:translate-y-0 translate-y-2"
+          >
+            <router-link
+              to="/carrier-assessment-9th-10th"
+              class="px-4 py-2.5 block hover:bg-orange-50 hover:text-[#FF5C00] cursor-pointer text-sm"
+            >
+              9th to 10th
+            </router-link>
+            <router-link
+              to="/carrier-assessment-11th-12th"
+              class="block px-4 py-2.5 hover:bg-orange-50 hover:text-[#FF5C00] cursor-pointer text-sm"
+            >
+              11th to 12th
+            </router-link>
+          </ul>
+        </li>
 
         <li class="relative group cursor-pointer">
           <span class="flex items-center hover:text-gray-200">

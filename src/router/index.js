@@ -42,6 +42,8 @@ import CompairColleges from "../pages/Colleges/CompairColleges.vue";
 import Terms from "../pages/Static/Terms.vue";
 import PrivacyPolicy from "../pages/Static/PrivacyPolicy.vue";
 import About from "../pages/Static/About.vue";
+import Assessment9th10th from "../pages/AssessmentCarrier/Assessment-9th-10th.vue";
+import Assessment11th12th from "../pages/AssessmentCarrier/Assessment-11th-12th.vue";
 
 const routes = [
   {
@@ -61,10 +63,25 @@ const routes = [
     component: AllCourses,
     meta: { title: "Top Courses in India 2025" },
   },
-  { path: "/exams", component: AllExams ,  meta: { title: "Top Exams in India 2025 - College Entry" },},
-  { path: "/scholarships", component: Scholarship , meta: { title: "Top Scholarships in India and Abroad 2025 - College Entry" } },
+  {
+    path: "/exams",
+    component: AllExams,
+    meta: { title: "Top Exams in India 2025 - College Entry" },
+  },
+  {
+    path: "/scholarships",
+    component: Scholarship,
+    meta: {
+      title: "Top Scholarships in India and Abroad 2025 - College Entry",
+    },
+  },
   { path: "/verify-email", name: "VerifyEmail", component: Verify },
-  { path: "/contact-us", name: "ContactUs", component: ContactUs , meta: { title: "Contact Us" } },
+  {
+    path: "/contact-us",
+    name: "ContactUs",
+    component: ContactUs,
+    meta: { title: "Contact Us" },
+  },
   {
     path: "/college-compare",
     name: "college-compare",
@@ -82,6 +99,18 @@ const routes = [
     name: "about-us",
     component: About,
     meta: { title: "About Us" },
+  },
+  {
+    path: "/carrier-assessment-9th-10th",
+    name: "carrier-assessment-9th-10th",
+    component: Assessment9th10th,
+    meta: { title: "Carrier Assessment 9th to 10th" },
+  },
+  {
+    path: "/carrier-assessment-11th-12th",
+    name: "carrier-assessment-11th-12th",
+    component: Assessment11th12th,
+    meta: { title: "Carrier Assessment 11th to 12th" },
   },
   {
     path: "/privacy-policy",

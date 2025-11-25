@@ -8,3 +8,16 @@ body {
   padding: 0;
   box-sizing: border-box;
 }
+
+
+/* Change text selection color */
+::selection {
+  background: rgb(255, 115, 0);
+  color: white; /* text color */
+}
+
+/* For Firefox */
+::-moz-selection {
+  background: rgb(255, 115, 0);
+  color: white;
+}

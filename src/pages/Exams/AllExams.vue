@@ -132,7 +132,7 @@ const searchInput = ref("");
             style="height: 50px"
           />
           <button
-            class="sm:w-auto px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-150 shadow-md"
+            class="sm:w-auto px-6 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-800 transition duration-150 shadow-md"
           >
             Search
           </button>

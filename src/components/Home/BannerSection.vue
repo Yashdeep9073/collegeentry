@@ -207,7 +207,7 @@ h1 {
 }
 
 .tabs button.active {
-  background: #0055ff;
+  background: linear-gradient(90deg, #D83E00, #FF6A00, #FFB15A);
   color: white;
 }
 

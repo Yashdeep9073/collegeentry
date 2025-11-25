@@ -329,7 +329,7 @@ const adBanners = ref([
         <div class="bg-blue-50 border border-blue-100 p-5 rounded-lg text-center">
             <h4 class="font-bold text-gray-800 mb-2">Need Counselling?</h4>
             <p class="text-sm text-gray-600 mb-4">Get expert guidance for admission 2025.</p>
-            <button class="w-full bg-blue-600 text-white font-semibold py-2 rounded hover:bg-blue-700 transition">
+            <button class="w-full bg-red-600 text-white font-semibold py-2 rounded hover:bg-blue-700 transition">
                 Contact Us
             </button>
         </div>

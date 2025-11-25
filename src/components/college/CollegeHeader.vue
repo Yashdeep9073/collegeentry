@@ -100,7 +100,7 @@ watch(university, (val) => {
         >
           <router-link
             to="/college-compare"
-            class="w-full sm:w-auto px-5 py-2.5 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition duration-200 text-sm font-semibold flex items-center justify-center gap-2"
+            class="w-full sm:w-auto px-5 py-2.5 border border-red-600 text-red-600 rounded-lg hover:bg-blue-50 transition duration-200 text-sm font-semibold flex items-center justify-center gap-2"
           >
             <i class="fas fa-balance-scale"></i>
             Compare Colleges
@@ -112,7 +112,7 @@ watch(university, (val) => {
             Apply Now
           </button>
           <button
-            class="w-full sm:w-auto px-5 py-2.5 border border-gray-500 text-gray-800 rounded-lg hover:bg-gray-100 transition duration-200 text-sm font-semibold flex items-center justify-center gap-2"
+            class="w-full sm:w-auto px-5 py-2.5 border border-gray-600 text-gray-900 rounded-lg hover:bg-gray-100 transition duration-200 text-sm font-semibold flex items-center justify-center gap-2"
           >
             <i class="fas fa-download"></i>
             Download Brochure
