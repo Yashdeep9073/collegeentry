@@ -9,7 +9,7 @@
           :key="index"
           class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex flex-col items-center text-center hover:shadow-md hover:-translate-y-1 transition"
         >
-          <component :is="item.icon" class="w-10 h-10 text-blue-600 mb-3" />
+          <component :is="item.icon" class="w-10 h-10 text-red-600 mb-3" />
           <p class="text-gray-600 text-sm font-medium">{{ item.label }}</p>
           <p class="text-2xl font-semibold text-gray-900 mt-1">{{ item.value }}</p>
         </div>

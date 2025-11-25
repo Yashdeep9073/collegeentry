@@ -161,7 +161,7 @@ const selectCategory = (category) => {
       </div>
 
       <div class="mt-8 text-center">
-        <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-150 uppercase tracking-wide text-sm">
+        <button class="bg-gradient-to-r from-[#E04A00] via-[#FF5C00] to-[#FFA040] text-white font-bold py-3 px-8 rounded-lg  transition duration-150 uppercase tracking-wide text-sm">
           VIEW ALL UNDERGRADUATE SCHOLARSHIPS
         </button>
       </div>

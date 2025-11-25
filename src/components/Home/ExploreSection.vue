@@ -107,7 +107,7 @@ const goToCourse = (name) =>
           @click="goToCollege(item.name)"
           class="cursor-pointer bg-white shadow-sm hover:shadow-md transition rounded-xl p-6 flex flex-col items-center text-center hover:-translate-y-1 border"
         >
-          <i :class="`fa-solid ${item.icon} text-3xl text-blue-600 mb-2`"></i>
+          <i :class="`fa-solid ${item.icon} text-3xl text-red-600 mb-2`"></i>
           <p class="font-medium text-gray-800">{{ item.name }}</p>
           <p class="text-gray-500 text-sm">{{ item.count }} Colleges</p>
         </div>

@@ -147,7 +147,7 @@ const searchInput = ref('');
       </div>
       
       <div class="mt-8 text-center">
-        <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-150">
+        <button class=" bg-gradient-to-r from-[#E04A00] via-[#FF5C00] to-[#FFA040] text-white  font-bold py-3 px-8 rounded-lg shadow-lg transition duration-150">
           <i class="fas fa-caret-down mr-2"></i> View All Streams
         </button>
       </div>

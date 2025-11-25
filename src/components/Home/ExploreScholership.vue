@@ -67,7 +67,7 @@ const handleClick = (item) => {
         >
           <!-- Icon -->
           <div
-            class="text-blue-600 text-5xl mb-4 transition-transform duration-300 group-hover:scale-110"
+            class="text-red-600 text-5xl mb-4 transition-transform duration-300 group-hover:scale-110"
           >
             <i :class="item.icon"></i>
           </div>

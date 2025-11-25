@@ -114,7 +114,7 @@ function closeModal() {
 
     <div class="section popular">
       <div class="section-header">
-        <span class="icon">⭐</span>
+        <span class="icon"></span>
         <strong>Popular Searches</strong>
       </div>
       <ul>
