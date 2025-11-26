@@ -68,6 +68,7 @@
     <div
       class="  mt-10 pt-6 text-center text-sm text-white"
     >
+    <hr class="mb-3">
       &copy; 2025 College Entry | All Rights Reserved
     </div>
 

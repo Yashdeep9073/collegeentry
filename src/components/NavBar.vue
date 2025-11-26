@@ -31,7 +31,7 @@
         <li class="hover:text-gray-200 cursor-pointer">Article</li>
         <li class="relative group cursor-pointer">
           <span class="flex items-center hover:text-gray-200">
-            Carrier Assessment
+            Career Assessment
             <svg
               class="inline-block ml-1 w-3 h-3 transition-transform duration-200 group-hover:rotate-180"
               fill="white"

@@ -74,7 +74,6 @@ const sendEmail = () => {
 <template>
   <section class="py-20 bg-gradient-to-br from-blue-50 via-white to-indigo-50">
     <div class="max-w-7xl mx-auto px-4">
-      <!-- Header Section -->
       <div class="text-center mb-16">
         <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-4">
           Talk To Our Experts
@@ -85,9 +84,7 @@ const sendEmail = () => {
       </div>
 
       <div class="grid lg:grid-cols-2 gap-12 items-start">
-        <!-- Left Side - Contact Information -->
         <div class="space-y-8">
-          <!-- Tabs Navigation -->
           <div class="flex flex-wrap gap-4 mb-8">
             <button
               v-for="tab in tabs"
@@ -105,7 +102,6 @@ const sendEmail = () => {
             </button>
           </div>
 
-          <!-- Support Tab Content -->
           <transition name="fade" mode="out-in">
             <div v-if="activeTab === 'support'" key="support" class="space-y-6">
               <div
@@ -113,13 +109,15 @@ const sendEmail = () => {
                 :key="contact.type"
                 class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 p-6 group hover:-translate-y-1"
               >
-                <div class="flex items-start gap-4">
+                <div class="flex flex-wrap items-start gap-4 sm:flex-nowrap"> 
+                  
                   <div
                     class="flex-shrink-0 w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110"
                     :class="contact.bgColor"
                   >
                     <i :class="[contact.icon, 'text-xl', contact.color]"></i>
                   </div>
+                  
                   <div class="flex-1 min-w-0">
                     <h3 class="text-lg font-bold text-gray-800 mb-1">
                       {{ contact.type }}
@@ -136,7 +134,8 @@ const sendEmail = () => {
                       {{ contact.description }}
                     </p>
                   </div>
-                  <div class="flex-shrink-0">
+                  
+                  <div class="flex-shrink-0 mt-4 sm:mt-0 ml-auto">
                     <button
                       v-if="contact.number"
                       @click="callNumber(contact.number)"
@@ -164,11 +163,9 @@ const sendEmail = () => {
           </transition>
         </div>
 
-        <!-- Right Side - Call to Action -->
         <div
           class="bg-gradient-to-br from-blue-600 to-purple-700 rounded-3xl shadow-2xl p-8 lg:p-12 text-white relative overflow-hidden"
         >
-          <!-- Background Pattern -->
           <div class="absolute inset-0 opacity-10">
             <div
               class="absolute top-0 right-0 w-64 h-64 bg-white rounded-full -translate-y-32 translate-x-32"
@@ -196,7 +193,6 @@ const sendEmail = () => {
                 consultants who understand your aspirations.
               </p>
 
-              <!-- Features List -->
               <div class="space-y-3 mb-8">
                 <div class="flex items-center gap-3">
                   <i class="fa-solid fa-check-circle text-green-400"></i>
@@ -216,7 +212,6 @@ const sendEmail = () => {
                 </div>
               </div>
 
-              <!-- Book Session Button -->
               <button
                 @click="bookSession"
                 class="w-full bg-white text-blue-600 py-4 px-8 rounded-2xl font-bold text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-3xl flex items-center justify-center gap-3"
@@ -225,19 +220,18 @@ const sendEmail = () => {
                 Book Your 30 Mins Expert Career Advice
               </button>
 
-              <!-- Quick Stats -->
               <div
-                class="flex justify-center lg:justify-start gap-6 mt-8 pt-8 border-t border-white/20"
+                class="flex flex-wrap justify-center lg:justify-start gap-6 mt-8 pt-8 border-t border-white/20"
               >
-                <div class="text-center">
+                <div class="text-center min-w-[70px]">
                   <div class="text-2xl font-bold">24/7</div>
                   <div class="text-blue-200 text-sm">Support</div>
                 </div>
-                <div class="text-center">
+                <div class="text-center min-w-[70px]">
                   <div class="text-2xl font-bold">5000+</div>
                   <div class="text-blue-200 text-sm">Students Helped</div>
                 </div>
-                <div class="text-center">
+                <div class="text-center min-w-[70px]">
                   <div class="text-2xl font-bold">98%</div>
                   <div class="text-blue-200 text-sm">Satisfaction</div>
                 </div>
@@ -265,11 +259,8 @@ const sendEmail = () => {
 }
 
 /* Responsive adjustments */
-@media (max-width: 1024px) {
-  .grid-cols-2 {
-    grid-template-columns: 1fr;
-  }
-}
+/* The main grid (lg:grid-cols-2) handles desktop/tablet scaling well. */
+/* No specific media query needed here, as Tailwind classes are used directly. */
 
 /* Hover effects enhancement */
 .group:hover .group-hover\:scale-110 {
