@@ -153,21 +153,89 @@
       </div>
     </nav>
 
-    <div v-if="mobileOpen" class="bg-[#E05000] p-4 lg:hidden">
-      <ul class="space-y-3 text-sm font-medium">
-        <router-link to="/colleges" class="block py-1"
-          >Top Colleges</router-link
+   <!-- MOBILE MENU -->
+<div v-if="mobileOpen" class="bg-[#E05000] p-5 lg:hidden space-y-4 text-white">
+
+  <!-- Top Section -->
+  <ul class="space-y-3 text-base font-medium">
+
+    <router-link to="/colleges" class="block py-1">
+      Top Colleges
+    </router-link>
+
+    <router-link to="/courses" class="block py-1">
+      Top Courses
+    </router-link>
+
+    <router-link to="/exams" class="block py-1">
+      Entrance Exams
+    </router-link>
+
+    <router-link to="/scholarships" class="block py-1">
+      Scholarships
+    </router-link>
+
+    <li class="py-1">Admission 2025</li>
+    <li class="py-1">Article</li>
+
+    <!-- Career Assessment (Mobile Dropdown) -->
+    <details class="bg-[#E45400] rounded-lg px-4 py-2">
+      <summary class="cursor-pointer text-white text-sm flex justify-between items-center">
+        Career Assessment
+        <i class="fas fa-chevron-down text-xs"></i>
+      </summary>
+
+      <div class="mt-3 space-y-2 pl-3">
+        <router-link
+          to="/carrier-assessment-9th-10th"
+          class="block text-sm py-1"
         >
-        <router-link to="/courses" class="block py-1">Top Courses</router-link>
-        <router-link to="/exams" class="block py-1">Entrance Exams</router-link>
-        <router-link to="/scholarships" class="block py-1"
-          >Scholarships</router-link
+          9th to 10th
+        </router-link>
+
+        <router-link
+          to="/carrier-assessment-11th-12th"
+          class="block text-sm py-1"
         >
-        <li class="py-1">Admission 2025</li>
-        <li class="py-1">News</li>
-        <li class="py-1 border-t mt-2 pt-2">Register / Login</li>
-      </ul>
-    </div>
+          11th to 12th
+        </router-link>
+      </div>
+    </details>
+  </ul>
+
+  <!-- Divider -->
+  <div class="border-t border-white/40"></div>
+
+  <!-- LOGIN / REGISTER (Mobile) -->
+  <ul class="space-y-2 text-sm font-medium">
+
+    <li
+      v-if="!user.name"
+      class="py-2 cursor-pointer"
+      @click="openRegister(); mobileOpen = false"
+    >
+      Register
+    </li>
+
+    <li
+      v-if="!user.name"
+      class="py-2 cursor-pointer"
+      @click="openLogin(); mobileOpen = false"
+    >
+      Login
+    </li>
+
+    <li
+      v-else
+      class="py-2 cursor-pointer text-red-200"
+      @click="logoutUser(); mobileOpen = false"
+    >
+      <i class="fas fa-sign-out-alt mr-2"></i> Logout
+    </li>
+
+  </ul>
+</div>
+
   </header>
 </template>
 
