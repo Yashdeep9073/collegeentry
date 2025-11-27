@@ -37,7 +37,8 @@ const isApplyModalOpen = ref(false);
 const isSubmitting = ref(false); // Replaces 'loading' for clarity
 const submitMessage = ref(null); // Stores success/error message for display
 
-const formState = reactive({ // Used 'reactive' for the form object
+const formState = reactive({
+  // Used 'reactive' for the form object
   name: "",
   phone: "",
   email: "",
@@ -51,17 +52,23 @@ const formState = reactive({ // Used 'reactive' for the form object
 
 const openApplyModal = () => {
   isApplyModalOpen.value = true;
-  document.body.style.overflow = 'hidden'; // Prevents background scroll
+  document.body.style.overflow = "hidden"; // Prevents background scroll
 };
 
 const closeApplyModal = () => {
   isApplyModalOpen.value = false;
-  document.body.style.overflow = ''; // Re-enable background scroll
-  
+  document.body.style.overflow = ""; // Re-enable background scroll
+
   // Reset form state and messages on close
   Object.assign(formState, {
-    name: "", phone: "", email: "", city: "", state: "",
-    country: "", degree_type: "", message: "",
+    name: "",
+    phone: "",
+    email: "",
+    city: "",
+    state: "",
+    country: "",
+    degree_type: "",
+    message: "",
   });
   submitMessage.value = null;
 };
@@ -87,9 +94,9 @@ const submitLead = async () => {
   submitMessage.value = null;
 
   try {
-    const payload = { 
-      ...formState, 
-      degree_type: formState.degree_type || "N/A"
+    const payload = {
+      ...formState,
+      degree_type: formState.degree_type || "N/A",
     };
 
     const response = await axios.post(VITE_ADD_LEAD, payload);
@@ -105,8 +112,7 @@ const submitLead = async () => {
       };
 
       setTimeout(() => closeApplyModal(), 2000);
-    } 
-    else {
+    } else {
       toast.error(response.data.message || "Submission failed!", {
         autoClose: 2500,
       });
@@ -116,7 +122,6 @@ const submitLead = async () => {
         text: "Submission failed. Try again!",
       };
     }
-
   } catch (error) {
     console.log("Submission Error:", error);
 
@@ -128,12 +133,10 @@ const submitLead = async () => {
       type: "error",
       text: " Network error. Please try again.",
     };
-
   } finally {
     isSubmitting.value = false;
   }
 };
-
 </script>
 
 <template>
@@ -219,6 +222,7 @@ const submitLead = async () => {
           </button>
 
           <button
+            @click="openApplyModal"
             class="px-5 py-2.5 w-full sm:w-auto border border-white text-white rounded-lg hover:bg-white hover:text-black transition font-semibold"
           >
             <i class="fas fa-download mr-1"></i>
@@ -239,7 +243,7 @@ const submitLead = async () => {
     @click.self="closeApplyModal"
   >
     <div
-      class="bg-white rounded-xl shadow-2xl w-[95%] max-w-md relative transform scale-100 transition-transform duration-300 max-h-[90vh] overflow-y-auto"
+      class="modal-scroll bg-white rounded-xl shadow-2xl w-[95%] max-w-md relative transform scale-100 transition-transform duration-300 max-h-[90vh] overflow-y-auto"
     >
       <div
         class="sticky top-0 bg-white z-10 flex justify-between items-center p-5 border-b border-gray-100"
@@ -356,7 +360,7 @@ const submitLead = async () => {
               <input
                 type="text"
                 v-model="formState.degree_type"
-                placeholder="Degree Type (e.g. B.Tech)"
+                placeholder="Degree Type "
                 class="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 transition duration-150"
               />
               <i
@@ -385,9 +389,7 @@ const submitLead = async () => {
             <span v-if="isSubmitting">
               <i class="fas fa-spinner fa-spin mr-2"></i> Submitting...
             </span>
-            <span v-else>
-              Request Free Counseling
-            </span>
+            <span v-else> Request Free Counseling </span>
           </button>
         </form>
       </div>
@@ -396,5 +398,12 @@ const submitLead = async () => {
 </template>
 
 <style scoped>
-/* Scoped styles remain here */
+.modal-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.modal-scroll {
+  -ms-overflow-style: none; /* IE & Edge */
+  scrollbar-width: none; /* Firefox */
+}
 </style>

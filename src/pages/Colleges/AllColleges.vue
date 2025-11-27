@@ -383,7 +383,8 @@
                 class="flex flex-col sm:flex-row items-start justify-between gap-3"
               >
                 <div>
-                  <h2 @click ="goToCollege(college)"
+                  <h2
+                    @click="goToCollege(college)"
                     class="text-xl font-bold text-gray-900 hover:text-blue-600 transition cursor-pointer"
                   >
                     {{ college.name }}
@@ -440,9 +441,10 @@
 
               <div class="mt-6 flex items-center gap-4 flex-wrap">
                 <button
+                @click="openApplyModal"
                   class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl text-base font-semibold transition shadow-lg shadow-red-500/50"
                 >
-                  Apply Now 
+                  Apply Now
                 </button>
                 <button
                   class="border border-[#ff4d4f] text-[#ff4d4f] px-6 py-3 rounded-xl text-sm font-semibold hover:bg-blue-50 transition"
@@ -510,6 +512,164 @@
       </main>
     </div>
   </div>
+  <div
+    v-if="isApplyModalOpen"
+    class="fixed inset-0 bg-black/70 flex justify-center items-center z-50"
+    @click.self="closeApplyModal"
+  >
+    <div
+      class="modal-scroll bg-white rounded-xl shadow-2xl w-[95%] max-w-md relative transform scale-100 transition-transform duration-300 max-h-[90vh] overflow-y-auto"
+    >
+      <div
+        class="sticky top-0 bg-white z-10 flex justify-between items-center p-5 border-b border-gray-100"
+      >
+        <h2 class="text-xl font-extrabold text-gray-800">
+          <i class="fas fa-user-graduate mr-2 text-orange-500"></i>
+          Admission Enquiry
+        </h2>
+
+        <button
+          @click="closeApplyModal"
+          class="text-gray-400 hover:text-red-500 text-2xl transition-colors"
+        >
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="p-6">
+        <div
+          v-if="submitMessage"
+          :class="[
+            'p-3 mb-4 rounded-lg font-medium',
+            submitMessage.type === 'success'
+              ? 'bg-green-100 text-green-700'
+              : 'bg-red-100 text-red-700',
+          ]"
+        >
+          {{ submitMessage.text }}
+        </div>
+
+        <p class="text-sm text-gray-600 mb-2">
+          Get instant callback and free counseling from our experts. .
+        </p>
+
+        <form @submit.prevent="submitLead" class="space-y-4">
+          <div class="space-y-2">
+            <div class="relative">
+              <input
+                type="text"
+                v-model="formState.name"
+                placeholder="Full Name *"
+                required
+                class="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 transition duration-150"
+              />
+              <i
+                class="fas fa-user absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              ></i>
+            </div>
+
+            <div class="relative">
+              <input
+                type="tel"
+                v-model="formState.phone"
+                placeholder="Phone Number *"
+                required
+                class="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 transition duration-150"
+              />
+              <i
+                class="fas fa-phone absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              ></i>
+            </div>
+
+            <div class="relative">
+              <input
+                type="email"
+                v-model="formState.email"
+                placeholder="Email Address"
+                class="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 transition duration-150"
+              />
+              <i
+                class="fas fa-envelope absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              ></i>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="relative">
+              <input
+                type="text"
+                v-model="formState.city"
+                placeholder="City"
+                class="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 transition duration-150"
+              />
+              <i
+                class="fas fa-city absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              ></i>
+            </div>
+
+            <div class="relative">
+              <input
+                type="text"
+                v-model="formState.state"
+                placeholder="State"
+                class="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 transition duration-150"
+              />
+              <i
+                class="fas fa-map-pin absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              ></i>
+            </div>
+
+            <div class="relative">
+              <input
+                type="text"
+                v-model="formState.country"
+                placeholder="Country"
+                class="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 transition duration-150"
+              />
+              <i
+                class="fas fa-globe absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              ></i>
+            </div>
+
+            <div class="relative">
+              <input
+                type="text"
+                v-model="formState.degree_type"
+                placeholder="Degree Type "
+                class="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 transition duration-150"
+              />
+              <i
+                class="fas fa-graduation-cap absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              ></i>
+            </div>
+          </div>
+
+          <div class="relative">
+            <textarea
+              v-model="formState.message"
+              placeholder="Your Specific Query/Message"
+              rows="3"
+              class="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 transition duration-150 resize-none"
+            ></textarea>
+            <i
+              class="fas fa-comment-dots absolute left-3 top-4 text-gray-400"
+            ></i>
+          </div>
+
+          <button
+            type="submit"
+            :disabled="isSubmitting"
+            class="w-full bg-gradient-to-r from-orange-600 to-yellow-500 text-white py-3 rounded-lg font-bold shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01] disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <span v-if="isSubmitting">
+              <i class="fas fa-spinner fa-spin mr-2"></i> Submitting...
+            </span>
+            <span v-else> Request Free Counseling </span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -517,8 +677,7 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 const FETCH_ALL_COLLEGES_URL = import.meta.env.VITE_FETCH_COLLEGES_FILTER;
-import { ref, computed, onMounted } from "vue";
-
+import { onMounted, computed, ref, watch, reactive } from "vue";
 /* ------------ Reactive Data ------------ */
 const allColleges = ref([]);
 const loading = ref(false);
@@ -836,6 +995,110 @@ const nextPage = () => {
 onMounted(() => {
   fetchColleges();
 });
+
+const isApplyModalOpen = ref(false);
+const isSubmitting = ref(false); // Replaces 'loading' for clarity
+const submitMessage = ref(null); // Stores success/error message for display
+
+const formState = reactive({
+  // Used 'reactive' for the form object
+  name: "",
+  phone: "",
+  email: "",
+  city: "",
+  state: "",
+  country: "",
+  degree_type: "", // Harmonized with snake_case for potential API use
+  message: "",
+});
+
+const openApplyModal = () => {
+  isApplyModalOpen.value = true;
+  document.body.style.overflow = "hidden"; // Prevents background scroll
+};
+
+const closeApplyModal = () => {
+  isApplyModalOpen.value = false;
+  document.body.style.overflow = ""; // Re-enable background scroll
+
+  // Reset form state and messages on close
+  Object.assign(formState, {
+    name: "",
+    phone: "",
+    email: "",
+    city: "",
+    state: "",
+    country: "",
+    degree_type: "",
+    message: "",
+  });
+  submitMessage.value = null;
+};
+
+// --- LEAD SUBMISSION LOGIC ---
+
+const submitLead = async () => {
+  // Basic Validation
+  if (!formState.name || !formState.phone) {
+    toast.error("Full Name and Phone Number are required!", {
+      autoClose: 2500,
+    });
+
+    submitMessage.value = {
+      type: "error",
+      text: "Full Name and Phone Number are required.",
+    };
+
+    return;
+  }
+
+  isSubmitting.value = true;
+  submitMessage.value = null;
+
+  try {
+    const payload = {
+      ...formState,
+      degree_type: formState.degree_type || "N/A",
+    };
+
+    const response = await axios.post(VITE_ADD_LEAD, payload);
+
+    if (response.status === 200 || response.status === 201) {
+      toast.success("Lead submitted successfully!", {
+        autoClose: 2000,
+      });
+
+      submitMessage.value = {
+        type: "success",
+        text: "✅ Your enquiry has been submitted successfully.",
+      };
+
+      setTimeout(() => closeApplyModal(), 2000);
+    } else {
+      toast.error(response.data.message || "Submission failed!", {
+        autoClose: 2500,
+      });
+
+      submitMessage.value = {
+        type: "error",
+        text: "Submission failed. Try again!",
+      };
+    }
+  } catch (error) {
+    console.log("Submission Error:", error);
+
+    toast.error("Network Error! Please check your connection.", {
+      autoClose: 3000,
+    });
+
+    submitMessage.value = {
+      type: "error",
+      text: " Network error. Please try again.",
+    };
+  } finally {
+    isSubmitting.value = false;
+  }
+};
 </script>
 
 <style scoped>
@@ -848,5 +1111,14 @@ onMounted(() => {
 }
 .custom-scrollbar::-webkit-scrollbar-track {
   background: #f1f5f9;
+}
+
+.modal-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.modal-scroll {
+  -ms-overflow-style: none; /* IE & Edge */
+  scrollbar-width: none; /* Firefox */
 }
 </style>

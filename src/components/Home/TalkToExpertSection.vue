@@ -3,9 +3,7 @@ import { ref } from "vue";
 
 const activeTab = ref("support");
 
-const tabs = [
-  { id: "support", name: "Support", icon: "fa-solid fa-headset" },
-];
+const tabs = [{ id: "support", name: "Support", icon: "fa-solid fa-headset" }];
 
 const supportContacts = [
   {
@@ -16,6 +14,7 @@ const supportContacts = [
     bgColor: "bg-green-50",
     description: "Get started with your educational journey",
   },
+
   {
     type: "Existing Student",
     number: "+91-7657999786",
@@ -50,19 +49,14 @@ const supportContacts = [
   },
 ];
 
-
-
-
 const bookSession = () => {
   console.log("Booking career advice session");
   // Add booking logic here
-  alert("Redirecting to booking page...");
 };
 
 const callNumber = (number) => {
-  console.log("Calling:", number);
-  // In a real app, this would trigger phone call
-  alert(`Calling ${number}`);
+  if (!number) return;
+  window.location.href = `tel:${number}`;
 };
 
 const sendEmail = () => {
@@ -109,15 +103,14 @@ const sendEmail = () => {
                 :key="contact.type"
                 class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 p-6 group hover:-translate-y-1"
               >
-                <div class="flex flex-wrap items-start gap-4 sm:flex-nowrap"> 
-                  
+                <div class="flex flex-wrap items-start gap-4 sm:flex-nowrap">
                   <div
                     class="flex-shrink-0 w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110"
                     :class="contact.bgColor"
                   >
                     <i :class="[contact.icon, 'text-xl', contact.color]"></i>
                   </div>
-                  
+
                   <div class="flex-1 min-w-0">
                     <h3 class="text-lg font-bold text-gray-800 mb-1">
                       {{ contact.type }}
@@ -134,7 +127,7 @@ const sendEmail = () => {
                       {{ contact.description }}
                     </p>
                   </div>
-                  
+
                   <div class="flex-shrink-0 mt-4 sm:mt-0 ml-auto">
                     <button
                       v-if="contact.number"
