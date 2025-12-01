@@ -678,7 +678,11 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 const FETCH_ALL_COLLEGES_URL = import.meta.env.VITE_FETCH_COLLEGES_FILTER;
+const VITE_ADD_LEAD = import.meta.env.VITE_ADD_LEAD_COLLEGE_API;
+
 import { onMounted, computed, ref, watch, reactive } from "vue";
+import { toast } from "vue3-toastify";
+import axios from "axios";
 /* ------------ Reactive Data ------------ */
 const allColleges = ref([]);
 const loading = ref(false);

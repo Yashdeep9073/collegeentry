@@ -1,5 +1,8 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 // ✅ Import Local Images
 import banner1 from "../../assets/slider3.webp";
@@ -7,6 +10,9 @@ import banner2 from "../../assets/2.webp";
 import banner3 from "../../assets/5.webp";
 import banner4 from "../../assets/6.webp";
 import banner5 from "../../assets/1.webp";
+import axios from "axios";
+
+const FETCH_COLLEGE_BY_NAME = import.meta.env.VITE_SEARCH_COLLEGE_EXAM_COURSE;
 
 const showModal = ref(false);
 
@@ -35,14 +41,8 @@ function changeTab(tab) {
 }
 
 const searchText = ref("");
-const popular = ref([
-  { name: "FDDI AIST", type: "Exam" },
-  { name: "MAH MArch CET", type: "Exam" },
-  { name: "Lucknow University Entrance Exam", type: "Exam" },
-  { name: "HPU B.Ed Entrance Exam", type: "Exam" },
-  { name: "BCA [Bachelor of Computer Application]", type: "Course" },
-  { name: "Master's in City Planning (MCP)", type: "Course" },
-]);
+const results = ref([]);
+const loading = ref(false);
 
 function openSearchModal() {
   showModal.value = true;
@@ -50,6 +50,40 @@ function openSearchModal() {
 
 function closeModal() {
   showModal.value = false;
+  searchText.value = "";
+  results.value = [];
+}
+
+//  API CALL: fetch colleges by keyword
+async function fetchSearchResults() {
+  if (searchText.value.length < 3) {
+    results.value = [];
+    return;
+  }
+
+  loading.value = true;
+
+  try {
+    const res = await axios.get(`${FETCH_COLLEGE_BY_NAME}/${searchText.value}`);
+
+    // Adjust based on your API response structure
+    results.value = res.data?.data || [];
+  } catch (error) {
+    console.error("API Error:", error);
+    results.value = [];
+  }
+
+  loading.value = false;
+}
+
+// Auto-fetch when user types
+watch(searchText, () => {
+  fetchSearchResults();
+});
+
+function goToCollege(college) {
+  const slug = college.name.toLowerCase().replace(/\s+/g, "-"); // convert name → slug
+  router.push(`/colleges/${slug}`);
 }
 </script>
 
@@ -112,15 +146,21 @@ function closeModal() {
 
     <p class="hint">Type 3 or more characters for search results</p>
 
-    <div class="section popular">
-      <div class="section-header">
-        <span class="icon"></span>
-        <strong>Popular Searches</strong>
-      </div>
-      <ul>
-        <li v-for="(p, index) in popular" :key="index">
-          <span>{{ p.name }}</span>
-          <span class="type">{{ p.type }}</span>
+    <div class="section">
+      <div v-if="loading" class="text-center">Loading...</div>
+
+      <ul v-else>
+        <li v-if="results.length === 0 && searchText.length >= 3">
+          No results found.
+        </li>
+
+        <li
+          v-for="(college, i) in results"
+          :key="i"
+          @click="goToCollege(college)"
+        >
+          <span>{{ college.name }}</span>
+          <span class="type">College</span>
         </li>
       </ul>
     </div>
@@ -207,7 +247,7 @@ h1 {
 }
 
 .tabs button.active {
-  background: linear-gradient(90deg, #D83E00, #FF6A00, #FFB15A);
+  background: linear-gradient(90deg, #d83e00, #ff6a00, #ffb15a);
   color: white;
 }
 
@@ -233,7 +273,7 @@ h1 {
 }
 
 .search-box button {
-  background: linear-gradient(90deg, #D83E00, #FF6A00, #FFB15A);
+  background: linear-gradient(90deg, #d83e00, #ff6a00, #ffb15a);
   border: none;
   padding: 12px 20px;
   color: white;
@@ -423,73 +463,3 @@ h1 {
   }
 }
 </style>
-
-<!-- <script setup>
-import { ref, onMounted } from "vue";
-
-const API_URL_FETCH_WEBSITE_MEDIA = import.meta.env.VITE_FETCH_WEBSITE_MEDIA;
-import { useMediaStore } from "../../store/mediaStore";
-const mediaStore = useMediaStore();
-const showModal = ref(false);
-
-const images = ref([]);
-const currentIndex = ref(0);
-
-onMounted(async () => {
-  try {
-    const res = await fetch(API_URL_FETCH_WEBSITE_MEDIA);
-
-    const result = await res.json();
-
-    // Filter only BANNER images
-    images.value = result.data
-      .filter((item) => item.category === "MAIN_BANNER")
-      .map((item) => encodeURI(item.url));
-
-    // If no banner returned, fallback to default
-    if (images.value.length === 0) {
-      images.value = [
-        "https://images.pexels.com/photos/1454360/pexels-photo-1454360.jpeg",
-      ];
-    }
-
-    setInterval(() => {
-      currentIndex.value = (currentIndex.value + 1) % images.value.length;
-    }, 4000);
-  } catch (error) {
-    console.log("Banner Fetch Error:", error);
-  }
-});
-
-const tabs = ["Colleges", "Exams", "Courses"];
-const activeTab = ref("Colleges");
-const placeholderText = ref("Enter College Name");
-
-function changeTab(tab) {
-  activeTab.value = tab;
-  placeholderText.value =
-    tab === "Colleges"
-      ? "Enter College Name"
-      : tab === "Exams"
-      ? "Enter Exam Name"
-      : "Enter Course Name";
-}
-
-const searchText = ref("");
-const popular = ref([
-  { name: "FDDI AIST", type: "Exam" },
-  { name: "MAH MArch CET", type: "Exam" },
-  { name: "Lucknow University Entrance Exam", type: "Exam" },
-  { name: "HPU B.Ed Entrance Exam", type: "Exam" },
-  { name: "BCA [Bachelor of Computer Application]", type: "Course" },
-  { name: "Master's in City Planning (MCP)", type: "Course" },
-]);
-
-function openSearchModal() {
-  showModal.value = true;
-}
-
-function closeModal() {
-  showModal.value = false;
-}
-</script> -->
