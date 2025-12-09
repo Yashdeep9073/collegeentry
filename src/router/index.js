@@ -44,6 +44,8 @@ import PrivacyPolicy from "../pages/Static/PrivacyPolicy.vue";
 import About from "../pages/Static/About.vue";
 import Assessment9th10th from "../pages/AssessmentCarrier/Assessment-9th-10th.vue";
 import Assessment11th12th from "../pages/AssessmentCarrier/Assessment-11th-12th.vue";
+import SingleArticle from "../pages/Article/SingleArticle.vue";
+import MasterArticle from "../pages/Article/MasterArticle.vue";
 
 const routes = [
   {
@@ -139,6 +141,16 @@ const routes = [
     ],
   },
   {
+    path: "/article/:slug",
+    name: "SingleArticle",
+    component: SingleArticle,
+  },
+  {
+    path: "/article",
+    name: "Article",
+    component: MasterArticle,
+  },
+  {
     path: "/courses/:slug",
     component: AllCoursesBySlug,
     children: [
@@ -151,6 +163,7 @@ const routes = [
       { path: "integrated-degree", component: IntegratedDegree },
     ],
   },
+
   {
     path: "/:slug",
     component: CourseDetails,

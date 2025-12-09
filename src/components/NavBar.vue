@@ -28,7 +28,7 @@
           >Scholarships</router-link
         >
         <li class="hover:text-gray-200 cursor-pointer">Admission 2025</li>
-        <li class="hover:text-gray-200 cursor-pointer">Article</li>
+        <router-link to="/article" class="hover:text-gray-200 cursor-pointer">Article</router-link>
         <li class="relative group cursor-pointer">
           <span class="flex items-center hover:text-gray-200">
             Career Assessment
