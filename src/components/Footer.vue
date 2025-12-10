@@ -22,13 +22,13 @@
             >
               <i class="fab fa-facebook-f"></i>
             </a>
-            <a
+            <!-- <a
               href="#"
               aria-label="Twitter"
               class="hover:text-white transition duration-150"
             >
               <i class="fab fa-x-twitter"></i>
-            </a>
+            </a> -->
             <a
               target="_blank"
               href="https://www.instagram.com/collegeentry2025/"
@@ -37,13 +37,13 @@
             >
               <i class="fab fa-instagram"></i>
             </a>
-            <a
+            <!-- <a
               href="#"
               aria-label="LinkedIn"
               class="hover:text-white transition duration-150"
             >
               <i class="fab fa-linkedin-in"></i>
-            </a>
+            </a> -->
           </div>
         </div>
 
