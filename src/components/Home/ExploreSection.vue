@@ -60,9 +60,9 @@ const fetchCollegeCounts = async () => {
   }
 };
 
-onMounted(() => {
-  fetchCollegeCounts();
-});
+// onMounted(() => {
+//   fetchCollegeCounts();
+// });
 
 /* ✅ NAVIGATION HANDLERS */
 const goToCollege = (name) =>
