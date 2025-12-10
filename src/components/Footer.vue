@@ -4,7 +4,7 @@
       <div class="grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-12">
         <div>
           <div class="flex items-center mb-4">
-            <img src="../assets/white-logo.svg" alt="">
+            <img src="../assets/white-logo.svg" alt="" />
           </div>
 
           <address class="not-italic text-sm space-y-1">
@@ -15,7 +15,8 @@
 
           <div class="flex space-x-4 mt-6">
             <a
-              href="#"
+              target="_blank"
+              href="https://www.facebook.com/collegeentryofficial"
               aria-label="Facebook"
               class="hover:text-white transition duration-150"
             >
@@ -29,7 +30,8 @@
               <i class="fab fa-x-twitter"></i>
             </a>
             <a
-              href="#"
+              target="_blank"
+              href="https://www.instagram.com/collegeentry2025/"
               aria-label="Instagram"
               class="hover:text-white transition duration-150"
             >
@@ -65,10 +67,8 @@
       </div>
     </div>
 
-    <div
-      class="  mt-10 pt-6 text-center text-sm text-white"
-    >
-    <hr class="mb-3">
+    <div class="mt-10 pt-6 text-center text-sm text-white">
+      <hr class="mb-3" />
       &copy; 2025 College Entry | All Rights Reserved
     </div>
 
