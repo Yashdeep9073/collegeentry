@@ -1,27 +1,49 @@
 <script setup>
 import { ref } from "vue";
+import axios from "axios";
+import { toast } from "vue3-toastify";
 
-// Form fields state
+
+
+const API_URL = import.meta.env.VITE_ADD_CONTACT_API;
+
+// Form fields
 const fullName = ref("");
 const emailAddress = ref("");
 const mobileNumber = ref("");
 const message = ref("");
 
-// Function to handle form submission
-const handleSubmit = () => {
-  // In a real application, you would send this data to your backend
-  console.log({
-    fullName: fullName.value,
-    emailAddress: emailAddress.value,
-    mobileNumber: mobileNumber.value,
-    message: message.value,
-  });
-  alert("Form submitted! (Check console for data)");
-  // Optionally clear form fields
-  fullName.value = "";
-  emailAddress.value = "";
-  mobileNumber.value = "";
-  message.value = "";
+const loading = ref(false);
+
+// Submit handler
+const handleSubmit = async () => {
+  loading.value = true;
+
+  try {
+    await axios.post(API_URL, {
+      name: fullName.value,
+      email: emailAddress.value,
+      phone: mobileNumber.value,
+      message: message.value,
+    });
+
+    toast.success("Thanks! Message sent successfully ");
+
+    // reset fields
+    fullName.value = "";
+    emailAddress.value = "";
+    mobileNumber.value = "";
+    message.value = "";
+
+  } catch (error) {
+    if (error.response?.data?.errors) {
+      toast.error("Please correct the highlighted fields ");
+    } else {
+      toast.error("Something went wrong. Try again later ");
+    }
+  }
+
+  loading.value = false;
 };
 </script>
 
@@ -40,7 +62,9 @@ const handleSubmit = () => {
               Counselling, Queries, Feedback - we're here for it all
             </p>
           </div>
-          <div class="mt-8 lg:mt-0"><img src="../assets/contactUsDesktop.png" alt="" /></div>
+          <div class="mt-8 lg:mt-0">
+            <img src="../assets/contactUsDesktop.png" alt="" />
+          </div>
           <div class="mt-8 flex space-x-4">
             <a
               href="#"
@@ -118,7 +142,7 @@ const handleSubmit = () => {
             <div class="text-right">
               <button
                 type="submit"
-                class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm  bg-gradient-to-r from-[#E04A00] via-[#FF5C00] to-[#FFA040] text-white "
+                class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm bg-gradient-to-r from-[#E04A00] via-[#FF5C00] to-[#FFA040] text-white"
               >
                 Submit
               </button>
