@@ -7,6 +7,8 @@ const router = useRouter();
 const activeTab = ref("colleges");
 const FETCH_ALL_STREAM_COUNT = import.meta.env.VITE_FETCH_ALL_STREAM_COUNT;
 
+const FETCH_ALL_EXAM_CATEGORY = import.meta.env.VITE_FETCH_ALL_EXAM_CATEGORY;
+
 const tabs = ["colleges", "exams", "courses"];
 
 /* ✅ DATA FOR COLLEGES */
@@ -22,14 +24,7 @@ const collegeCategories = ref([
 ]);
 
 /* ✅ DATA FOR EXAMS */
-const examCategories = [
-  { name: "JEE Main", level: "National", icon: "fa-book-open" },
-  { name: "NEET", level: "National", icon: "fa-heart-pulse" },
-  { name: "CAT", level: "MBA", icon: "fa-chart-simple" },
-  { name: "CLAT", level: "Law", icon: "fa-scale-balanced" },
-  { name: "GATE", level: "PG Engineering", icon: "fa-network-wired" },
-  { name: "CUET", level: "UG Entrance", icon: "fa-university" },
-];
+const examCategories = ref([]);
 
 /* ✅ DATA FOR COURSES */
 const courseCategories = [
@@ -60,9 +55,24 @@ const fetchCollegeCounts = async () => {
   }
 };
 
-// onMounted(() => {
-//   fetchCollegeCounts();
-// });
+const fetchExamCategories = async () => {
+  try {
+    const res = await axios.get(FETCH_ALL_EXAM_CATEGORY);
+    const categories = res.data.data;
+
+    examCategories.value = categories.map((cat) => ({
+      name: cat.name,
+      icon: cat.icon, // icon is URL
+    }));
+  } catch (err) {
+    console.error("Error fetching exam categories:", err);
+  }
+};
+
+onMounted(() => {
+  // fetchCollegeCounts();
+  fetchExamCategories();
+});
 
 /* ✅ NAVIGATION HANDLERS */
 const goToCollege = (name) =>
@@ -124,7 +134,8 @@ const goToCourse = (name) =>
           @click="goToExam(item.name)"
           class="cursor-pointer bg-white shadow hover:shadow-md transition rounded-xl p-6 text-center hover:-translate-y-1 border"
         >
-          <i :class="`fa-solid ${item.icon} text-3xl text-green-600 mb-3`"></i>
+          <img :src="item.icon" class="w-12 h-12 mx-auto mb-3 object-contain" />
+
           <p class="font-medium text-gray-800">{{ item.name }}</p>
           <p class="text-gray-500 text-sm">{{ item.level }}</p>
         </div>

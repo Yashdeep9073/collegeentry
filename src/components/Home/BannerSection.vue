@@ -64,10 +64,11 @@ async function fetchSearchResults() {
   loading.value = true;
 
   try {
-    const res = await axios.get(`${FETCH_COLLEGE_BY_NAME}/${searchText.value}`);
+    const res = await axios.get(
+      `${FETCH_COLLEGE_BY_NAME}?query=${searchText.value}`
+    );
 
-    // Adjust based on your API response structure
-    results.value = res.data?.data || [];
+    results.value = res.data?.data || []; // contains college + exam mixed
   } catch (error) {
     console.error("API Error:", error);
     results.value = [];
@@ -81,9 +82,16 @@ watch(searchText, () => {
   fetchSearchResults();
 });
 
-function goToCollege(college) {
-  const slug = college.name.toLowerCase().replace(/\s+/g, "-"); // convert name → slug
-  router.push(`/colleges/${slug}`);
+function goToResult(item) {
+  const slug = item.name.toLowerCase().replace(/\s+/g, "-");
+
+  if (item.type === "college") {
+    router.push(`/colleges/${slug}`);
+  } else if (item.type === "exam") {
+    router.push(`/exam/${slug}`);
+  }
+
+  closeModal();
 }
 </script>
 
@@ -153,14 +161,18 @@ function goToCollege(college) {
         <li v-if="results.length === 0 && searchText.length >= 3">
           No results found.
         </li>
-
         <li
-          v-for="(college, i) in results"
+          v-for="(item, i) in results"
           :key="i"
-          @click="goToCollege(college)"
+          @click="goToResult(item)"
+          class="result-row"
         >
-          <span>{{ college.name }}</span>
-          <span class="type">College</span>
+          <span>{{ item.name }}</span>
+
+          <!-- SHOW TYPE: College / Exam -->
+          <span class="type">
+            {{ item.type === "college" ? "College" : "Exam" }}
+          </span>
         </li>
       </ul>
     </div>

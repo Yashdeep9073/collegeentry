@@ -25,7 +25,7 @@ import TrendingExam from '../../components/Home/TrendingExam.vue';
  <ExploreSection />
  <TrendingExam />
  <TrendingCourses />
- <TopSchoolExams />
+ <!-- <TopSchoolExams /> -->
  <PopularCollege/>
  <ExploreScholership/>
  <LatestNewsSection />
