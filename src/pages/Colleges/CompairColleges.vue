@@ -61,7 +61,10 @@
     </div>
 
     <!-- Comparison Table -->
-    <div v-if="comparisonData" class="bg-white mt-8 rounded-xl shadow-md overflow-hidden">
+    <div
+      v-if="comparisonData"
+      class="bg-white mt-8 rounded-xl shadow-md overflow-hidden"
+    >
       <div
         v-for="(section, index) in sections"
         :key="index"
@@ -77,14 +80,18 @@
           <svg
             :class="[
               'w-5 h-5 transform transition-transform',
-              openSection === index ? 'rotate-180' : ''
+              openSection === index ? 'rotate-180' : '',
             ]"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
           >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M19 9l-7 7-7-7" />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 9l-7 7-7-7"
+            />
           </svg>
         </button>
 
@@ -93,8 +100,12 @@
           class="px-6 pb-6 grid grid-cols-1 md:grid-cols-3 gap-6 bg-gray-50"
         >
           <div class="font-semibold text-gray-700">{{ section.title }}</div>
-          <div class="text-gray-600">{{ comparisonData.college1[section.key] }}</div>
-          <div class="text-gray-600">{{ comparisonData.college2[section.key] }}</div>
+          <div class="text-gray-600">
+            {{ comparisonData.college1[section.key] }}
+          </div>
+          <div class="text-gray-600">
+            {{ comparisonData.college2[section.key] }}
+          </div>
         </div>
       </div>
     </div>
@@ -102,12 +113,22 @@
 </template>
 
 <script setup>
+import axios from "axios";
 import { ref } from "vue";
+import { toast } from "vue3-toastify";
 
 const selectedCollege1 = ref("");
 const selectedCollege2 = ref("");
-const openSection = ref(null);
+
 const comparisonData = ref(null);
+const openSection = ref(null);
+const loading = ref(false);
+
+const College_by_name = import.meta.env.VITE_SEARCH_COLLEGE_COURSE;
+
+const formatName = (name) => {
+  return name.trim().toLowerCase().replace(/\s+/g, "");
+};
 
 const sections = [
   { title: "Location", key: "location" },
@@ -116,47 +137,70 @@ const sections = [
   { title: "Accreditation", key: "accreditation" },
   { title: "Ownership", key: "ownership" },
   { title: "Total Rating", key: "rating" },
-  { title: "Total Courses", key: "courses" },
-  { title: "Fees Range", key: "fees" },
-  { title: "Placement Rate", key: "placementRate" },
+  { title: "Total Courses", key: "totalCourses" },
+  { title: "Fees Range", key: "feesRange" },
 ];
 
 const toggleSection = (index) => {
   openSection.value = openSection.value === index ? null : index;
 };
 
-// Dummy compare function (You can replace this with an API call)
-const compareColleges = () => {
+const normalizeCollege = (raw) => {
+  return {
+    location: raw.location || "N/A",
+    ranking: raw.details?.ranking || "N/A",
+    placements: raw.placements?.length
+      ? `${raw.placements.length} records`
+      : "N/A",
+    accreditation: raw.accreditation || raw.affiliation || "N/A",
+    ownership: raw.ownership || "N/A",
+    rating: raw.totalRating || raw.details?.rating || "N/A",
+    totalCourses: raw.totalCourses ?? "N/A",
+    feesRange: raw.feesRange || "N/A",
+  };
+};
+
+const fetchCollege = async (name) => {
+  try {
+    const formatted = formatName(name);
+    const url = `${College_by_name}${formatted}`;
+
+    console.log("Calling:", url);
+
+    const res = await axios.get(url);
+
+    if (res.data?.data?.length > 0) {
+      return normalizeCollege(res.data.data[0]);
+    }
+
+    return null;
+  } catch (error) {
+    console.error("Fetch error:", error);
+    return null;
+  }
+};
+
+const compareColleges = async () => {
   if (!selectedCollege1.value || !selectedCollege2.value) {
-    alert("Please enter both college names!");
+    toast.error("Please enter both college names!");
     return;
   }
 
-  // Example dummy data
-  comparisonData.value = {
-    college1: {
-      location: "Mumbai, India",
-      ranking: "5th Nationally",
-      placements: "95%",
-      accreditation: "NAAC A+",
-      ownership: "Private",
-      rating: "4.6/5",
-      courses: "120",
-      fees: "₹2L - ₹5L",
-      placementRate: "92%",
-    },
-    college2: {
-      location: "Delhi, India",
-      ranking: "8th Nationally",
-      placements: "89%",
-      accreditation: "NAAC A",
-      ownership: "Government",
-      rating: "4.2/5",
-      courses: "110",
-      fees: "₹1L - ₹3L",
-      placementRate: "88%",
-    },
-  };
+  loading.value = true;
+
+  const [c1, c2] = await Promise.all([
+    fetchCollege(selectedCollege1.value),
+    fetchCollege(selectedCollege2.value),
+  ]);
+
+  loading.value = false;
+
+  if (!c1 || !c2) {
+    toast.error("One or both colleges not found!");
+    return;
+  }
+
+  comparisonData.value = { college1: c1, college2: c2 };
 };
 </script>
 

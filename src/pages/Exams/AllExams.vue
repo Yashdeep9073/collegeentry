@@ -73,11 +73,16 @@ const searchExams = async () => {
 };
 
 function goToExam(exam) {
-  const slug = exam.fullName.toLowerCase().replace(/\s+/g, "-");
+  const title = exam.fullName || exam.name || exam.shortName;
 
+  if (!title) {
+    console.error("Invalid exam object:", exam);
+    return;
+  }
+
+  const slug = title.toLowerCase().replace(/\s+/g, "-");
   router.push(`/exam/${slug}`);
 
-  // Clear dropdown
   searchResults.value = [];
   searchInput.value = "";
 }
