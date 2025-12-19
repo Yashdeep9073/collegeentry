@@ -6,15 +6,20 @@ import "swiper/css/pagination";   // ✅ important if we add dots later
 import { Navigation, Autoplay } from "swiper/modules";
 import { ref } from "vue";
 import cityImage from "../../assets/download.jpg";
+import mumbai from "../../assets/mumbai.jpg";
+import bangalore from "../../assets/bangalore.avif";
+import chennai from "../../assets/chennai.avif";
+import pune from "../../assets/pune.avif";
+
 
 const swiperInstance = ref(null);
 
 const cities = [
-  { name: "Bangalore", image: cityImage },
-  { name: "Chennai", image: cityImage },
+  { name: "Bangalore", image: bangalore },
+  { name: "Chennai", image: chennai },
   { name: "Delhi", image: cityImage },
-  { name: "Mumbai", image: cityImage },
-  { name: "Pune", image: cityImage },
+  { name: "Mumbai", image: mumbai },
+  { name: "Pune", image: pune },
 ];
 const onSwiper = (swiper) => {
   swiperInstance.value = swiper;

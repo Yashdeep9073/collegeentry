@@ -415,13 +415,7 @@ const goToCoursesTab = () => {
               :alt="ad.title"
               class="w-full h-auto object-cover transform group-hover:scale-105 transition duration-500 ease-in-out"
             />
-            <div class="absolute bottom-4 left-0 right-0 text-center">
-              <span
-                class="bg-red-600 text-white text-sm font-bold py-2 px-6 rounded-full shadow-lg group-hover:bg-red-700 transition"
-              >
-                {{ ad.title || "Apply Now" }}
-              </span>
-            </div>
+          
           </a>
         </div>
 

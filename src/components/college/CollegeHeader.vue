@@ -1,152 +1,8 @@
-<script setup>
-import { useCollegeStore } from "../../store/collegeNameStore";
-import { useRoute } from "vue-router";
-import { onMounted, computed, ref, watch, reactive } from "vue"; // <-- Added 'reactive'
-import axios from "axios"; // Ensure axios is installed and imported
-import { toast } from "vue3-toastify";
-
-// API URL from environment variable
-const VITE_ADD_LEAD = import.meta.env.VITE_ADD_LEAD_COLLEGE_API;
-
-const route = useRoute();
-const collegeStore = useCollegeStore();
-
-const slug = route.params.slug;
-
-// Convert slug → Normal Name: "punjab-university" → "punjab university"
-const collegeName = slug.replace(/-/g, " ");
-
-// --- COLLEGE DATA FETCHING ---
-
-// Fetch data on page load
-onMounted(() => {
-  collegeStore.fetchCollegeByName(collegeName);
-});
-
-// For easy usage in template
-const university = computed(() => collegeStore.college);
-
-watch(university, (val) => {
-  if (val && val.name) {
-    document.title = `${val.name} | Admission, Courses, Fees & More`;
-  }
-});
-
-// --- MODAL AND FORM STATE MANAGEMENT ---
-
-const isApplyModalOpen = ref(false);
-const isSubmitting = ref(false); // Replaces 'loading' for clarity
-const submitMessage = ref(null); // Stores success/error message for display
-
-const formState = reactive({
-  // Used 'reactive' for the form object
-  name: "",
-  phone: "",
-  email: "",
-  city: "",
-  state: "",
-  country: "",
-  degree_type: "", // Harmonized with snake_case for potential API use
-  message: "",
-  college_name: collegeName, // Added college name for the lead data
-});
-
-const openApplyModal = () => {
-  isApplyModalOpen.value = true;
-  document.body.style.overflow = "hidden"; // Prevents background scroll
-};
-
-const closeApplyModal = () => {
-  isApplyModalOpen.value = false;
-  document.body.style.overflow = ""; // Re-enable background scroll
-
-  // Reset form state and messages on close
-  Object.assign(formState, {
-    name: "",
-    phone: "",
-    email: "",
-    city: "",
-    state: "",
-    country: "",
-    degree_type: "",
-    message: "",
-  });
-  submitMessage.value = null;
-};
-
-// --- LEAD SUBMISSION LOGIC ---
-
-const submitLead = async () => {
-  // Basic Validation
-  if (!formState.name || !formState.phone) {
-    toast.error("Full Name and Phone Number are required!", {
-      autoClose: 2500,
-    });
-
-    submitMessage.value = {
-      type: "error",
-      text: "Full Name and Phone Number are required.",
-    };
-
-    return;
-  }
-
-  isSubmitting.value = true;
-  submitMessage.value = null;
-
-  try {
-    const payload = {
-      ...formState,
-      degree_type: formState.degree_type || "N/A",
-    };
-
-    const response = await axios.post(VITE_ADD_LEAD, payload);
-
-    if (response.status === 200 || response.status === 201) {
-      toast.success("Lead submitted successfully!", {
-        autoClose: 2000,
-      });
-
-      submitMessage.value = {
-        type: "success",
-        text: "✅ Your enquiry has been submitted successfully.",
-      };
-
-      setTimeout(() => closeApplyModal(), 2000);
-    } else {
-      toast.error(response.data.message || "Submission failed!", {
-        autoClose: 2500,
-      });
-
-      submitMessage.value = {
-        type: "error",
-        text: "Submission failed. Try again!",
-      };
-    }
-  } catch (error) {
-    console.log("Submission Error:", error);
-
-    toast.error("Network Error! Please check your connection.", {
-      autoClose: 3000,
-    });
-
-    submitMessage.value = {
-      type: "error",
-      text: " Network error. Please try again.",
-    };
-  } finally {
-    isSubmitting.value = false;
-  }
-};
-</script>
-
 <template>
   <section
     v-if="university"
     class="relative w-full bg-center bg-cover bg-no-repeat"
-    :style="{
-      backgroundImage: `url(${university?.details?.thumbnail})`,
-    }"
+    :style="{ backgroundImage: `url(${university?.details?.thumbnail})` }"
   >
     <div class="absolute inset-0 bg-black/60 backdrop-blur-[1px]"></div>
 
@@ -185,88 +41,100 @@ const submitLead = async () => {
                 Reviews)
               </span>
             </div>
-
-            <div class="flex flex-wrap gap-6 text-xs opacity-90">
-              <span class="flex items-center gap-2">
-                <img
-                  :src="university?.admin?.image"
-                  alt="Admin Image"
-                  class="w-6 h-6 rounded-full object-cover border border-white/30"
-                />
-                Authored by {{ university?.admin?.name }}
-              </span>
-
-              <span class="flex items-center gap-2">
-                <i class="fas fa-clock"></i>
-                Updated
-                {{ new Date(university?.createdAt).toLocaleDateString() }}
-              </span>
-            </div>
           </div>
         </div>
 
         <div class="flex flex-col sm:flex-row lg:flex-col gap-3 flex-shrink-0">
           <router-link
             to="/college-compare"
-            class="px-5 py-2.5 w-full sm:w-auto text-sm font-semibold border border-white text-white rounded-lg hover:bg-white hover:text-black transition"
+            class="px-5 py-2.5 text-center text-sm font-semibold border border-white text-white rounded-lg hover:bg-white hover:text-black transition"
           >
-            <i class="fas fa-balance-scale mr-1"></i>
-            Compare Colleges
+            <i class="fas fa-balance-scale mr-1"></i> Compare
           </router-link>
 
           <button
             @click="openApplyModal"
-            class="px-5 py-2.5 w-full sm:w-auto rounded-lg bg-gradient-to-r from-orange-600 via-orange-500 to-yellow-400 text-white font-semibold shadow-lg hover:brightness-110 transition"
+            class="px-5 py-2.5 rounded-lg bg-gradient-to-r from-orange-600 via-orange-500 to-yellow-400 text-white font-semibold shadow-lg hover:brightness-110 transition"
           >
-            <i class="fas fa-paper-plane mr-1"></i>
-            Apply Now
+            <i class="fas fa-paper-plane mr-1"></i> Apply Now
           </button>
 
           <button
             @click="openApplyModal"
-            class="px-5 py-2.5 w-full sm:w-auto border border-white text-white rounded-lg hover:bg-white hover:text-black transition font-semibold"
+            class="px-5 py-2.5 border border-white text-white rounded-lg hover:bg-white hover:text-black transition font-semibold"
           >
-            <i class="fas fa-download mr-1"></i>
-            Download Brochure
+            <i class="fas fa-download mr-1"></i> Download Brochure
           </button>
         </div>
       </div>
     </div>
   </section>
 
-  <section v-else class="text-center py-10 text-gray-500">
-    Loading college data...
-  </section>
-
   <div
     v-if="isApplyModalOpen"
-    class="fixed inset-0 bg-black/70 flex justify-center items-center z-50"
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
     @click.self="closeApplyModal"
   >
     <div
-      class="modal-scroll bg-white rounded-xl shadow-2xl w-[95%] max-w-md relative transform scale-100 transition-transform duration-300 max-h-[90vh] overflow-y-auto"
+      class="relative flex modal-scroll flex-col md:flex-row w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden animate-fade-in-up"
     >
-      <div
-        class="sticky top-0 bg-white z-10 flex justify-between items-center p-5 border-b border-gray-100"
+      <button
+        @click="closeApplyModal"
+        class="absolute top-4 right-4 z-20 p-1 rounded-full hover:bg-gray-100 transition-colors text-gray-400 hover:text-gray-600"
       >
-        <h2 class="text-xl font-extrabold text-gray-800">
-          <i class="fas fa-user-graduate mr-2 text-orange-500"></i>
-          Admission Enquiry
-        </h2>
-
-        <button
-          @click="closeApplyModal"
-          class="text-gray-400 hover:text-red-500 text-2xl transition-colors"
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
         >
-          <i class="fas fa-times"></i>
-        </button>
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+
+      <div
+        class="hidden md:flex md:w-5/12 bg-red-600 p-8 text-white flex-col justify-center relative overflow-hidden"
+      >
+        <div
+          class="absolute top-0 right-0 -mr-10 -mt-10 w-40 h-40 bg-red-500 rounded-full opacity-50"
+        ></div>
+        <div class="relative z-10">
+          <div class="text-4xl mb-6 text-center">
+            <img src="../../assets/college-university-student.png" alt="" />
+          </div>
+          <h2 class="text-2xl font-bold mb-6 leading-tight italic text-center">
+            Invest in Your Future: Get Help with Your Registration Today
+          </h2>
+          <ul class="space-y-4 text-sm">
+            <li class="flex items-start gap-3">
+              <i class="fas fa-check-circle mt-1 text-red-300"></i>
+              <p>Get Expert Help to Apply to Your Dream College!</p>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="fas fa-check-circle mt-1 text-red-300"></i>
+              <p>Stay up-to-date with Exam Notification and News</p>
+            </li>
+          </ul>
+        </div>
       </div>
 
-      <div class="p-6">
+      <div
+        class="w-full md:w-7/12 p-8 md:p-12 max-h-[90vh] overflow-y-auto hide-scrollbar"
+      >
+        <h3 class="text-2xl font-bold text-gray-900 mb-6 leading-tight">
+          Apply Now
+        </h3>
+
         <div
           v-if="submitMessage"
           :class="[
-            'p-3 mb-4 rounded-lg font-medium',
+            'p-3 mb-4 rounded-lg text-sm font-medium',
             submitMessage.type === 'success'
               ? 'bg-green-100 text-green-700'
               : 'bg-red-100 text-red-700',
@@ -275,122 +143,92 @@ const submitLead = async () => {
           {{ submitMessage.text }}
         </div>
 
-        <p class="text-sm text-gray-600 mb-2">
-          Get instant callback and free counseling from our experts. .
-        </p>
-
         <form @submit.prevent="submitLead" class="space-y-4">
-          <div class="space-y-2">
-            <div class="relative">
-              <input
-                type="text"
-                v-model="formState.name"
-                placeholder="Full Name *"
-                required
-                class="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 transition duration-150"
-              />
-              <i
-                class="fas fa-user absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-              ></i>
-            </div>
-
-            <div class="relative">
-              <input
-                type="tel"
-                v-model="formState.phone"
-                placeholder="Phone Number *"
-                required
-                class="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 transition duration-150"
-              />
-              <i
-                class="fas fa-phone absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-              ></i>
-            </div>
-
-            <div class="relative">
-              <input
-                type="email"
-                v-model="formState.email"
-                placeholder="Email Address"
-                class="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 transition duration-150"
-              />
-              <i
-                class="fas fa-envelope absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-              ></i>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="relative">
-              <input
-                type="text"
-                v-model="formState.city"
-                placeholder="City"
-                class="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 transition duration-150"
-              />
-              <i
-                class="fas fa-city absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-              ></i>
-            </div>
-
-            <div class="relative">
-              <input
-                type="text"
-                v-model="formState.state"
-                placeholder="State"
-                class="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 transition duration-150"
-              />
-              <i
-                class="fas fa-map-pin absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-              ></i>
-            </div>
-
-            <div class="relative">
-              <input
-                type="text"
-                v-model="formState.country"
-                placeholder="Country"
-                class="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 transition duration-150"
-              />
-              <i
-                class="fas fa-globe absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-              ></i>
-            </div>
-
-            <div class="relative">
-              <input
-                type="text"
-                v-model="formState.degree_type"
-                placeholder="Degree Type "
-                class="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 transition duration-150"
-              />
-              <i
-                class="fas fa-graduation-cap absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-              ></i>
-            </div>
+          <div class="relative">
+            <span
+              class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"
+            >
+              <i class="fas fa-user text-sm"></i>
+            </span>
+            <input
+              v-model="formState.name"
+              type="text"
+              placeholder="Name *"
+              required
+              class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 outline-none transition-all"
+            />
           </div>
 
           <div class="relative">
-            <textarea
-              v-model="formState.message"
-              placeholder="Your Specific Query/Message"
-              rows="3"
-              class="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500 transition duration-150 resize-none"
-            ></textarea>
-            <i
-              class="fas fa-comment-dots absolute left-3 top-4 text-gray-400"
-            ></i>
+            <span
+              class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400"
+            >
+              <i class="fas fa-envelope text-sm"></i>
+            </span>
+            <input
+              v-model="formState.email"
+              type="email"
+              placeholder="Email Address"
+              class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 outline-none transition-all"
+            />
           </div>
 
-          <button
-            type="submit"
-            :disabled="isSubmitting"
-            class="w-full bg-gradient-to-r from-orange-600 to-yellow-500 text-white py-3 rounded-lg font-bold shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01] disabled:opacity-50 disabled:cursor-not-allowed"
+          <div class="flex gap-2">
+            <div
+              class="flex items-center gap-1 border border-gray-200 rounded-lg px-3 bg-gray-50 text-gray-600 text-sm"
+            >
+              <span>🇮🇳</span><span>+91</span>
+            </div>
+            <input
+              v-model="formState.phone"
+              type="tel"
+              placeholder="Mobile Number *"
+              required
+              class="flex-1 px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 outline-none"
+            />
+          </div>
+          <select
+            v-model="formState.streamId"
+            class="w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-700 focus:ring-2 focus:ring-red-500 outline-none appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[right_1rem_center] bg-[length:1em_1em]"
           >
-            <span v-if="isSubmitting">
-              <i class="fas fa-spinner fa-spin mr-2"></i> Submitting...
-            </span>
-            <span v-else> Request Free Counseling </span>
+            <option value="" disabled>
+              {{ isStreamLoading ? "Loading streams..." : "Stream Interested" }}
+            </option>
+
+            <option
+              v-for="stream in streams"
+              :key="stream.id"
+              :value="stream.id"
+            >
+              {{ stream.name }}
+            </option>
+          </select>
+
+          <select
+            v-model="formState.degreeType"
+            class="w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-500 focus:ring-2 focus:ring-red-500 outline-none appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[right_1rem_center] bg-[length:1em_1em]"
+          >
+            <option value="" disabled selected>Level Interested</option>
+            <option value="Bachelors">Bachelors</option>
+            <option value="Masters">Masters</option>
+          </select>
+
+          <p class="text-[11px] text-gray-500">
+            By proceeding forward, I agree to CollegeEntry
+            <span class="text-red-600 cursor-pointer hover:underline"
+              >Terms & Conditions</span
+            >
+          </p>
+
+          <button
+            :disabled="isSubmitting"
+            type="submit"
+            class="w-full bg-red-400 hover:bg-red-500 text-white font-bold py-4 rounded-lg transition-all transform hover:scale-[1.01] shadow-lg disabled:opacity-50"
+          >
+            <span v-if="isSubmitting"
+              ><i class="fas fa-spinner fa-spin mr-2"></i>Processing...</span
+            >
+            <span v-else>Next</span>
           </button>
         </form>
       </div>
@@ -398,13 +236,136 @@ const submitLead = async () => {
   </div>
 </template>
 
+<script setup>
+import { useCollegeStore } from "../../store/collegeNameStore";
+import { useRoute } from "vue-router";
+import { onMounted, computed, ref, watch, reactive } from "vue";
+import axios from "axios";
+import { toast } from "vue3-toastify";
+
+const VITE_ADD_LEAD = import.meta.env.VITE_ADD_LEAD_COLLEGE_API;
+const VITE_FETCH_STREAM = import.meta.env.VITE_FETCH_ALL_STREAM;
+const route = useRoute();
+const collegeStore = useCollegeStore();
+const slug = route.params.slug;
+const collegeName = slug.replace(/-/g, " ");
+
+const streams = ref([]);
+const isStreamLoading = ref(false);
+
+const fetchStreams = async () => {
+  try {
+    isStreamLoading.value = true;
+    const res = await axios.get(VITE_FETCH_STREAM);
+
+    // assuming API returns array like [{ id, name }]
+    streams.value = res.data.data || [];
+  } catch (error) {
+    console.error("Error fetching streams:", error);
+  } finally {
+    isStreamLoading.value = false;
+  }
+};
+
+onMounted(() => {
+  collegeStore.fetchCollegeByName(collegeName);
+});
+
+const university = computed(() => collegeStore.college);
+
+watch(university, (val) => {
+  if (val && val.name) {
+    document.title = `${val.name} | Admission 2025`;
+  }
+});
+
+// Modal & Form State
+const isApplyModalOpen = ref(false);
+const isSubmitting = ref(false);
+const submitMessage = ref(null);
+
+const formState = reactive({
+  name: "",
+  phone: "",
+  email: "",
+  streamId: null,
+  degreeType: "",
+  college_name: collegeName,
+});
+
+const openApplyModal = () => {
+  isApplyModalOpen.value = true;
+  document.body.style.overflow = "hidden";
+
+  if (!streams.value.length) {
+    fetchStreams();
+  }
+};
+
+const closeApplyModal = () => {
+  isApplyModalOpen.value = false;
+  document.body.style.overflow = "";
+  Object.assign(formState, {
+    name: "",
+    phone: "",
+    email: "",
+    city: "",
+    state: "",
+    degreeType: "",
+    streamId: null,
+  });
+  submitMessage.value = null;
+};
+
+const submitLead = async () => {
+  if (!formState.name || !formState.phone) {
+    toast.error("Name and Phone are required!");
+    return;
+  }
+
+  isSubmitting.value = true;
+  try {
+    const response = await axios.post(VITE_ADD_LEAD, formState);
+    if (response.status === 200 || response.status === 201) {
+      toast.success("Enquiry sent!");
+      submitMessage.value = {
+        type: "success",
+        text: "✅ Success! We will contact you shortly.",
+      };
+      setTimeout(() => closeApplyModal(), 2000);
+    }
+  } catch (error) {
+    submitMessage.value = {
+      type: "error",
+      text: "Network error. Please try again.",
+    };
+  } finally {
+    isSubmitting.value = false;
+  }
+};
+</script>
+
 <style scoped>
-.modal-scroll::-webkit-scrollbar {
-  display: none;
+.animate-fade-in-up {
+  animation: fadeInUp 0.4s ease-out;
+}
+.hide-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE & Edge */
 }
 
-.modal-scroll {
-  -ms-overflow-style: none; /* IE & Edge */
-  scrollbar-width: none; /* Firefox */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>

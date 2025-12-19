@@ -7,7 +7,7 @@ const route = useRoute();
 const slug = ref(route.params.slug);
 
 // Ensure this environment variable is correctly set in your project
-const API_URL = import.meta.env.VITE_FETCH_ALL_ARTICLE; 
+const API_URL = import.meta.env.VITE_FETCH_ARTICLE_BY_TITLE; 
 
 const article = ref(null);
 const loading = ref(true);

@@ -1,18 +1,21 @@
 <template>
   <section class="bg-gray-50 text-gray-800">
-    <div class="relative py-28 overflow-hidden">
+    <div class="relative py-40 md:py-52 overflow-hidden">
       <div
-        class="absolute inset-0 bg-gradient-to-r from-[#E04A00] via-[#FF5C00] to-[#FFA040] text-white "
-      ></div>
-
+        class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-105"
+        :style="`background-image: url('${bannerImg}')`"
+      >
+        <div class="absolute inset-0 bg-black opacity-65"></div>
+      </div>
+      
       <div class="relative z-10 max-w-6xl mx-auto px-6 text-center text-white">
         <h1
-          class="text-4xl md:text-6xl font-extrabold mb-5 drop-shadow-lg animate-fade-in-down"
+          class="text-5xl md:text-7xl font-extrabold mb-6 drop-shadow-lg animate-fade-in-down tracking-tight"
         >
-          About College Entry
+          About Our College
         </h1>
         <p
-          class="text-lg md:text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed animate-fade-in-up"
+          class="text-xl md:text-2xl text-red-100 max-w-3xl mx-auto leading-relaxed animate-fade-in-up font-light"
         >
           Empowering students with innovation, integrity, and excellence to
           shape a brighter future.
@@ -55,10 +58,10 @@
         </h2>
         <div class="grid md:grid-cols-2 gap-10 text-left">
           <div
-            class="bg-blue-50 p-10 rounded-3xl shadow-lg border-l-8 border-blue-600 hover:shadow-xl transition duration-300 transform hover:-translate-y-1"
+            class=" p-10 rounded-3xl shadow-lg border-l-8 border-red-600 hover:shadow-xl transition duration-300 transform hover:-translate-y-1"
           >
             <div class="flex items-center mb-4">
-              <div class="bg-blue-600 rounded-full p-3 mr-4">
+              <div class="bg-red-600 rounded-full p-3 mr-4">
                 <svg
                   class="w-7 h-7 text-white"
                   fill="none"
@@ -74,7 +77,7 @@
                   ></path>
                 </svg>
               </div>
-              <h3 class="text-3xl font-bold text-blue-800">Our Mission</h3>
+              <h3 class="text-3xl font-bold text-red-800">Our Mission</h3>
             </div>
             <p class="text-gray-700 text-lg">
               To provide world-class education that inspires innovation,
@@ -83,10 +86,10 @@
             </p>
           </div>
           <div
-            class="bg-green-50 p-10 rounded-3xl shadow-lg border-l-8 border-green-600 hover:shadow-xl transition duration-300 transform hover:-translate-y-1"
+            class=" p-10 rounded-3xl shadow-lg border-l-8 border-red-600 hover:shadow-xl transition duration-300 transform hover:-translate-y-1"
           >
             <div class="flex items-center mb-4">
-              <div class="bg-green-600 rounded-full p-3 mr-4">
+              <div class="bg-red-600 rounded-full p-3 mr-4">
                 <svg
                   class="w-7 h-7 text-white"
                   fill="none"
@@ -108,7 +111,7 @@
                   ></path>
                 </svg>
               </div>
-              <h3 class="text-3xl font-bold text-green-800">Our Vision</h3>
+              <h3 class="text-3xl font-bold text-red-800">Our Vision</h3>
             </div>
             <p class="text-gray-700 text-lg">
               To be a globally recognized institution renowned for academic
@@ -127,10 +130,10 @@
         </h2>
         <div class="grid md:grid-cols-3 gap-8">
           <div
-            class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1 border-b-4 border-blue-500"
+            class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1 border-b-4 border-red-500"
           >
             <h3
-              class="text-5xl font-extrabold text-blue-700 mb-3 animate-pulse-on-hover"
+              class="text-5xl font-extrabold text-red-700 mb-3 animate-pulse-on-hover"
             >
               25+
             </h3>
@@ -180,12 +183,12 @@
             <img
               :src="member.image"
               :alt="`Portrait of ${member.name}`"
-              class="w-32 h-32 mx-auto rounded-full object-cover mb-6 border-4 border-blue-400 shadow-md"
+              class="w-32 h-32 mx-auto rounded-full object-cover mb-6 border-4 border-red-400 shadow-md"
             />
             <h3 class="text-2xl font-semibold text-gray-900 mb-1">
               {{ member.name }}
             </h3>
-            <p class="text-blue-700 font-medium text-lg mb-3">
+            <p class="text-red-700 font-medium text-lg mb-3">
               {{ member.role }}
             </p>
             <p class="text-gray-600 text-base leading-relaxed">
@@ -196,27 +199,14 @@
       </div>
     </div>
 
-    <!-- <div
-      class="bg-gradient-to-r from-blue-700 to-indigo-700 text-white py-20 text-center"
-    >
-      <h2 class="text-4xl font-bold mb-6 drop-shadow-md">
-        Join Us and Be a Part of Our Journey
-      </h2>
-      <p class="text-blue-100 mb-8 max-w-3xl mx-auto text-lg leading-relaxed">
-        Start your journey toward excellence with one of the most vibrant and
-        forward-thinking educational communities. Discover your potential with
-        us.
-      </p>
-      <button
-        class="bg-white text-blue-700 font-bold px-8 py-4 rounded-full shadow-lg hover:bg-blue-100 hover:text-blue-800 transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300"
-      >
-        Discover More
-      </button>
-    </div> -->
-  </section>
+    </section>
 </template>
 
 <script setup>
+// IMPORTANT: For the best results, replace 'about-us-page.png' with an image that has NO TEXT.
+// For example, a picture of students on campus or a college building.
+import bannerImg from "/about-us-page.png"; // Placeholder: Update this path!
+
 const faculty = [
   {
     name: "Dr. Ananya Mehta",

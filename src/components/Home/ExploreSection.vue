@@ -77,7 +77,7 @@ onMounted(() => {
 /* ✅ NAVIGATION HANDLERS */
 const goToCollege = (name) =>
   router.push(`/colleges?category=${encodeURIComponent(name)}`);
-const goToExam = (name) => router.push(`/exams/${encodeURIComponent(name)}`);
+const goToExam = () => router.push(`/exams`);
 const goToCourse = (name) =>
   router.push(`/courses/${encodeURIComponent(name)}`);
 </script>

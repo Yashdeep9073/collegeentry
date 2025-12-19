@@ -83,21 +83,21 @@ onMounted(() => {
           class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
         >
           <div class="flex items-start sm:items-center space-x-4 flex-grow">
-            <div class="p-3 rounded-xl bg-blue-100 border-2 border-blue-300">
+            <div class="p-3 rounded-xl bg-red-100 border-2 border-red-300">
               <img
                 v-if="iconUrl"
                 :src="iconUrl"
                 class="w-10 h-10 object-contain"
               />
 
-              <i v-else :class="courseIconClass" class="text-blue-600"></i>
+              <i v-else :class="courseIconClass" class="text-red-600"></i>
             </div>
 
             <div>
               <h1
                 class="text-xl sm:text-2xl font-extrabold text-gray-800 leading-tight"
               >
-                <span class="text-blue-700">{{ examName }}</span
+                <span class="text-red-700">{{ examName }}</span
                 >:
                 {{ examFullName }}
               </h1>
@@ -153,7 +153,7 @@ onMounted(() => {
                       :href="'https://' + item.value"
                       target="_blank"
                       rel="noopener noreferrer"
-                      class="text-blue-600 hover:text-blue-800 hover:underline"
+                      class="text-red-600 hover:text-red-800 hover:underline"
                     >
                       {{ item.value }}
                     </a>

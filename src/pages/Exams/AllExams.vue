@@ -106,7 +106,7 @@ function goToExam(exam) {
               @input="searchExams"
               type="text"
               placeholder="Search for an Entrance Exam"
-              class="w-full px-5 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-700 shadow-sm"
+              class="w-full px-5 py-3 border border-gray-300 rounded-lg"
               style="height: 50px"
             />
 
@@ -119,14 +119,13 @@ function goToExam(exam) {
                 <li
                   v-for="exam in searchResults"
                   :key="exam.id"
-                  class="px-4 py-2 hover:bg-blue-50 cursor-pointer flex items-center space-x-2 transition"
+                 class="px-4 py-2 hover:bg-red-50 cursor-pointer"
                   @click="goToExam(exam)"
                 >
                   <i
-                    class="fa-solid fa-magnifying-glass text-blue-500 text-xs"
+                    class="fa-solid fa-magnifying-glass text-red-500 text-xs mr-2"
                   ></i>
-
-                  <span class="text-sm font-medium text-gray-700">
+                  <span class="text-sm font-medium ">
                     {{ exam.shortName }} - {{ exam.name }}
                   </span>
                 </li>
