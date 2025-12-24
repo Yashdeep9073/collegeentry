@@ -574,18 +574,6 @@
           Apply Now
         </h3>
 
-        <div
-          v-if="submitMessage"
-          :class="[
-            'p-3 mb-4 rounded-lg text-sm font-medium',
-            submitMessage.type === 'success'
-              ? 'bg-green-100 text-green-700'
-              : 'bg-red-100 text-red-700',
-          ]"
-        >
-          {{ submitMessage.text }}
-        </div>
-
         <form @submit.prevent="submitLead" class="space-y-4">
           <div class="relative">
             <span
@@ -600,6 +588,9 @@
               required
               class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 outline-none transition-all"
             />
+            <p v-if="errors.name" class="text-xs text-red-500 mt-1">
+              {{ errors.name }}
+            </p>
           </div>
 
           <div class="relative">
@@ -614,37 +605,54 @@
               placeholder="Email Address"
               class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 outline-none transition-all"
             />
+            <p v-if="errors.email" class="text-xs text-red-500 mt-1">
+              {{ errors.email }}
+            </p>
           </div>
 
           <div class="flex gap-2">
             <div
-              class="flex items-center gap-1 border border-gray-200 rounded-lg px-3 bg-gray-50 text-gray-600 text-sm"
+              class="flex items-center gap-2 border border-gray-200 px-3 bg-gray-50 text-gray-600 text-sm"
             >
-              <span>🇮🇳</span><span>+91</span>
+              <img
+                src="https://flagcdn.com/w20/in.png"
+                alt="India"
+                class="w-6 h-5 object-cover"
+              />
+              <span>+91</span>
             </div>
+
             <input
               v-model="formState.phone"
               type="tel"
               placeholder="Mobile Number *"
               required
-              class="flex-1 px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 outline-none"
+              class="flex-1 px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 outline-none"
             />
+            <p v-if="errors.phone" class="text-xs text-red-500 mt-1">
+              {{ errors.phone }}
+            </p>
           </div>
+
           <select
             v-model="formState.streamId"
             class="w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-700 focus:ring-2 focus:ring-red-500 outline-none appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[right_1rem_center] bg-[length:1em_1em]"
           >
-            <option value="" disabled>
+            <!-- <option value="" disabled selected>
               {{ isStreamLoading ? "Loading streams..." : "Stream Interested" }}
-            </option>
+            </option> -->
+            <option value="" selected>Stream Interested</option>
 
             <option
-              v-for="stream in streams"
+              v-for="stream in apiStreams"
               :key="stream.id"
               :value="stream.id"
             >
               {{ stream.name }}
             </option>
+            <p v-if="errors.streamId" class="text-xs text-red-500 mt-1">
+              {{ errors.streamId }}
+            </p>
           </select>
 
           <select
@@ -654,6 +662,9 @@
             <option value="" disabled selected>Level Interested</option>
             <option value="Bachelors">Bachelors</option>
             <option value="Masters">Masters</option>
+            <p v-if="errors.degreeType" class="text-xs text-red-500 mt-1">
+              {{ errors.degreeType }}
+            </p>
           </select>
 
           <p class="text-[11px] text-gray-500">
@@ -680,9 +691,11 @@
 </template>
 
 <script setup>
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 const router = useRouter();
+const route = useRoute(); // for reading query params
+
 const FETCH_ALL_COLLEGES_URL = import.meta.env.VITE_FETCH_COLLEGES_FILTER;
 const VITE_ADD_LEAD = import.meta.env.VITE_ADD_LEAD_COLLEGE_API;
 
@@ -828,6 +841,17 @@ function mapOwnershipToType(ownership) {
   if (ownership === "PRIVATE") return "Private";
   return ownership; // fallback
 }
+watch(
+  () => route.query.city,
+  (city) => {
+    if (city) {
+      filters.value.city = city;
+      filters.value.search = city; // optional but powerful
+      applyFilters();
+    }
+  },
+  { immediate: true }
+);
 
 function generateRandomFee() {
   // Generate random fee between 50,000 and 20,00,000
@@ -1007,6 +1031,15 @@ onMounted(() => {
   fetchColleges();
 });
 
+const openApplyModal = () => {
+  isApplyModalOpen.value = true;
+  document.body.style.overflow = "hidden";
+
+  if (!apiStreams.value.length) {
+    fetchStreams();
+  }
+};
+
 const isApplyModalOpen = ref(false);
 const isSubmitting = ref(false); // Replaces 'loading' for clarity
 const submitMessage = ref(null); // Stores success/error message for display
@@ -1019,12 +1052,55 @@ const formState = reactive({
   city: "",
   state: "",
   degreeType: "",
-  streamId: null,
+  streamId: "",
 });
+const errors = reactive({
+  name: "",
+  phone: "",
+  streamId: "",
+  degreeType: "",
+});
+const validateForm = () => {
+  let isValid = true;
 
-const openApplyModal = () => {
-  isApplyModalOpen.value = true;
-  document.body.style.overflow = "hidden"; // Prevents background scroll
+  // Reset errors
+  errors.name = "";
+  errors.phone = "";
+  errors.streamId = "";
+  errors.degreeType = "";
+
+  // Name validation
+  if (!formState.name.trim()) {
+    errors.name = "Name is required";
+    isValid = false;
+  } else if (formState.name.length < 3) {
+    errors.name = "Name must be at least 3 characters";
+    isValid = false;
+  }
+
+  // Phone validation (Indian numbers)
+  const phoneRegex = /^[6-9]\d{9}$/;
+  if (!formState.phone) {
+    errors.phone = "Mobile number is required";
+    isValid = false;
+  } else if (!phoneRegex.test(formState.phone)) {
+    errors.phone = "Enter a valid 10-digit Indian number";
+    isValid = false;
+  }
+
+  // Stream validation
+  if (!formState.streamId) {
+    errors.streamId = "Please select a stream";
+    isValid = false;
+  }
+
+  // Degree validation
+  if (!formState.degreeType) {
+    errors.degreeType = "Please select degree level";
+    isValid = false;
+  }
+
+  return isValid;
 };
 
 const closeApplyModal = () => {
@@ -1039,65 +1115,52 @@ const closeApplyModal = () => {
     city: "",
     state: "",
     degreeType: "",
-    streamId: null,
+    streamId: "",
   });
   submitMessage.value = null;
+};
+
+const VITE_FETCH_STREAM = import.meta.env.VITE_FETCH_ALL_STREAM;
+
+const apiStreams = ref([]);
+const isStreamLoading = ref(false);
+
+const fetchStreams = async () => {
+  try {
+    isStreamLoading.value = true;
+    const res = await axios.get(VITE_FETCH_STREAM);
+
+    // assuming API returns array like [{ id, name }]
+    apiStreams.value = res.data.data || [];
+  } catch (error) {
+    console.error("Error fetching streams:", error);
+  } finally {
+    isStreamLoading.value = false;
+  }
 };
 
 // --- LEAD SUBMISSION LOGIC ---
 
 const submitLead = async () => {
-  // Basic Validation
-  if (!formState.name || !formState.phone) {
-    toast.error("Full Name and Phone Number are required!", {
-      autoClose: 2500,
-    });
-
-    submitMessage.value = {
-      type: "error",
-      text: "Full Name and Phone Number are required.",
-    };
-
+  if (!validateForm()) {
+    toast.error("Please fix the errors in the form");
     return;
   }
 
   isSubmitting.value = true;
-  submitMessage.value = null;
-
   try {
     const response = await axios.post(VITE_ADD_LEAD, formState);
-
     if (response.status === 200 || response.status === 201) {
-      toast.success("Lead submitted successfully!", {
-        autoClose: 2000,
-      });
-
+      toast.success("Enquiry sent!");
       submitMessage.value = {
         type: "success",
-        text: "✅ Your enquiry has been submitted successfully.",
       };
-
       setTimeout(() => closeApplyModal(), 2000);
-    } else {
-      toast.error(response.data.message || "Submission failed!", {
-        autoClose: 2500,
-      });
-
-      submitMessage.value = {
-        type: "error",
-        text: "Submission failed. Try again!",
-      };
     }
   } catch (error) {
-    console.log("Submission Error:", error);
-
-    toast.error("Network Error! Please check your connection.", {
-      autoClose: 3000,
-    });
-
     submitMessage.value = {
       type: "error",
-      text: " Network error. Please try again.",
+      text: "Network error. Please try again.",
     };
   } finally {
     isSubmitting.value = false;
