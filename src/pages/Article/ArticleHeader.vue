@@ -28,11 +28,14 @@ const fetchArticle = async () => {
 
 onMounted(fetchArticle);
 
-function goToArticle(article) {
-  // Assuming a slug can be generated from the title for routing
-  const slug = article.title.toLowerCase().replace(/\s+/g, "-");
+const goToArticle = (article) => {
+  const slug = article.slug || article.title.toLowerCase().replace(/\s+/g, "-");
+
   router.push(`/article/${slug}`);
-}
+
+  searchInput.value = "";
+  searchResults.value = [];
+};
 </script>
 
 <template>
@@ -133,7 +136,8 @@ function goToArticle(article) {
 
 /* Explicit hover state styles (equivalent to hover:shadow-lg hover:-translate-y-1) */
 .article-card:hover {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
   transform: translateY(-4px); /* -translate-y-1 (approx) */
 }
 
@@ -144,6 +148,4 @@ function goToArticle(article) {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2; /* limit to 2 lines */
 }
-
-
 </style>

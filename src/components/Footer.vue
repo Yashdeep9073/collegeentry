@@ -46,6 +46,24 @@
             </a> -->
           </div>
         </div>
+        <div>
+          <h4
+            class="text-lg font-semibold text-white mb-4 uppercase border-b-2 border-orange-500 inline-block pb-1"
+          >
+            Top Colleges
+          </h4>
+
+          <ul class="space-y-2 text-sm">
+            <li
+              v-for="college in topColleges"
+              :key="college.id"
+              class="cursor-pointer hover:text-white transition duration-150"
+              @click="goToCollege(college)"
+            >
+              {{ college.name }}
+            </li>
+          </ul>
+        </div>
 
         <div v-for="(section, index) in footerLinks" :key="index">
           <h4
@@ -77,23 +95,31 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
+import { useCollegeStore } from "../store/collegeStore";
+import { useRouter } from "vue-router";
 
-// Dynamic year for copyright
+const router = useRouter();
+const collegeStore = useCollegeStore();
 
+onMounted(async () => {
+  if (!collegeStore.collegeList.length) {
+    await collegeStore.fetchColleges();
+  }
+});
+
+// ✅ Get only first 5 colleges
+const topColleges = computed(() => {
+  return Array.isArray(collegeStore.collegeList)
+    ? collegeStore.collegeList.slice(0, 5)
+    : [];
+});
+function goToCollege(college) {
+  const slug = college.name.toLowerCase().replace(/\s+/g, "-");
+  router.push(`/colleges/${slug}`);
+}
 // Link Data Structure
 const footerLinks = ref([
-  {
-    title: "Top College",
-    links: [
-      { name: "Motherhood University", url: "#" },
-      { name: "Graphic Era Hill University", url: "#" },
-      { name: "Sanskaram University", url: "#" },
-      { name: "Sharda University", url: "#" },
-      { name: "Tulas Institute", url: "#" },
-      { name: "KR Mangalam University", url: "#" },
-    ],
-  },
   {
     title: "Top Courses",
     links: [

@@ -171,7 +171,7 @@ onMounted(async () => {
         <a
           v-for="article in articles"
           :key="article.id"
-          :href="`/article/${article.title}`"
+          @click="goToArticle(article)"
           class="block bg-white rounded-lg border border-gray-200 shadow-md hover:shadow-xl transition"
         >
           <img v-if="article.image" :src="article.image" />

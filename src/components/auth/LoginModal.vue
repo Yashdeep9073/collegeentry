@@ -20,8 +20,8 @@ const form = ref({
 });
 
 function goToTermsAndConditions() {
-  emit("close"); 
-  router.push("/terms-and-conditions"); 
+  emit("close");
+  router.push("/terms-and-conditions");
 }
 
 // ✅ Password visibility toggle
@@ -165,7 +165,9 @@ const switchToRegister = () => {
         </span>
       </p>
 
-      <p @click="goToTermsAndConditions" class="note">Terms of use &amp; Conditions</p>
+      <p @click="goToTermsAndConditions" class="note">
+        Terms of use &amp; Conditions
+      </p>
     </div>
   </div>
 </template>

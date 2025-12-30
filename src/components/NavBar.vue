@@ -290,9 +290,6 @@ const toggleMobileMenu = () => {
 
 const goHomeWithHash = () => {
   router.push("/");
-  setTimeout(() => {
-    window.history.replaceState(null, "", "/#");
-  }, 50);
 };
 
 // --- API & Auth Functions ---

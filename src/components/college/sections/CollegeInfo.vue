@@ -415,7 +415,6 @@ const goToCoursesTab = () => {
               :alt="ad.title"
               class="w-full h-auto object-cover transform group-hover:scale-105 transition duration-500 ease-in-out"
             />
-          
           </a>
         </div>
 

@@ -466,7 +466,7 @@
             v-if="filtered.length === 0"
             class="text-center py-10 bg-white rounded-xl shadow-lg text-gray-600"
           >
-            <p class="text-xl font-semibold mb-3">No Colleges Found 😞</p>
+            <p class="text-xl font-semibold mb-3">No Colleges Found</p>
             <p>Try adjusting your filters or clearing your selections.</p>
           </div>
         </div>
@@ -634,42 +634,41 @@
             </p>
           </div>
 
-          <select
+          <Multiselect
             v-model="formState.streamId"
-            class="w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-700 focus:ring-2 focus:ring-red-500 outline-none appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[right_1rem_center] bg-[length:1em_1em]"
-          >
-            <!-- <option value="" disabled selected>
-              {{ isStreamLoading ? "Loading streams..." : "Stream Interested" }}
-            </option> -->
-            <option value="" selected>Stream Interested</option>
-
-            <option
-              v-for="stream in apiStreams"
-              :key="stream.id"
-              :value="stream.id"
-            >
-              {{ stream.name }}
-            </option>
-            <p v-if="errors.streamId" class="text-xs text-red-500 mt-1">
-              {{ errors.streamId }}
-            </p>
-          </select>
-
-          <select
+            :options="apiStreams"
+            label="name"
+            track-by="id"
+            placeholder="Search Stream Interested"
+            :searchable="true"
+            :close-on-select="true"
+            :allow-empty="true"
+            class="multiselect-custom"
+          />
+          <p v-if="errors.streamId" class="text-xs text-red-500">
+            {{ errors.streamId }}
+          </p>
+          <Multiselect
             v-model="formState.degreeType"
-            class="w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-500 focus:ring-2 focus:ring-red-500 outline-none appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[right_1rem_center] bg-[length:1em_1em]"
-          >
-            <option value="" disabled selected>Level Interested</option>
-            <option value="Bachelors">Bachelors</option>
-            <option value="Masters">Masters</option>
-            <p v-if="errors.degreeType" class="text-xs text-red-500 mt-1">
-              {{ errors.degreeType }}
-            </p>
-          </select>
+            :options="levels"
+            label="name"
+            track-by="id"
+            placeholder="Search Level Interested"
+            :searchable="true"
+            :close-on-select="true"
+            :allow-empty="true"
+            class="multiselect-custom"
+          />
+
+          <p v-if="errors.degreeType" class="text-xs text-red-500">
+            {{ errors.degreeType }}
+          </p>
 
           <p class="text-[11px] text-gray-500">
             By proceeding forward, I agree to CollegeEntry
-            <span class="text-red-600 cursor-pointer hover:underline"
+            <span
+              class="text-red-600 cursor-pointer hover:underline"
+              @click="goToTermsAndConditions"
               >Terms & Conditions</span
             >
           </p>
@@ -691,6 +690,8 @@
 </template>
 
 <script setup>
+import Multiselect from "vue-multiselect";
+import "vue-multiselect/dist/vue-multiselect.css";
 import { useRoute, useRouter } from "vue-router";
 
 const router = useRouter();
@@ -769,6 +770,13 @@ const filters = ref({
   feeRange: { label: "All", min: 0, max: 9999999 },
   rating: 0,
 });
+
+const levels = ref([
+  { id: "Bachelors", name: "Bachelors" },
+  { id: "Masters", name: "Masters" },
+  { id: "Doctorate", name: "Doctorate" },
+  { id: "Diploma", name: "Diploma" },
+]);
 
 const sortBy = ref("relevance");
 const page = ref(1);
@@ -1040,6 +1048,10 @@ const openApplyModal = () => {
   }
 };
 
+function goToTermsAndConditions() {
+  closeApplyModal();
+  router.push("/terms-and-conditions");
+}
 const isApplyModalOpen = ref(false);
 const isSubmitting = ref(false); // Replaces 'loading' for clarity
 const submitMessage = ref(null); // Stores success/error message for display
@@ -1139,8 +1151,6 @@ const fetchStreams = async () => {
   }
 };
 
-// --- LEAD SUBMISSION LOGIC ---
-
 const submitLead = async () => {
   if (!validateForm()) {
     toast.error("Please fix the errors in the form");
@@ -1148,20 +1158,35 @@ const submitLead = async () => {
   }
 
   isSubmitting.value = true;
+
   try {
-    const response = await axios.post(VITE_ADD_LEAD, formState);
-    if (response.status === 200 || response.status === 201) {
-      toast.success("Enquiry sent!");
-      submitMessage.value = {
-        type: "success",
-      };
-      setTimeout(() => closeApplyModal(), 2000);
-    }
-  } catch (error) {
-    submitMessage.value = {
-      type: "error",
-      text: "Network error. Please try again.",
+    // ✅ Transform data for backend
+    const payload = {
+      ...formState,
+      degreeType: formState.degreeType?.id || "",
+      streamId: formState.streamId?.id || null,
     };
+
+    const response = await axios.post(VITE_ADD_LEAD, payload);
+
+    toast.success(response.data?.message || "Enquiry sent successfully!");
+    setTimeout(() => closeApplyModal(), 1500);
+  } catch (error) {
+    // ✅ Handle Zod / validation errors properly
+    if (error.response?.data?.errors) {
+      error.response.data.errors.forEach((err) => {
+        const field = err.path?.[0];
+        if (field && errors[field] !== undefined) {
+          errors[field] = err.message;
+        }
+        toast.error(err.message);
+      });
+    } else {
+      toast.error(
+        error.response?.data?.message ||
+          "Something went wrong. Please try again."
+      );
+    }
   } finally {
     isSubmitting.value = false;
   }

@@ -53,10 +53,11 @@ onMounted(() => {
 });
 
 // Navigate to Article Page
-function goToArticle(article) {
-  const slug = article.title.toLowerCase().replace(/\s+/g, "-");
+const goToArticle = (article) => {
+  const slug = article.slug || article.title.toLowerCase().replace(/\s+/g, "-");
+
   router.push(`/article/${slug}`);
-}
+};
 </script>
 
 <template>
