@@ -464,6 +464,8 @@ const submitLead = async () => {
   display: none; /* Chrome, Safari */
 }
 
+
+
 @keyframes fadeInUp {
   from {
     opacity: 0;

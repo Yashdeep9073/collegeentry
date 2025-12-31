@@ -36,7 +36,7 @@ onMounted(async () => {
         position: "left",
       },
       brandSetting: {
-        brandName: "NVindia",
+        brandName: "College Entry",
         brandSubTitle: "Typically replies within a day",
         brandImg: "/admin/logo/fav-print.jpg",
         welcomeText: "Hi there!\nHow can I help you?",

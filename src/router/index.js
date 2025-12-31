@@ -47,6 +47,7 @@ import Assessment11th12th from "../pages/AssessmentCarrier/Assessment-11th-12th.
 import SingleArticle from "../pages/Article/SingleArticle.vue";
 import MasterArticle from "../pages/Article/MasterArticle.vue";
 import ExamDetails from "../pages/Exams/ExamDetails.vue";
+import SingleScholarship from "../pages/Scholarship/SingleScholarship.vue";
 
 const routes = [
   {
@@ -150,6 +151,11 @@ const routes = [
     path: "/exam/:slug",
     name: "Exam Details",
     component: ExamDetails,
+  },
+  {
+    path: "/scholarship/:slug",
+    name: "Scholarship Details",
+    component: SingleScholarship,
   },
   {
     path: "/article",

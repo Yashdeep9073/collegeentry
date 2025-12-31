@@ -1,5 +1,7 @@
 <script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+const router = useRouter();
 
 // Scholarship categories data
 const scholarships = [
@@ -38,15 +40,14 @@ const scholarships = [
 ];
 
 // Optional: handle click
-const handleClick = (item) => {
-  alert(`You clicked: ${item.title}`);
-};
+function goToScholarship() {
+  router.push(`/scholarships`);
+}
 </script>
 
 <template>
   <section class="py-16 bg-[#f8f7f4]">
     <div class="max-w-7xl mx-auto px-5 text-center">
-
       <!-- Title -->
       <h2 class="text-3xl md:text-4xl font-semibold text-gray-900 mb-3">
         Explore Scholarships
@@ -62,7 +63,7 @@ const handleClick = (item) => {
         <div
           v-for="item in scholarships"
           :key="item.title"
-          @click="handleClick(item)"
+          @click="goToScholarship(item)"
           class="group w-full bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 p-8 flex flex-col items-center justify-center cursor-pointer"
         >
           <!-- Icon -->
