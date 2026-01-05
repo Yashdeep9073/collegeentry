@@ -237,12 +237,12 @@ const footerLinks = ref([
   {
     title: "Top Courses",
     links: [
-      { name: "Architecture", url: "#" },
-      { name: "Arts", url: "#" },
-      { name: "Commerce", url: "#" },
-      { name: "Computer", url: "#" },
-      { name: "Design", url: "#" },
-      { name: "Education", url: "#" },
+      { name: "Architecture", url: "Architecture" },
+      { name: "Arts", url: "Arts" },
+      { name: "Commerce", url: "Commerce" },
+      { name: "Computer", url: "Computer" },
+      { name: "Design", url: "Design" },
+      { name: "Education", url: "Education" },
     ],
   },
   {

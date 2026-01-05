@@ -14,6 +14,22 @@ const route = useRoute();
 const mediaStore = useMediaStore();
 const companySettingStore = useCompanySettingStore();
 
+const loadTawkTo = () => {
+  // Prevent duplicate widget
+  if (window.Tawk_API || document.getElementById("tawk-script")) return;
+
+  window.Tawk_API = window.Tawk_API || {};
+  window.Tawk_LoadStart = new Date();
+
+  const script = document.createElement("script");
+  script.id = "tawk-script";
+  script.async = true;
+  script.src = import.meta.env.VITE_LIVE_CHAT;
+  script.charset = "UTF-8";
+  script.setAttribute("crossorigin", "*");
+
+  document.body.appendChild(script);
+};
 onMounted(async () => {
   // Load media once app starts
   await Promise.all([
@@ -55,6 +71,7 @@ onMounted(async () => {
         phoneNumber: setting?.contactNumber || "919870443528",
       },
     });
+    loadTawkTo();
   };
 
   document.body.appendChild(script);

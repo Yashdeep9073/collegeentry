@@ -1,27 +1,27 @@
 <script setup>
+import { onMounted } from "vue";
+import { useRoute } from "vue-router";
+import { useCourseStore } from "../../store/courseStore";
+
 import CourseHeader from "../../components/courses/courseHeader.vue";
 import CourseTabs from "../../components/courses/CourseTab.vue";
+import CourseList from "../../components/courses/CourseList.vue";
+
+const route = useRoute();
+const store = useCourseStore();
+
+const slug = route.params.slug;
+const courseName = slug.replace(/-/g, " ");
+
+onMounted(() => {
+  store.fetchStreamCourses(courseName);
+});
 </script>
 
 <template>
-  <div class="w-full min-h-screen bg-gray-50">
-
-    <!-- Top College Banner / Header -->
+  <div class="min-h-screen bg-gray-50">
     <CourseHeader />
-
-    <!-- Sticky Tabs Section -->
     <CourseTabs />
-
-    <!-- Page Inner Content -->
-    <div class="max-w-6xl mx-auto px-4 py-6">
-      <router-view />
-    </div>
-
+    <CourseList />
   </div>
 </template>
-
-<style scoped>
-html {
-  scroll-behavior: smooth;
-}
-</style>

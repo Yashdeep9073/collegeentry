@@ -5,7 +5,8 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 const activeTab = ref("colleges");
-const FETCH_ALL_STREAM_COUNT = import.meta.env.VITE_FETCH_ALL_STREAM_COUNT;
+const FETCH_ALL_STREAM_COUNT = import.meta.env.VITE_STREAM_COUNT;
+const FETCH_ALL_COURSE_STREAM_COUNT = import.meta.env.VITE_COURSE_STREAM_COUNT;
 
 const FETCH_ALL_EXAM_CATEGORY = import.meta.env.VITE_FETCH_ALL_EXAM_CATEGORY;
 
@@ -27,29 +28,31 @@ const collegeCategories = ref([
 const examCategories = ref([]);
 
 /* ✅ DATA FOR COURSES */
-const courseCategories = [
-  { name: "BTech", duration: "4 Years", icon: "fa-gears" },
-  { name: "BSc", duration: "3 Years", icon: "fa-flask" },
-  { name: "BBA", duration: "3 Years", icon: "fa-chart-line" },
-  { name: "MBA", duration: "2 Years", icon: "fa-briefcase" },
-  { name: "MBBS", duration: "5.5 Years", icon: "fa-stethoscope" },
-  { name: "BCA", duration: "3 Years", icon: "fa-laptop-code" },
-];
+const courseCategories = ref([]);
+
 
 const fetchCollegeCounts = async () => {
   try {
     const res = await axios.get(FETCH_ALL_STREAM_COUNT);
-    const streamData = res.data.data; // [{ name: 'Pharmacy', collegeCount: 12 }, ...]
 
-    collegeCategories.value = collegeCategories.value.map((cat) => {
-      const match = streamData.find(
-        (s) => s.name.toLowerCase() === cat.name.toLowerCase()
-      );
-      return {
-        ...cat,
-        count: match ? match.collegeCount : 0,
-      };
-    });
+    collegeCategories.value = res.data.data.map((stream) => ({
+      name: stream.name,
+      count: stream.collegeCount,
+      icon: stream.icon || "fa-graduation-cap", // fallback icon
+    }));
+  } catch (err) {
+    console.error("Error fetching college counts:", err);
+  }
+};
+const fetchCourseCounts = async () => {
+  try {
+    const res = await axios.get(FETCH_ALL_COURSE_STREAM_COUNT);
+
+    courseCategories.value = res.data.data.map((stream) => ({
+      name: stream.name,
+      count: stream.courseCount,
+      icon: stream.icon || "fa-graduation-cap", // fallback icon
+    }));
   } catch (err) {
     console.error("Error fetching college counts:", err);
   }
@@ -69,9 +72,11 @@ const fetchExamCategories = async () => {
   }
 };
 
+
 onMounted(() => {
-  // fetchCollegeCounts();
+  fetchCollegeCounts();
   fetchExamCategories();
+  fetchCourseCounts();
 });
 
 /* ✅ NAVIGATION HANDLERS */
@@ -117,7 +122,18 @@ const goToCourse = (name) =>
           @click="goToCollege(item.name)"
           class="cursor-pointer bg-white shadow-sm hover:shadow-md transition rounded-xl p-6 flex flex-col items-center text-center hover:-translate-y-1 border"
         >
-          <i :class="`fa-solid ${item.icon} text-3xl text-red-600 mb-2`"></i>
+          <!-- ICON -->
+          <img
+            v-if="item.icon"
+            :src="item.icon"
+            class="w-10 h-10 mb-2 object-contain"
+          />
+
+          <i
+            v-else
+            :class="`fa-solid ${item.icon} text-3xl text-red-600 mb-2`"
+          ></i>
+
           <p class="font-medium text-gray-800">{{ item.name }}</p>
           <p class="text-gray-500 text-sm">{{ item.count }} Colleges</p>
         </div>
@@ -137,26 +153,39 @@ const goToCourse = (name) =>
           <img :src="item.icon" class="w-12 h-12 mx-auto mb-3 object-contain" />
 
           <p class="font-medium text-gray-800">{{ item.name }}</p>
-          <p class="text-gray-500 text-sm">{{ item.level }}</p>
+          <p class="text-gray-500 text-sm">{{ item.count }}</p>
         </div>
       </div>
 
       <!-- ✅ COURSES GRID -->
-      <div
-        v-if="activeTab === 'courses'"
-        class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 mt-10"
-      >
-        <div
-          v-for="item in courseCategories"
-          :key="item.name"
-          @click="goToCourse(item.name)"
-          class="cursor-pointer bg-white shadow hover:shadow-md transition rounded-xl p-6 text-center hover:-translate-y-1 border"
-        >
-          <i :class="`fa-solid ${item.icon} text-3xl text-purple-600 mb-3`"></i>
-          <p class="font-medium text-gray-800">{{ item.name }}</p>
-          <p class="text-gray-500 text-sm">{{ item.duration }}</p>
-        </div>
-      </div>
+  <!-- ✅ COURSES GRID -->
+<div
+  v-if="activeTab === 'courses'"
+  class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 mt-10"
+>
+  <div
+    v-for="item in courseCategories"
+    :key="item.name"
+    @click="goToCourse(item.name)"
+    class="cursor-pointer bg-white shadow-sm hover:shadow-md transition rounded-xl p-6 flex flex-col items-center text-center hover:-translate-y-1 border"
+  >
+    <!-- ICON -->
+    <img
+      v-if="item.icon"
+      :src="item.icon"
+      class="w-10 h-10 mb-2 object-contain"
+    />
+
+    <i
+      v-else
+      class="fa-solid fa-graduation-cap text-3xl text-purple-600 mb-2"
+    ></i>
+
+    <p class="font-medium text-gray-800">{{ item.name }}</p>
+    <p class="text-gray-500 text-sm">{{ item.count }} Courses</p>
+  </div>
+</div>
+
     </div>
   </section>
 </template>
