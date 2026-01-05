@@ -86,6 +86,16 @@ const getAdvertisementBanners = async () => {
 onMounted(() => {
   getAdvertisementBanners();
 });
+
+watch(
+  article,
+  (newArticle) => {
+    if (newArticle?.title) {
+      document.title = `${newArticle.title} | College Entry`;
+    }
+  },
+  { immediate: true }
+);
 </script>
 
 <template>

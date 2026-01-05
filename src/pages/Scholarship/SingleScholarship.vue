@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import axios from "axios";
 
@@ -80,6 +80,15 @@ const fetchExam = async () => {
     console.error("Error fetching scholarship:", err);
   }
 };
+watch(
+  () => scholarshipData.value.title,
+  (title) => {
+    if (title) {
+      document.title = `${title} | College Entry`;
+    }
+  },
+  { immediate: true }
+);
 
 onMounted(() => {
   fetchExam();

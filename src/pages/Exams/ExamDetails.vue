@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import axios from "axios";
 
@@ -71,6 +71,16 @@ const fetchExam = async () => {
 onMounted(() => {
   fetchExam();
 });
+
+watch(
+  examName,
+  () => {
+    if (examName.value) {
+      document.title = `${examName.value} | College Entry`;
+    }
+  },
+  { immediate: true }
+);
 </script>
 
 <template>

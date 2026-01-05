@@ -60,23 +60,23 @@ const routes = [
     path: "/colleges",
     name: "College",
     component: AllColleges,
-    meta: { title: "Top Colleges in India 2025" },
+    meta: { title: "Top Colleges in India 2026" },
   },
   {
     path: "/courses",
     component: AllCourses,
-    meta: { title: "Top Courses in India 2025" },
+    meta: { title: "Top Courses in India 2026" },
   },
   {
     path: "/exams",
     component: AllExams,
-    meta: { title: "Top Exams in India 2025 - College Entry" },
+    meta: { title: "Top Exams in India 2026 - College Entry" },
   },
   {
     path: "/scholarships",
     component: Scholarship,
     meta: {
-      title: "Top Scholarships in India and Abroad 2025 - College Entry",
+      title: "Top Scholarships in India and Abroad 2026 - College Entry",
     },
   },
   { path: "/verify-email", name: "VerifyEmail", component: Verify },
@@ -161,6 +161,7 @@ const routes = [
     path: "/article",
     name: "Article",
     component: MasterArticle,
+    meta: { title: "Top Article in India 2026 - College Entry" },
   },
   {
     path: "/courses/:slug",
@@ -211,6 +212,5 @@ const router = createRouter({
     }
   },
 });
-
 
 export default router;
