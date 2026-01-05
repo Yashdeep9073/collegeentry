@@ -43,14 +43,32 @@ const fetchExam = async () => {
     const res = await axios.get(
       `${FETCH_SCHOLARSHIP_BY_NAME}${encodeURIComponent(actualName)}`
     );
-    const data = res.data.data;
+
+    // ✅ API returns SINGLE OBJECT now
+    const data = res.data?.data;
+
+    if (!data) {
+      console.warn("No scholarship found for:", actualName);
+      return;
+    }
 
     scholarshipData.value = {
-      ...data,
+      title: data.title || "",
+      provider: data.provider || "",
+      description: data.description || "",
       iconUrl: data.image || "",
+      lastDate: data.lastDate || "",
+      overview: data.overview || [],
+      eligibility: data.eligibility || [],
+      rewards: data.rewards || [],
+      applicationProcess: data.applicationProcess || [],
+      selectionProcess: data.selectionProcess || [],
+      requiredDocuments: data.requiredDocuments || [],
+      amounts: data.amounts || [],
+      categories: data.categories || [],
+      region: data.region || "",
     };
 
-    // Mapping Highlights Table
     examHighlights.value = [
       { label: "Scholarship Name", value: data.title || "N/A" },
       { label: "Provider", value: data.provider || "N/A" },
@@ -72,53 +90,54 @@ onMounted(() => {
   <div class="w-full bg-gray-50 p-4 sm:p-6 lg:p-8">
     <div class="max-w-7xl mx-auto">
       <!-- HERO HEADER -->
-     <!-- HERO HEADER -->
-<div class="relative rounded-2xl overflow-hidden shadow-2xl border border-gray-200">
-  <!-- Background Image -->
-  <div class="absolute inset-0">
-    <img
-      v-if="scholarshipData.iconUrl"
-      :src="scholarshipData.iconUrl"
-      class="w-full h-full object-cover object-center scale-105"
-      alt="Scholarship Banner"
-    />
-    <!-- Gradient Overlay -->
-    <div
-      class="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-black/30"
-    ></div>
-  </div>
-
-  <!-- Content -->
-  <div class="relative z-10 px-6 py-10 sm:px-10 sm:py-14">
-    <div class="max-w-4xl">
-      <!-- Tag -->
-      <span
-        class="inline-block mb-4 px-4 py-1 text-xs font-semibold tracking-wide uppercase bg-red-600/90 text-white rounded-full shadow"
+      <!-- HERO HEADER -->
+      <div
+        class="relative rounded-2xl overflow-hidden shadow-2xl border border-gray-200"
       >
-        Scholarship
-      </span>
+        <!-- Background Image -->
+        <div class="absolute inset-0">
+          <img
+            v-if="scholarshipData.iconUrl"
+            :src="scholarshipData.iconUrl"
+            class="w-full h-full object-cover object-center scale-105"
+            alt="Scholarship Banner"
+          />
+          <!-- Gradient Overlay -->
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-black/30"
+          ></div>
+        </div>
 
-      <!-- Title -->
-      <h1
-        class="text-2xl sm:text-4xl lg:text-5xl font-extrabold leading-tight text-white drop-shadow-md"
-      >
-        {{ scholarshipData.title }}
-      </h1>
+        <!-- Content -->
+        <div class="relative z-10 px-6 py-10 sm:px-10 sm:py-14">
+          <div class="max-w-4xl">
+            <!-- Tag -->
+            <span
+              class="inline-block mb-4 px-4 py-1 text-xs font-semibold tracking-wide uppercase bg-red-600/90 text-white rounded-full shadow"
+            >
+              Scholarship
+            </span>
 
-      <!-- Provider -->
-      <p class="mt-4 text-sm sm:text-base text-gray-200">
-        Offered by
-        <span class="font-semibold text-white">
-          {{ scholarshipData.provider }}
-        </span>
-      </p>
+            <!-- Title -->
+            <h1
+              class="text-2xl sm:text-4xl lg:text-5xl font-extrabold leading-tight text-white drop-shadow-md"
+            >
+              {{ scholarshipData.title }}
+            </h1>
 
-      <!-- Divider -->
-      <div class="mt-6 w-16 h-1 bg-red-500 rounded-full"></div>
-    </div>
-  </div>
-</div>
+            <!-- Provider -->
+            <p class="mt-4 text-sm sm:text-base text-gray-200">
+              Offered by
+              <span class="font-semibold text-white">
+                {{ scholarshipData.provider }}
+              </span>
+            </p>
 
+            <!-- Divider -->
+            <div class="mt-6 w-16 h-1 bg-red-500 rounded-full"></div>
+          </div>
+        </div>
+      </div>
 
       <div
         class="mt-8 bg-white p-6 rounded-lg shadow-sm border border-gray-200 space-y-10"
@@ -207,19 +226,16 @@ onMounted(() => {
             </li>
           </ul>
         </section>
-
-        <section v-if="scholarshipData.overview?.length" class="space-y-6">
-          <h3 class="text-2xl font-bold text-gray-800">Detailed Overview</h3>
-          <div
-            v-for="(item, index) in scholarshipData.overview"
-            :key="index"
-            class="p-4 bg-gray-50 rounded-lg border-l-4 border-gray-300"
-          >
-            <h4 class="text-lg font-bold text-gray-900 mb-2">
-              {{ item.title }}
-            </h4>
-            <div class="text-gray-700" v-html="item.description"></div>
-          </div>
+        <section v-if="scholarshipData.applicationProcess?.length">
+          <h3 class="text-xl font-bold mb-4">Application Process</h3>
+          <ol class="list-decimal pl-5 space-y-2 text-gray-700">
+            <li
+              v-for="(step, i) in scholarshipData.applicationProcess"
+              :key="i"
+            >
+              {{ step }}
+            </li>
+          </ol>
         </section>
 
         <section v-if="scholarshipData.selectionProcess?.length">
@@ -238,6 +254,36 @@ onMounted(() => {
                 {{ step }}
               </li>
             </ul>
+          </div>
+        </section>
+        <section v-if="scholarshipData.requiredDocuments?.length">
+          <h3 class="text-xl font-bold mb-4">Required Documents</h3>
+          <ul class="list-disc pl-5 space-y-2 text-gray-700">
+            <li v-for="(doc, i) in scholarshipData.requiredDocuments" :key="i">
+              {{ doc }}
+            </li>
+          </ul>
+        </section>
+        <section v-if="scholarshipData.rewards?.length">
+          <h3 class="text-xl font-bold mb-4">Rewards & Benefits</h3>
+          <ul class="list-disc pl-5 space-y-2 text-gray-700">
+            <li v-for="(reward, i) in scholarshipData.rewards" :key="i">
+              {{ reward }}
+            </li>
+          </ul>
+        </section>
+
+        <section v-if="scholarshipData.overview?.length" class="space-y-6">
+          <h3 class="text-2xl font-bold text-gray-800">Detailed Overview</h3>
+          <div
+            v-for="(item, index) in scholarshipData.overview"
+            :key="index"
+            class="p-4 bg-gray-50 rounded-lg border-l-4 border-gray-300"
+          >
+            <h4 class="text-lg font-bold text-gray-900 mb-2">
+              {{ item.title }}
+            </h4>
+            <div class="text-gray-700" v-html="item.description"></div>
           </div>
         </section>
       </div>

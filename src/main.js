@@ -4,17 +4,18 @@ import App from "./App.vue";
 import router from "./router";
 import { createPinia } from "pinia";
 
+import { useCompanySettingStore } from "./store/companySettingStore";
+
 const app = createApp(App);
 
-app.use(createPinia());
+const pinia = createPinia();
+app.use(pinia);
 app.use(router);
 
 router.afterEach((to) => {
   const defaultTitle = "College";
 
-  // Lazy import Pinia store INSIDE guard
-  const { useCompanySettingStore } = require("../store/companySettingStore");
-  const store = useCompanySettingStore();
+  const store = useCompanySettingStore(pinia);
 
   const companyName = store.setting?.organizationName || defaultTitle;
 
