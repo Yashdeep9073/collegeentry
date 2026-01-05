@@ -1,9 +1,12 @@
 <script setup>
 import { ref } from "vue";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/vue/24/outline";
-// Note: REGISTER_URL is not used in the component's logic, so it is left as is.
-// const REGISTER_URL = import.meta.env.VITE_REGISTER;
 
+import { computed } from "vue";
+import { useCompanySettingStore } from "../../store/companySettingStore";
+
+const store = useCompanySettingStore();
+const logo = computed(() => store.setting?.favicon || "/college-entry.svg");
 // ✅ Props
 const { isOpen } = defineProps({
   isOpen: Boolean,
@@ -11,7 +14,7 @@ const { isOpen } = defineProps({
 import { useRouter } from "vue-router";
 const router = useRouter();
 
-// ✅ Emits
+//  Emits
 const emit = defineEmits(["close", "submit", "switch-to-login"]);
 
 // ✅ Form state
@@ -59,7 +62,7 @@ const switchToLogin = () => {
       </button>
 
       <div class="logo_container">
-        <img src="/logo.svg" alt="logo" class="h-full w-full p-2" />
+        <img :src="logo" alt="logo" class="h-full w-full p-2" />
       </div>
 
       <div class="title_container">

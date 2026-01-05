@@ -4,19 +4,26 @@ import { useRoute } from "vue-router";
 
 import Footer from "./components/Footer.vue";
 import NavBar from "./components/NavBar.vue";
+import { watch } from "vue";
 
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { useMediaStore } from "./store/mediaStore";
+import { useCompanySettingStore } from "./store/companySettingStore";
 
 const route = useRoute();
 const mediaStore = useMediaStore();
+const companySettingStore = useCompanySettingStore();
 
 onMounted(async () => {
   // Load media once app starts
-  await mediaStore.fetchMedia();
+  await Promise.all([
+    mediaStore.fetchMedia(),
+    companySettingStore.fetchCompanySetting(),
+  ]);
 
   // Prevent duplicate WhatsApp widget
   if (window.CreateWhatsappChatWidget) return;
+  const setting = companySettingStore.setting;
 
   const script = document.createElement("script");
   script.src =
@@ -36,22 +43,38 @@ onMounted(async () => {
         position: "left",
       },
       brandSetting: {
-        brandName: "College Entry",
+        brandName: setting?.organizationName || "College Entry",
         brandSubTitle: "Typically replies within a day",
-        brandImg: "/admin/logo/fav-print.jpg",
+        brandImg: setting?.favicon || "/admin/logo/fav-print.jpg",
         welcomeText: "Hi there!\nHow can I help you?",
         messageText: "Hello, I have a question about {{page_link}}",
         backgroundColor: "#2ACA45",
         ctaText: "Start Chat",
         borderRadius: "25",
         autoShow: false,
-        phoneNumber: "919870443528",
+        phoneNumber: setting?.contactNumber || "919870443528",
       },
     });
   };
 
   document.body.appendChild(script);
 });
+
+watch(
+  () => companySettingStore.setting?.favicon,
+  (favicon) => {
+    if (!favicon) return;
+
+    let link =
+      document.querySelector("link[rel~='icon']") ||
+      document.createElement("link");
+
+    link.rel = "icon";
+    link.href = favicon;
+    document.head.appendChild(link);
+  },
+  { immediate: true }
+);
 </script>
 
 <template>

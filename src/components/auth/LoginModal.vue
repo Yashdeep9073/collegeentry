@@ -5,11 +5,14 @@ import { ref } from "vue";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/vue/24/outline";
 import { useRouter } from "vue-router";
 const router = useRouter();
-
+import { computed } from "vue";
+import { useCompanySettingStore } from "../../store/companySettingStore";
 // ✅ Props & Emits
 const { isOpen } = defineProps({
   isOpen: Boolean,
 });
+const store = useCompanySettingStore();
+const logo = computed(() => store.setting?.favicon || "");
 
 const emit = defineEmits(["close", "submit", "switch-to-register"]);
 
@@ -56,7 +59,7 @@ const switchToRegister = () => {
       </button>
 
       <div class="logo_container">
-        <img src="/logo.svg" alt="logo" class="h-full w-full p-2" />
+        <img :src="logo" alt="logo" class="h-full w-full p-2" />
       </div>
 
       <div class="title_container">

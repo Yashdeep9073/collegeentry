@@ -2,11 +2,13 @@
 import { ref } from "vue";
 import axios from "axios";
 import { toast } from "vue3-toastify";
-
-
+import { computed } from "vue";
+import { useCompanySettingStore } from "../store/companySettingStore";
 
 const API_URL = import.meta.env.VITE_ADD_CONTACT_API;
-
+const store = useCompanySettingStore();
+const email = computed(() => store.setting?.email || "College Entry");
+const phone = computed(() => store.setting?.contactNumber || "College Entry");
 // Form fields
 const fullName = ref("");
 const emailAddress = ref("");
@@ -34,7 +36,6 @@ const handleSubmit = async () => {
     emailAddress.value = "";
     mobileNumber.value = "";
     message.value = "";
-
   } catch (error) {
     if (error.response?.data?.errors) {
       toast.error("Please correct the highlighted fields ");
@@ -165,11 +166,9 @@ const handleSubmit = async () => {
             <h4 class="text-lg font-semibold text-gray-800 mb-2">
               Business Related Queries
             </h4>
-            <a
-              href="mailto:info@collegeentry.in"
-              class="text-blue-600 hover:underline"
-              >info@collegeentry.in</a
-            >
+            <a :href="'mailto:' + email" class="text-blue-600 hover:underline">
+              {{ email }}
+            </a>
           </div>
 
           <div
@@ -183,7 +182,7 @@ const handleSubmit = async () => {
             </h4>
 
             <p class="text-gray-600 text-sm mt-1">
-              Academic Counselor: 9870443528
+              Academic Counselor: {{ phone }}
             </p>
           </div>
 
@@ -196,11 +195,9 @@ const handleSubmit = async () => {
             <h4 class="text-lg font-semibold text-gray-800 mb-2">
               Want to work with us?
             </h4>
-            <a
-              href="mailto:info@collegeentry.in"
-              class="text-purple-600 hover:underline"
-              >info@collegeentry.in</a
-            >
+            <a :href="'mailto:' + email" class="text-purple-600 hover:underline">
+              {{ email }}
+            </a>
           </div>
         </div>
       </div>

@@ -1,11 +1,19 @@
-<script setup></script>
+<script setup>
+import { computed } from "vue";
+
+import { useCompanySettingStore } from "../store/companySettingStore";
+const store = useCompanySettingStore();
+const Name = computed(() => store.setting?.organizationName || "College Entry");
+const Logo = computed(() => store.setting?.logo || "College Entry");
+</script>
 
 <template>
-  <div class="min-h-screen flex flex-col justify-center items-center bg-white px-4">
-
+  <div
+    class="min-h-screen flex flex-col justify-center items-center bg-white px-4"
+  >
     <!-- Logo -->
     <div class="flex items-center gap-3 mb-8">
-      <img src="../assets/college-entry-image.svg" alt="College Entry Logo" class="h-[100px] w-auto" />
+      <img :src="Logo" alt=" Logo" class="h-[100px] w-auto" />
     </div>
 
     <!-- Error Image -->
@@ -14,9 +22,12 @@
     </div>
 
     <!-- Text Content -->
-    <h1 class="text-3xl font-bold text-gray-900 mb-2 text-center">Page Not Found</h1>
+    <h1 class="text-3xl font-bold text-gray-900 mb-2 text-center">
+      Page Not Found
+    </h1>
     <p class="text-gray-600 text-center max-w-md mb-6">
-      The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
+      The page you are looking for might have been removed, had its name
+      changed, or is temporarily unavailable.
     </p>
 
     <!-- Button -->
@@ -24,13 +35,13 @@
       <button
         class="px-6 py-3 bg-orange-500 text-white font-semibold rounded-xl shadow hover:bg-orange-600 transition translate-y-0 hover:-translate-y-1"
       >
-         Back to Home
+        Back to Home
       </button>
     </router-link>
 
     <!-- Footer -->
     <p class="text-gray-400 text-xs mt-10">
-      © 2025 College Entry. All Rights Reserved.
+      © 2026 {{ Name }}. All Rights Reserved.
     </p>
   </div>
 </template>

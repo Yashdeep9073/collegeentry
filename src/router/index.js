@@ -54,7 +54,7 @@ const routes = [
     path: "/",
     name: "home",
     component: HomePage,
-    meta: { title: "College Entry " },
+    meta: { title: "Home" },
   },
   {
     path: "/colleges",
@@ -211,5 +211,6 @@ const router = createRouter({
     }
   },
 });
+
 
 export default router;

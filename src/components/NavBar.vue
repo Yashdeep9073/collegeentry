@@ -9,7 +9,7 @@
         class="flex items-center gap-2 font-bold text-xl cursor-pointer"
         @click="goHomeWithHash"
       >
-        <img src="../assets/white-logo.svg" alt="logo" class="h-10" />
+        <img :src="logo" alt="Logo" class="h-10" @error="onLogoError" />
       </div>
 
       <ul class="hidden lg:flex items-center gap-6 text-sm font-medium">
@@ -28,7 +28,9 @@
           >Scholarships</router-link
         >
         <!-- <li class="hover:text-gray-200 cursor-pointer">Admission 2025</li> -->
-        <router-link to="/article" class="hover:text-gray-200 cursor-pointer">Article</router-link>
+        <router-link to="/article" class="hover:text-gray-200 cursor-pointer"
+          >Article</router-link
+        >
         <li class="relative group cursor-pointer">
           <span class="flex items-center hover:text-gray-200">
             Career Assessment
@@ -153,94 +155,106 @@
       </div>
     </nav>
 
-   <!-- MOBILE MENU -->
-<div v-if="mobileOpen" class="bg-[#E05000] p-5 lg:hidden space-y-4 text-white">
-
-  <!-- Top Section -->
-  <ul class="space-y-3 text-base font-medium">
-
-    <router-link to="/colleges" class="block py-1">
-      Top Colleges
-    </router-link>
-
-    <router-link to="/courses" class="block py-1">
-      Top Courses
-    </router-link>
-
-    <router-link to="/exams" class="block py-1">
-      Entrance Exams
-    </router-link>
-
-    <router-link to="/scholarships" class="block py-1">
-      Scholarships
-    </router-link>
-
-    <li class="py-1">Admission 2025</li>
-    <li class="py-1">Article</li>
-
-    <!-- Career Assessment (Mobile Dropdown) -->
-    <details class="bg-[#E45400] rounded-lg px-4 py-2">
-      <summary class="cursor-pointer text-white text-sm flex justify-between items-center">
-        Career Assessment
-        <i class="fas fa-chevron-down text-xs"></i>
-      </summary>
-
-      <div class="mt-3 space-y-2 pl-3">
-        <router-link
-          to="/carrier-assessment-9th-10th"
-          class="block text-sm py-1"
-        >
-          9th to 10th
+    <!-- MOBILE MENU -->
+    <div
+      v-if="mobileOpen"
+      class="bg-[#E05000] p-5 lg:hidden space-y-4 text-white"
+    >
+      <!-- Top Section -->
+      <ul class="space-y-3 text-base font-medium">
+        <router-link to="/colleges" class="block py-1">
+          Top Colleges
         </router-link>
 
-        <router-link
-          to="/carrier-assessment-11th-12th"
-          class="block text-sm py-1"
-        >
-          11th to 12th
+        <router-link to="/courses" class="block py-1">
+          Top Courses
         </router-link>
-      </div>
-    </details>
-  </ul>
 
-  <!-- Divider -->
-  <div class="border-t border-white/40"></div>
+        <router-link to="/exams" class="block py-1">
+          Entrance Exams
+        </router-link>
 
-  <!-- LOGIN / REGISTER (Mobile) -->
-  <ul class="space-y-2 text-sm font-medium">
+        <router-link to="/scholarships" class="block py-1">
+          Scholarships
+        </router-link>
 
-    <li
-      v-if="!user.name"
-      class="py-2 cursor-pointer"
-      @click="openRegister(); mobileOpen = false"
-    >
-      Register
-    </li>
+        <li class="py-1">Admission 2025</li>
+        <li class="py-1">Article</li>
 
-    <li
-      v-if="!user.name"
-      class="py-2 cursor-pointer"
-      @click="openLogin(); mobileOpen = false"
-    >
-      Login
-    </li>
+        <!-- Career Assessment (Mobile Dropdown) -->
+        <details class="bg-[#E45400] rounded-lg px-4 py-2">
+          <summary
+            class="cursor-pointer text-white text-sm flex justify-between items-center"
+          >
+            Career Assessment
+            <i class="fas fa-chevron-down text-xs"></i>
+          </summary>
 
-    <li
-      v-else
-      class="py-2 cursor-pointer text-red-200"
-      @click="logoutUser(); mobileOpen = false"
-    >
-      <i class="fas fa-sign-out-alt mr-2"></i> Logout
-    </li>
+          <div class="mt-3 space-y-2 pl-3">
+            <router-link
+              to="/carrier-assessment-9th-10th"
+              class="block text-sm py-1"
+            >
+              9th to 10th
+            </router-link>
 
-  </ul>
-</div>
+            <router-link
+              to="/carrier-assessment-11th-12th"
+              class="block text-sm py-1"
+            >
+              11th to 12th
+            </router-link>
+          </div>
+        </details>
+      </ul>
 
+      <!-- Divider -->
+      <div class="border-t border-white/40"></div>
+
+      <!-- LOGIN / REGISTER (Mobile) -->
+      <ul class="space-y-2 text-sm font-medium">
+        <li
+          v-if="!user.name"
+          class="py-2 cursor-pointer"
+          @click="
+            openRegister();
+            mobileOpen = false;
+          "
+        >
+          Register
+        </li>
+
+        <li
+          v-if="!user.name"
+          class="py-2 cursor-pointer"
+          @click="
+            openLogin();
+            mobileOpen = false;
+          "
+        >
+          Login
+        </li>
+
+        <li
+          v-else
+          class="py-2 cursor-pointer text-red-200"
+          @click="
+            logoutUser();
+            mobileOpen = false;
+          "
+        >
+          <i class="fas fa-sign-out-alt mr-2"></i> Logout
+        </li>
+      </ul>
+    </div>
   </header>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
+import { computed } from "vue";
+import { useCompanySettingStore } from "../store/companySettingStore";
+
 import axios from "axios";
 import { useRouter } from "vue-router";
 // Replaced Heroicons imports with Font Awesome icons for consistency
@@ -251,7 +265,8 @@ import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
 const router = useRouter();
-
+const store = useCompanySettingStore();
+const logo = computed(() => store.setting?.whiteLogo || "/college-entry.svg");
 // Authentication State
 const user = ref({ name: null, email: null }); // Holds user details if logged in
 const mobileOpen = ref(false);
@@ -262,6 +277,12 @@ const showLogin = ref(false);
 const API_URL_REGISTER = import.meta.env.VITE_REGISTER;
 const API_URL_LOGIN = import.meta.env.VITE_LOGIN;
 const API_GET_USER_DETAILS = import.meta.env.VITE_GET_USER_DETAILS_API;
+
+import fallbackLogo from "../assets/white-logo.svg";
+
+const onLogoError = (event) => {
+  event.target.src = fallbackLogo;
+};
 
 // --- Modal Functions ---
 const openRegister = () => {

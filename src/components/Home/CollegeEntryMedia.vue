@@ -5,9 +5,9 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Navigation, Autoplay } from "swiper/modules";
 import { ref, onMounted } from "vue";
-import media from "../../assets/c4.jpg"
-
-
+import media from "../../assets/c4.jpg";
+import { computed } from "vue";
+import { useCompanySettingStore } from "../../store/companySettingStore";
 const API_URL_FETCH_WEBSITE_MEDIA = import.meta.env.VITE_FETCH_WEBSITE_MEDIA;
 
 const swiperInstance = ref(null);
@@ -26,7 +26,8 @@ onMounted(async () => {
     console.error("CERTIFICATE images fetch failed:", err);
   }
 });
-
+const store = useCompanySettingStore();
+const Name = computed(() => store.setting?.organizationName || "College Entry");
 const onSwiper = (swiper) => (swiperInstance.value = swiper);
 const slidePrev = () => swiperInstance.value?.slidePrev();
 const slideNext = () => swiperInstance.value?.slideNext();
@@ -38,7 +39,7 @@ if (certificateImages.value.length === 0) {
 
 <template>
   <div class="py-16 text-center">
-    <h2 class="text-3xl md:text-4xl font-bold mb-10">College Entry in Media</h2>
+    <h2 class="text-3xl md:text-4xl font-bold mb-10">{{ Name }} in Media</h2>
 
     <div class="relative w-[90%] mx-auto">
       <Swiper

@@ -1,9 +1,12 @@
 <script setup>
 import { ref, onMounted, watch } from "vue";
+import { computed } from "vue";
+import { useCompanySettingStore } from "../../store/companySettingStore";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
-
+const store = useCompanySettingStore();
+const Name = computed(() => store.setting?.organizationName || "College Entry");
 // ✅ Import Local Images
 import banner1 from "../../assets/slider3.webp";
 import banner2 from "../../assets/2.webp";
@@ -102,7 +105,7 @@ function goToResult(item) {
     :style="`background-image: url('${images[currentIndex]}')`"
   >
     <div class="overlay">
-      <h1>College Entry: One Platform. Endless Educational Possibilities</h1>
+      <h1>{{ Name }}: One Platform. Endless Educational Possibilities</h1>
 
       <!-- Tabs -->
       <div class="tabs">

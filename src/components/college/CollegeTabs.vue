@@ -6,21 +6,36 @@ const route = useRoute();
 const collegeSlug = route.params.slug;
 
 // All tabs
-const tabs = [
-  { label: "Info", path: "" },
-  { label: "Courses & Fees", path: "courses-fees" },
-  { label: "Admission", path: "admission" },
-  { label: "Cut Off", path: "cutoff" },
-  { label: "Reviews", path: "reviews" },
-  { label: "Placements", path: "placements" },
-  { label: "Result", path: "result" },
-  { label: "Infrastructure", path: "infrastructure" },
-  { label: "Gallery", path: "gallery" },
-  { label: "Scholarship", path: "scholarship" },
-  { label: "Ranking", path: "ranking" },
-  { label: "Hostel", path: "hostel" },
-  { label: "Articles & News", path: "articles" },
-];
+import { computed } from "vue";
+import { useCollegeStore } from "../../store/collegeNameStore";
+
+const collegeStore = useCollegeStore();
+
+const tabs = computed(() => {
+  const baseTabs = [
+    { label: "Info", path: "" },
+    // { label: "Courses & Fees", path: "courses-fees" },
+    // { label: "Admission", path: "admission" },
+    // { label: "Cut Off", path: "cutoff" },
+    // { label: "Reviews", path: "reviews" },
+    // { label: "Placements", path: "placements" },
+    // { label: "Result", path: "result" },
+    // { label: "Infrastructure", path: "infrastructure" },
+    // { label: "Scholarship", path: "scholarship" },
+    // { label: "Ranking", path: "ranking" },
+    // { label: "Hostel", path: "hostel" },
+  ];
+
+  // ✅ Show Articles tab ONLY if articles exist
+  if (collegeStore.college?.articles?.length > 0) {
+    baseTabs.push({ label: "Articles & News", path: "articles" });
+  }
+  if (collegeStore.college?.details.mediaGallery?.length > 0) {
+    baseTabs.push({ label: "Gallery", path: "gallery" });
+  }
+
+  return baseTabs;
+});
 
 // Build full path per tab
 const getTabPath = (tabPath) => {

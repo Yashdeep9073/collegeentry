@@ -1,14 +1,19 @@
 <script setup>
 import { ref } from "vue";
-
+import { computed } from "vue";
+import { useCompanySettingStore } from "../../store/companySettingStore";
 const activeTab = ref("support");
 
 const tabs = [{ id: "support", name: "Support", icon: "fa-solid fa-headset" }];
 
+const store = useCompanySettingStore();
+const Name = computed(() => store.setting?.organizationName || "College Entry");
+const phone = computed(() => store.setting?.contactNumber || "College Entry");
+const email = computed(() => store.setting?.email || "College Entry");
 const supportContacts = [
   {
     type: "New Student",
-    number: "+91-9870443528",
+    number: phone,
     icon: "fa-solid fa-user-plus",
     color: "text-green-600",
     bgColor: "bg-green-50",
@@ -17,7 +22,7 @@ const supportContacts = [
 
   {
     type: "Existing Student",
-    number: "+91-7657999786",
+    number: phone,
     icon: "fa-solid fa-user-check",
     color: "text-blue-600",
     bgColor: "bg-blue-50",
@@ -25,7 +30,7 @@ const supportContacts = [
   },
   {
     type: "Email",
-    contact: "info@collegeentry.in",
+    contact: email,
     icon: "fa-solid fa-envelope",
     color: "text-purple-600",
     bgColor: "bg-purple-50",

@@ -10,7 +10,17 @@ app.use(createPinia());
 app.use(router);
 
 router.afterEach((to) => {
-  document.title = to.meta.title || "College Entry";
+  const defaultTitle = "College";
+
+  // Lazy import Pinia store INSIDE guard
+  const { useCompanySettingStore } = require("../store/companySettingStore");
+  const store = useCompanySettingStore();
+
+  const companyName = store.setting?.organizationName || defaultTitle;
+
+  document.title = to.meta?.title
+    ? `${to.meta.title} - ${companyName}`
+    : companyName;
 });
 
 app.mount("#app");
