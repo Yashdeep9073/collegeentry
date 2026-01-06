@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 
-export const useCourseStore = defineStore("course", {
+export const useCourseStore = defineStore("courseList", {
   state: () => ({
     stream: null,
     courses: [],
@@ -10,13 +10,13 @@ export const useCourseStore = defineStore("course", {
   }),
 
   getters: {
-    // 🔥 unique degree types from backend
+    // unique degree types from backend
     degreeTypes(state) {
       const types = new Set(state.courses.map((c) => c.degreeType));
       return ["ALL", ...types];
     },
 
-    // 🔥 filtered courses (tabs + search compatible)
+    //filtered courses (tabs + search compatible)
     filteredCourses(state) {
       if (state.activeDegree === "ALL") return state.courses;
 

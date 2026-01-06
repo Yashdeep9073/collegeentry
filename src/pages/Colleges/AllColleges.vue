@@ -211,7 +211,7 @@
             </div>
           </div>
 
-          <div class="filter-group">
+          <!-- <div class="filter-group">
             <h4
               class="text-sm font-semibold text-gray-700 mb-3 flex items-center justify-between"
             >
@@ -241,7 +241,7 @@
                 <span class="text-gray-700">{{ e }}</span>
               </label>
             </div>
-          </div>
+          </div> -->
 
           <div class="filter-group">
             <h4

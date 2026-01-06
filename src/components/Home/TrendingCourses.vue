@@ -1,62 +1,58 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, computed } from "vue";
+import { useRouter } from "vue-router";
+import axios from "axios";
 
-const activeCourse = ref("B.Ed"); // default selected
+/* ---------------- ROUTER ---------------- */
+const router = useRouter();
 
-const courses = [
-  "B.Ed",
-  "BBA",
-  "BCA",
-  "BCom",
-  "MBA in Finance",
-  "MCA",
-  "BSc Nursing",
-  "MBA",
-  "BTech",
-  "BSc",
-];
+/* ---------------- STATE ---------------- */
+const courses = ref([]);
+const activeCourseId = ref(null);
+const loading = ref(false);
 
-const courseContent = {
-  "B.Ed": ["B.Ed Admission", "B.Ed Syllabus", "B.Ed Colleges", "B.Ed Jobs"],
-  BBA: ["BBA Admission", "BBA Fees", "BBA Syllabus", "BBA Jobs"],
-  BCA: ["BCA Admission", "BCA Syllabus", "BCA Jobs", "BCA Subjects"],
-  BCom: [
-    "BCom Admission",
-    "BCom Specialization",
-    "BCom Jobs",
-    "BCom Fees",
-    "BCom Syllabus",
-  ],
-  "MBA in Finance": [
-    "MBA in Finance Course",
-    "MBA in Finance Syllabus",
-    "MBA in Finance Jobs",
-    "Top MBA Finance Colleges",
-  ],
-  MCA: ["MCA Course", "MCA Colleges", "MCA Jobs", "MCA Syllabus"],
-  "BSc Nursing": [
-    "BSc Nursing Course",
-    "BSc Nursing Syllabus",
-    "BSc Nursing Jobs",
-  ],
-  MBA: ["MBA Admission", "MBA Specializations", "MBA Jobs", "MBA Colleges"],
-  BTech: [
-    "BTech Admission",
-    "BTech Branches",
-    "Top Engineering Colleges",
-    "BTech Fees",
-  ],
-  BSc: [
-    "BSc Admission",
-    "BSc Syllabus",
-    "BSc Jobs",
-    "BSc Fees",
-    "BSc Specialization",
-  ],
+/* ---------------- API ---------------- */
+const API_ALL_COURSE = import.meta.env.VITE_COURSE_BY_COURSE;
+
+/* ---------------- FETCH COURSES ---------------- */
+const fetchCourses = async () => {
+  try {
+    loading.value = true;
+    const res = await axios.get(API_ALL_COURSE);
+    courses.value = res.data.data || [];
+
+    // select first course by default
+    if (courses.value.length) {
+      activeCourseId.value = courses.value[0].id;
+    }
+  } catch (error) {
+    console.error("Failed to fetch courses", error);
+  } finally {
+    loading.value = false;
+  }
 };
 
-const setCourse = (course) => {
-  activeCourse.value = course;
+onMounted(fetchCourses);
+
+/* ---------------- COMPUTED ---------------- */
+const activeCourse = computed(() =>
+  courses.value.find((c) => c.id === activeCourseId.value)
+);
+
+/* ---------------- HELPERS ---------------- */
+const setCourse = (id) => {
+  activeCourseId.value = id;
+};
+
+const slugify = (text) =>
+  text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "");
+
+/* ---------------- NAVIGATION ---------------- */
+const goToCourse = (course) => {
+  router.push(`/${slugify(course.name)}`);
 };
 </script>
 
@@ -67,35 +63,58 @@ const setCourse = (course) => {
         Trending Courses
       </h2>
 
-      <!-- ✅ Course Chips -->
-      <div class="flex flex-wrap justify-center gap-3 mb-10">
+      <!-- 🔄 Loading -->
+      <div v-if="loading" class="text-gray-500 py-10">
+        Loading courses...
+      </div>
+
+      <!-- ❌ Empty -->
+      <div v-else-if="!courses.length" class="text-gray-500 py-10">
+        No courses available
+      </div>
+
+      <!-- ✅ COURSE CHIPS -->
+      <div
+        v-else
+        class="flex flex-wrap justify-center gap-3 mb-10"
+      >
         <button
           v-for="course in courses"
-          :key="course"
-          @click="setCourse(course)"
+          :key="course.id"
+          @click="setCourse(course.id)"
           class="px-5 py-2 rounded-full border text-sm transition"
           :class="
-            activeCourse === course
+            activeCourseId === course.id
               ? 'bg-gradient-to-r from-[#E04A00] via-[#FF5C00] to-[#FFA040] text-white'
               : 'bg-white text-gray-600 border-red-400 hover:bg-red-50'
           "
         >
-          {{ course }}
+          {{ course.name }}
         </button>
       </div>
 
-      <!-- ✅ Cards Under Selected Course -->
+      <!-- ✅ COURSE CARDS -->
       <transition name="fade" mode="out-in">
         <div
-          :key="activeCourse"
+          v-if="activeCourse"
+          :key="activeCourse.id"
           class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5"
         >
           <div
-            v-for="item in courseContent[activeCourse]"
-            :key="item"
             class="bg-white rounded-lg shadow-sm hover:shadow-md p-5 text-center transition hover:-translate-y-1 border cursor-pointer"
+            @click="goToCourse(activeCourse)"
           >
-            <p class="text-gray-800 font-medium text-sm">{{ item }}</p>
+            <p class="text-gray-800 font-semibold text-sm mb-1">
+              {{ activeCourse.name }}
+            </p>
+
+            <p class="text-xs text-gray-500">
+              {{ activeCourse.degreeType }}
+            </p>
+
+            <p class="text-xs text-gray-400 mt-1">
+              Duration: {{ activeCourse.duration }}
+            </p>
           </div>
         </div>
       </transition>
@@ -106,7 +125,7 @@ const setCourse = (course) => {
 <style scoped>
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.3s;
+  transition: opacity 0.25s ease;
 }
 .fade-enter-from,
 .fade-leave-to {

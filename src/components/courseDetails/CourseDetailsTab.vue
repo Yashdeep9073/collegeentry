@@ -1,30 +1,59 @@
 <script setup>
+import { computed } from "vue";
 import { useRoute } from "vue-router";
+import { useCourseStore } from "../../store/CourseDetailsStore";
+
 const route = useRoute();
+const courseStore = useCourseStore();
 
-const collegeSlug = route.params.slug;
+const slug = route.params.slug;
 
-const tabs = [
-  { label: "courseName", path: "" },
-  { label: "Syllabus and Subjects", path: "syllabus-subjects" },
-  { label: "Job, Scop and Salary", path: "job-scop-salary" },
-  { label: "Admission", path: "admission" },
-  { label: "Fees", path: "fees" },
-  { label: "Specialization", path: "specialization" },
-  { label: "Placements", path: "placement" },
-];
-
-const getTabPath = (tabPath) => {
-  return tabPath ? `/${collegeSlug}/${tabPath}` : `/${collegeSlug}`;
-};
-
+/* ---------------- ACTIVE ROUTE CHECK ---------------- */
 const isActive = (tabPath) => {
-  const currentRoutePath = route.path;
-  const fullTabPath = tabPath ? `/${collegeSlug}/${tabPath}` : `/${collegeSlug}`;
-  return currentRoutePath === fullTabPath;
+  const current = route.path;
+  const fullPath = tabPath ? `/${slug}/${tabPath}` : `/${slug}`;
+  return current === fullPath;
 };
-</script>
 
+const getTabPath = (tabPath) => (tabPath ? `/${slug}/${tabPath}` : `/${slug}`);
+
+/* ---------------- DYNAMIC TABS ---------------- */
+const tabs = computed(() => {
+  const tabsArr = [];
+
+  
+  if (courseStore.courseDetails?.overview) {
+    tabsArr.push({
+      label: "Course Details",
+      path: "",
+    });
+  }
+
+  
+  if (
+    courseStore.course?.[0]?.syllabus &&
+    courseStore.course[0].syllabus.length > 0
+  ) {
+    tabsArr.push({
+      label: "Syllabus and Subjects",
+      path: "syllabus-subjects",
+    });
+  }
+
+  
+  if (
+    courseStore.course?.[0]?.jobOpportunities &&
+    courseStore.course[0].jobOpportunities.length > 0
+  ) {
+    tabsArr.push({
+      label: "Job, Scope & Salary",
+      path: "job-scop-salary",
+    });
+  }
+
+  return tabsArr;
+});
+</script>
 
 <template>
   <div

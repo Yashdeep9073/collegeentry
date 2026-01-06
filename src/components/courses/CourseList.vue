@@ -1,6 +1,18 @@
 <script setup>
 import { useCourseStore } from "../../store/courseStore";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
+function goToCourse(course) {
+  if (!course?.name) return;
+
+  const slug = course.name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "");
+
+  router.push(`/${slug}`);
+}
 const store = useCourseStore();
 </script>
 
@@ -9,9 +21,7 @@ const store = useCourseStore();
     <div
       v-for="course in store.filteredCourses"
       :key="course.id"
-      class="bg-white p-5 rounded-lg shadow-md border border-gray-200
-             flex flex-col md:flex-row justify-between items-start md:items-center
-             transition duration-300 hover:shadow-lg hover:border-red-400"
+      class="bg-white p-5 rounded-lg shadow-md border border-gray-200 flex flex-col md:flex-row justify-between items-start md:items-center transition duration-300 hover:shadow-lg hover:border-red-400"
     >
       <!-- LEFT CONTENT -->
       <div class="flex-grow space-y-2 mb-4 md:mb-0">
@@ -53,9 +63,8 @@ const store = useCourseStore();
       <!-- RIGHT ACTION -->
       <div class="flex-shrink-0">
         <button
-          class="bg-red-600 hover:bg-red-700 text-white font-bold
-                 py-2.5 px-6 rounded-md shadow-lg
-                 transition duration-150 transform hover:scale-105"
+          @click="goToCourse(course)"
+          class="bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 px-6 rounded-md shadow-lg transition duration-150 transform hover:scale-105"
         >
           Apply Now
         </button>
@@ -64,7 +73,10 @@ const store = useCourseStore();
 
     <!-- EMPTY STATE -->
     <p
-      v-if="!store.filteredCourses.length && !store.loading"
+      v-if="
+        (!store.filteredCourses || !store.filteredCourses.length) &&
+        !store.loading
+      "
       class="text-center text-gray-500 text-sm"
     >
       No courses available for this category.

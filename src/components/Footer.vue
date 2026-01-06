@@ -117,6 +117,31 @@
             </li>
           </ul>
         </div>
+        <div>
+          <h4
+            class="text-lg font-semibold text-white mb-4 uppercase border-b-2 border-orange-500 inline-block pb-1"
+          >
+            Top Courses
+          </h4>
+
+          <ul class="space-y-2 text-sm">
+            <li
+              v-for="course in topCourses"
+              :key="course.id"
+              class="cursor-pointer hover:text-white transition duration-150"
+              @click="goToCourse(course)"
+            >
+              {{ course.name }}
+            </li>
+
+            <li
+              v-if="!topCourses.length && !isCourseLoading"
+              class="text-gray-400"
+            >
+              No courses available
+            </li>
+          </ul>
+        </div>
 
         <div v-for="(section, index) in footerLinks" :key="index">
           <h4
@@ -153,6 +178,8 @@ import { useCollegeStore } from "../store/collegeStore";
 import { useRouter } from "vue-router";
 import axios from "axios";
 
+const FETCH_ALL_COURSES = import.meta.env.VITE_COURSE_BY_COURSE;
+
 import fallbackLogo from "../assets/white-logo.svg";
 
 const onLogoError = (event) => {
@@ -168,6 +195,10 @@ const Logo = computed(() => store.setting?.whiteLogo || fallbackLogo);
 const AddressLine = computed(
   () => store.setting?.addressLine || "College Entry"
 );
+// 🔹 Courses state
+const courses = ref([]);
+const isCourseLoading = ref(false);
+
 const Country = computed(() => store.setting?.country || "College Entry");
 const State = computed(() => store.setting?.state || "College Entry");
 const city = computed(() => store.setting?.city || "College Entry");
@@ -184,13 +215,12 @@ const exams = ref([]);
 const isExamLoading = ref(false);
 
 onMounted(async () => {
-  // Colleges (already present)
   if (!collegeStore.collegeList.length) {
     await collegeStore.fetchColleges();
   }
 
-  // ✅ Fetch exams
   fetchExams();
+  fetchCourses(); // ✅ NEW
 });
 
 const fetchExams = async () => {
@@ -204,6 +234,17 @@ const fetchExams = async () => {
     isExamLoading.value = false;
   }
 };
+const fetchCourses = async () => {
+  try {
+    isCourseLoading.value = true;
+    const res = await axios.get(FETCH_ALL_COURSES);
+    courses.value = res.data?.data || [];
+  } catch (err) {
+    console.error("Failed to fetch courses", err);
+  } finally {
+    isCourseLoading.value = false;
+  }
+};
 
 // ✅ Only first 5 exams
 const topExams = computed(() => exams.value.slice(0, 5));
@@ -214,6 +255,17 @@ const topColleges = computed(() => {
     ? collegeStore.collegeList.slice(0, 6)
     : [];
 });
+const topCourses = computed(() => courses.value.slice(0, 5));
+function goToCourse(course) {
+  if (!course?.name) return;
+
+  const slug = course.name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "");
+
+  router.push(`${slug}`);
+}
 
 function goToCollege(college) {
   const slug = college.name.toLowerCase().replace(/\s+/g, "-");
@@ -234,17 +286,6 @@ function goToExam(exam) {
 
 // Footer static links (without Top Exams)
 const footerLinks = ref([
-  {
-    title: "Top Courses",
-    links: [
-      { name: "Architecture", url: "Architecture" },
-      { name: "Arts", url: "Arts" },
-      { name: "Commerce", url: "Commerce" },
-      { name: "Computer", url: "Computer" },
-      { name: "Design", url: "Design" },
-      { name: "Education", url: "Education" },
-    ],
-  },
   {
     title: "Our Policies",
     links: [

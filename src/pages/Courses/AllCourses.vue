@@ -177,7 +177,7 @@ const goToCourse = (course) => {
         <div
           v-for="stream in courseStreams"
           :key="stream.id"
-          class="bg-white p-5 rounded-lg border border-gray-200 shadow-sm transition duration-300 hover:shadow-lg hover:border-blue-300"
+          class="bg-white p-5 rounded-lg border border-gray-200 shadow-sm transition duration-300 hover:shadow-lg hover:border-red-300"
         >
           <!-- HEADER -->
           <div class="flex items-center space-x-3 mb-4 border-b pb-3">
@@ -186,7 +186,7 @@ const goToCourse = (course) => {
               :src="stream.icon"
               class="w-8 h-8 object-contain"
             />
-            <i v-else class="fas fa-graduation-cap text-3xl text-blue-600"></i>
+            <i v-else class="fas fa-graduation-cap text-3xl text-red-600"></i>
 
             <h4 class="text-lg font-semibold text-gray-800">
               {{ stream.name }}
@@ -216,7 +216,7 @@ const goToCourse = (course) => {
           <div class="mt-3 text-center">
             <button
               @click="goToStreamCourses(stream.slug)"
-              class="text-sm font-medium text-blue-600 hover:underline"
+              class="text-sm font-medium text-red-600 hover:underline"
             >
               View All {{ stream.name }} Courses
             </button>

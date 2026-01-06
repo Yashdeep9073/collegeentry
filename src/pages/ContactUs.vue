@@ -9,6 +9,11 @@ const API_URL = import.meta.env.VITE_ADD_CONTACT_API;
 const store = useCompanySettingStore();
 const email = computed(() => store.setting?.email || "College Entry");
 const phone = computed(() => store.setting?.contactNumber || "College Entry");
+const facebookUrl = computed(() => store.setting?.facebookUrl || "");
+const instagramUrl = computed(() => store.setting?.instagramUrl || "");
+const twitterUrl = computed(() => store.setting?.twitterUrl || "");
+const linkedinUrl = computed(() => store.setting?.linkedinUrl || "");
+const youtubeUrl = computed(() => store.setting?.youtubeUrl || "");
 // Form fields
 const fullName = ref("");
 const emailAddress = ref("");
@@ -68,28 +73,45 @@ const handleSubmit = async () => {
           </div>
           <div class="mt-8 flex space-x-4">
             <a
-              href="#"
+              v-if="facebookUrl"
+              :href="facebookUrl"
+              target="_blank"
               class="text-gray-300 hover:text-white transition duration-200 text-2xl"
             >
               <i class="fab fa-facebook-f"></i>
             </a>
             <a
-              href="#"
+              v-if="twitterUrl"
+              :href="twitterUrl"
+              target="_blank"
               class="text-gray-300 hover:text-white transition duration-200 text-2xl"
             >
               <i class="fab fa-twitter"></i>
             </a>
             <a
-              href="#"
+              v-if="instagramUrl"
+              :href="instagramUrl"
+              target="_blank"
               class="text-gray-300 hover:text-white transition duration-200 text-2xl"
             >
               <i class="fab fa-instagram"></i>
             </a>
             <a
-              href="#"
+              v-if="linkedinUrl"
+              :href="linkedinUrl"
+              target="_blank"
               class="text-gray-300 hover:text-white transition duration-200 text-2xl"
             >
               <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a
+              v-if="youtubeUrl"
+              :href="youtubeUrl"
+              target="_blank"
+              aria-label="YouTube"
+              class="hover:text-white transition duration-150"
+            >
+              <i class="fab fa-youtube"></i>
             </a>
           </div>
         </div>
@@ -195,7 +217,10 @@ const handleSubmit = async () => {
             <h4 class="text-lg font-semibold text-gray-800 mb-2">
               Want to work with us?
             </h4>
-            <a :href="'mailto:' + email" class="text-purple-600 hover:underline">
+            <a
+              :href="'mailto:' + email"
+              class="text-purple-600 hover:underline"
+            >
               {{ email }}
             </a>
           </div>
