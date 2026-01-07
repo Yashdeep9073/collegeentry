@@ -173,11 +173,20 @@ onMounted(async () => {
           v-for="item in scholarships"
           :key="item.id"
           @click="goToScholarship(item)"
-          class="block bg-white rounded-lg border border-gray-200 shadow-md hover:shadow-xl transition"
+          class="block bg-white rounded-lg border border-gray-200 shadow-md hover:shadow-xl transition overflow-hidden"
         >
-          <img v-if="item.image" :src="item.image" />
+          <!-- IMAGE -->
+          <div class="w-full h-40 bg-gray-100 overflow-hidden">
+            <img
+              v-if="item.image"
+              :src="item.image"
+              alt="Scholarship image"
+              class="w-full h-full object-cover"
+            />
+          </div>
 
-          <h4 class="p-4 font-semibold">
+          <!-- TITLE -->
+          <h4 class="p-4 font-semibold text-gray-800 line-clamp-2">
             {{ item.title }}
           </h4>
         </a>
