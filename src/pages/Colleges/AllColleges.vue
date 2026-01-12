@@ -103,13 +103,17 @@
             <div class="filter-group">
               <h4 class="text-sm font-semibold text-gray-700 mb-2">State</h4>
               <select
-                v-model="filters.state"
-                @change="filters.city = ''"
+                v-model="filters.stateId"
+                @change="filters.cityId = ''"
                 class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="">All States</option>
-                <option v-for="(s, i) in states" :key="i" :value="s">
-                  {{ s }}
+                <option
+                  v-for="s in apiStates"
+                  :key="s.id"
+                  :value="String(s.id)"
+                >
+                  {{ s.name }}
                 </option>
               </select>
             </div>
@@ -117,12 +121,16 @@
             <div class="filter-group">
               <h4 class="text-sm font-semibold text-gray-700 mb-2">City</h4>
               <select
-                v-model="filters.city"
+                v-model="filters.cityId"
                 class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="">All Cities</option>
-                <option v-for="(c, i) in cities" :key="i" :value="c">
-                  {{ c }}
+                <option
+                  v-for="c in apiCities"
+                  :key="c.id"
+                  :value="String(c.id)"
+                >
+                  {{ c.name }}
                 </option>
               </select>
             </div>
@@ -368,14 +376,14 @@
                 :alt="college.name"
                 class="w-full h-48 object-cover rounded-xl shadow-md"
               />
-              <div class="mt-4 p-3 bg-blue-50 rounded-lg text-center">
+              <!-- <div class="mt-4 p-3 bg-blue-50 rounded-lg text-center">
                 <div class="text-xs text-gray-600 font-medium">
                   Annual Fee (Avg.)
                 </div>
                 <div class="text-xl font-bold text-red-600">
                   {{ formatFee(college.fees) }}
                 </div>
-              </div>
+              </div> -->
             </div>
 
             <div class="flex-1">
@@ -716,29 +724,9 @@ const streams = [
   "Arts & Commerce",
   "Design",
 ];
-const states = [
-  "Delhi",
-  "Maharashtra",
-  "Gujarat",
-  "Rajasthan",
-  "Karnataka",
-  "Tamil Nadu",
-  "Uttar Pradesh",
-  "Uttarakhand",
-  "Haryana",
-];
-const cities = [
-  "New Delhi",
-  "Mumbai",
-  "Ahmedabad",
-  "Pilani",
-  "Manipal",
-  "Chennai",
-  "Noida",
-  "Roorkee",
-  "Kurukshetra",
-  "Gurugram",
-];
+const apiStates = ref([]);
+const apiCities = ref([]);
+
 const exams = [
   "JEE Advanced",
   "JEE Main",
@@ -761,8 +749,8 @@ const feeRanges = [
 const filters = ref({
   search: "",
   stream: [],
-  state: "",
-  city: "",
+  stateId: "",
+  cityId: "",
   collegeType: [],
   degree: "",
   programMode: "",
@@ -797,13 +785,15 @@ async function fetchColleges() {
 
     const data = await response.json();
 
-    if (data.message === "Colleges fetched successfully" && data.data) {
+    if (Array.isArray(data.data)) {
       // Transform API data to match our component structure
       allColleges.value = data.data.map((college) => ({
         id: college.id,
         name: college.name,
-        state: extractState(college.location),
-        city: extractCity(college.location),
+        stateId: college.state?.id ? String(college.state.id) : "",
+        cityId: college.city?.id ? String(college.city.id) : "",
+        state: college.state?.name || "",
+        city: college.city?.name || "",
         stream: "Engineering", // Default value - you can update this based on actual data
         type: mapOwnershipToType(college.ownership), // This is the key fix
         degree: "UG", // Default value
@@ -917,13 +907,18 @@ const filtered = computed(() => {
 
   // 1. Search
   if (q) {
-    list = list.filter(
-      (c) =>
-        c.name.toLowerCase().includes(q) ||
-        c.city.toLowerCase().includes(q) ||
-        c.stream.toLowerCase().includes(q) ||
-        c.description.toLowerCase().includes(q)
+    list = list.filter((c) =>
+      [c.name, c.city, c.state, c.stream, c.description]
+        .filter(Boolean)
+        .some((field) => field.toString().toLowerCase().includes(q))
     );
+  }
+  if (f.stateId !== "") {
+    list = list.filter((c) => c.stateId === f.stateId);
+  }
+
+  if (f.cityId !== "") {
+    list = list.filter((c) => c.cityId === f.cityId);
   }
 
   // 2. Multi-select filters
@@ -934,8 +929,7 @@ const filtered = computed(() => {
   if (f.exams.length) list = list.filter((c) => f.exams.includes(c.exam));
 
   // 3. Single-select filters
-  if (f.state) list = list.filter((c) => c.state === f.state);
-  if (f.city) list = list.filter((c) => c.city === f.city);
+
   if (f.degree) list = list.filter((c) => c.degree === f.degree);
   if (f.programMode) list = list.filter((c) => c.programMode === f.programMode);
 
@@ -954,8 +948,19 @@ const filtered = computed(() => {
   else if (sortBy.value === "fees_asc") list.sort((a, b) => a.fees - b.fees);
   else if (sortBy.value === "fees_desc") list.sort((a, b) => b.fees - a.fees);
 
+  console.log("COLLEGES:", allColleges.value);
+  console.log("FILTERED:", list);
+  console.log("FILTERS:", filters.value);
+
   return list;
 });
+console.table(
+  allColleges.value.map((c) => ({
+    id: c.id,
+    stateId: c.stateId,
+    cityId: c.cityId,
+  }))
+);
 
 /* ------------ Pagination Computed ------------ */
 const totalPages = computed(() =>
@@ -1013,8 +1018,8 @@ function clearFilters() {
   filters.value = {
     search: "",
     stream: [],
-    state: "",
-    city: "",
+    stateId: "",
+    cityId: "",
     collegeType: [],
     degree: "",
     programMode: "",
@@ -1037,6 +1042,7 @@ const nextPage = () => {
 /* ------------ Lifecycle ------------ */
 onMounted(() => {
   fetchColleges();
+  fetchStates();
 });
 
 const openApplyModal = () => {
@@ -1133,6 +1139,8 @@ const closeApplyModal = () => {
 };
 
 const VITE_FETCH_STREAM = import.meta.env.VITE_FETCH_ALL_STREAM;
+const VITE_FETCH_STATES = import.meta.env.VITE_FETCH_ALL_STATES;
+const VITE_FETCH_CITY_BY_STATE_ID = import.meta.env.VITE_FETCH_CITIES_BY_STATE;
 
 const apiStreams = ref([]);
 const isStreamLoading = ref(false);
@@ -1148,6 +1156,31 @@ const fetchStreams = async () => {
     console.error("Error fetching streams:", error);
   } finally {
     isStreamLoading.value = false;
+  }
+};
+watch(
+  () => filters.value.stateId,
+  async (stateId) => {
+    filters.value.cityId = "";
+    apiCities.value = [];
+
+    if (stateId === "") return;
+
+    try {
+      const res = await axios.get(`${VITE_FETCH_CITY_BY_STATE_ID}${stateId}`);
+      apiCities.value = res.data.data || [];
+    } catch (err) {
+      console.error("Failed to fetch cities", err);
+    }
+  }
+);
+
+const fetchStates = async () => {
+  try {
+    const res = await axios.get(VITE_FETCH_STATES);
+    apiStates.value = res.data.data || [];
+  } catch (err) {
+    console.error("Failed to fetch states", err);
   }
 };
 

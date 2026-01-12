@@ -98,7 +98,7 @@ const dynamicHighlights = computed(() => {
       value: `₹${Math.round(u.details.averageFees)}`,
       icon: "fa-wallet",
     },
-    { label: "Ranking (India)", value: `#${u.ranking}`, icon: "fa-trophy" },
+    // { label: "Ranking (India)", value: `#${u.ranking}`, icon: "fa-trophy" },
     { label: "Contact", value: u.contactNumber, icon: "fa-phone-alt" },
     { label: "Website", value: u.website, icon: "fa-link" },
   ];
@@ -143,41 +143,6 @@ const goToCoursesTab = () => {
 <template>
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
     <div class="lg:col-span-2 space-y-8">
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-        <h3
-          class="text-xl font-bold text-gray-800 mb-5 border-b pb-3 border-gray-200"
-        >
-          📢 Latest Update for {{ university?.shortName || university?.name }}
-        </h3>
-        <div class="space-y-6">
-          <div
-            v-for="update in displayedUpdates"
-            :key="update.id"
-            class="border-b border-gray-100 pb-4 last:border-b-0"
-          >
-            <div class="flex items-start text-red-600 font-medium mb-2">
-              <i
-                class="fas fa-calendar-alt text-lg mr-2 mt-1 flex-shrink-0"
-              ></i>
-              <span class="text-base md:text-lg">
-                {{ update.date }} - {{ update.title }}
-              </span>
-            </div>
-            <p class="text-gray-700 leading-relaxed pl-8 pr-4 text-sm">
-              {{ update.description }}
-            </p>
-          </div>
-        </div>
-        <div v-if="hasMoreUpdates" class="text-center pt-4">
-          <button
-            @click="toggleShowMore"
-            class="text-blue-600 hover:text-blue-800 font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out text-sm"
-          >
-            {{ showAllUpdates ? "Show Less" : "Show More" }}
-          </button>
-        </div>
-      </div>
-
       <div
         class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 relative"
       >
