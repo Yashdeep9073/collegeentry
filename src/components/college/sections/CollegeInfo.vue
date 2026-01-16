@@ -73,6 +73,17 @@ const toggleShowMore = () => {
 const aboutText = ref(university?.description);
 const showFullAbout = ref(false);
 
+// --- College FAQs ---
+const faqs = computed(() => {
+  return university.value?.faqs || [];
+});
+
+const activeFaq = ref(null);
+
+const toggleFaq = (id) => {
+  activeFaq.value = activeFaq.value === id ? null : id;
+};
+
 // --- Data for Highlights Table ---
 const dynamicHighlights = computed(() => {
   if (!university.value) return [];
@@ -94,8 +105,8 @@ const dynamicHighlights = computed(() => {
       icon: "fa-check-circle",
     },
     {
-      label: "Average Fees",
-      value: `₹${Math.round(u.details.averageFees)}`,
+      label: "Fees Range",
+      value: `₹${u.feesRange}`,
       icon: "fa-wallet",
     },
     // { label: "Ranking (India)", value: `#${u.ranking}`, icon: "fa-trophy" },
@@ -129,6 +140,10 @@ const displayedRankings = computed(() => {
 // --- Data for Courses & Fees Table ---
 const allCourses = computed(() => {
   return university.value?.courses || [];
+});
+
+const mapIframe = computed(() => {
+  return university.value?.details?.mapEmbedIframe || "";
 });
 
 // --- Navigation Function ---
@@ -165,7 +180,7 @@ const goToCoursesTab = () => {
         <div class="text-center pt-2 relative">
           <button
             @click="showFullAbout = !showFullAbout"
-            class="text-blue-600 hover:text-blue-800 font-semibold py-1 px-4 rounded-md transition duration-200 ease-in-out text-sm"
+            class="text-red-600 hover:text-red-800 font-semibold py-1 px-4 rounded-md transition duration-200 ease-in-out text-sm"
           >
             Show {{ showFullAbout ? "Less" : "More" }}
           </button>
@@ -347,14 +362,14 @@ const goToCoursesTab = () => {
             </tbody>
           </table>
         </div>
-        <div class="text-center pt-6">
+        <!-- <div class="text-center pt-6">
           <button
             @click="goToCoursesTab"
             class="px-6 py-2 border border-red-500 text-red-600 font-semibold rounded-md hover:bg-red-50 transition duration-200 flex items-center justify-center mx-auto text-sm"
           >
             More Courses <i class="fas fa-external-link-alt ml-2 text-xs"></i>
           </button>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="lg:col-span-1">
@@ -397,6 +412,92 @@ const goToCoursesTab = () => {
             Contact Us
           </button>
         </div>
+      </div>
+    </div>
+  </div>
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8 items-start">
+    <div
+      v-if="faqs.length"
+      class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 flex flex-col"
+    >
+      <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+        <span
+          class="bg-blue-100 text-blue-600 w-8 h-8 rounded-lg flex items-center justify-center mr-3 text-sm"
+          >❓</span
+        >
+        {{ university?.shortName || university?.name }} FAQs
+      </h3>
+
+      <div class="space-y-4">
+        <div
+          v-for="faq in faqs"
+          :key="faq.id"
+          class="group border border-gray-100 rounded-xl transition-all duration-300"
+          :class="
+            activeFaq === faq.id
+              ? 'border-blue-200 shadow-md shadow-blue-50'
+              : 'hover:border-gray-300'
+          "
+        >
+          <button
+            @click="toggleFaq(faq.id)"
+            class="w-full flex justify-between items-center px-5 py-4 text-left transition-colors"
+          >
+            <span class="text-gray-800 font-semibold text-sm sm:text-base pr-4">
+              {{ faq.question }}
+            </span>
+            <div
+              class="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-transform duration-300"
+              :class="
+                activeFaq === faq.id
+                  ? 'bg-red-600 text-white rotate-180'
+                  : 'bg-gray-100 text-gray-500'
+              "
+            >
+              <i class="fas fa-chevron-down text-[10px]"></i>
+            </div>
+          </button>
+
+          <div
+            v-show="activeFaq === faq.id"
+            class="px-5 pb-5 text-sm text-gray-600 leading-relaxed border-t border-gray-50 pt-4"
+          >
+            {{ faq.answer }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      v-if="mapIframe"
+      class="bg-white p-6 rounded-xl shadow-sm border border-gray-200"
+    >
+      <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+        <span
+          class="bg-red-100 text-red-600 w-8 h-8 rounded-lg flex items-center justify-center mr-3 text-sm"
+          >📍</span
+        >
+        Find on Map
+      </h3>
+
+      <div
+        class="relative w-full h-[400px] rounded-xl overflow-hidden border border-gray-100 group"
+      >
+        <div v-html="mapIframe" class="map-container"></div>
+
+        <div
+          class="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-sm p-3 rounded-lg border border-gray-200 shadow-lg translate-y-2 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300"
+        >
+          <p class="text-xs font-bold text-gray-800">{{ university?.name }}</p>
+          <p class="text-[11px] text-gray-500 truncate">
+            {{ university?.address }}
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-4 flex items-start text-sm text-gray-600">
+        <i class="fas fa-map-marker-alt mt-1 mr-2 text-red-500"></i>
+        <p>{{ university?.address }}</p>
       </div>
     </div>
   </div>

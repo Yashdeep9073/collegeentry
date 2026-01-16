@@ -9,27 +9,28 @@ import { watch } from "vue";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { useMediaStore } from "./store/mediaStore";
 import { useCompanySettingStore } from "./store/companySettingStore";
+import TawkMessenger from "@tawk.to/tawk-messenger-vue-3";
 
 const route = useRoute();
 const mediaStore = useMediaStore();
 const companySettingStore = useCompanySettingStore();
 
-const loadTawkTo = () => {
-  // Prevent duplicate widget
-  if (window.Tawk_API || document.getElementById("tawk-script")) return;
+// const loadTawkTo = () => {
+//   // Prevent duplicate widget
+//   if (window.Tawk_API || document.getElementById("tawk-script")) return;
 
-  window.Tawk_API = window.Tawk_API || {};
-  window.Tawk_LoadStart = new Date();
+//   window.Tawk_API = window.Tawk_API || {};
+//   window.Tawk_LoadStart = new Date();
 
-  const script = document.createElement("script");
-  script.id = "tawk-script";
-  script.async = true;
-  script.src = import.meta.env.VITE_LIVE_CHAT;
-  script.charset = "UTF-8";
-  script.setAttribute("crossorigin", "*");
+//   const script = document.createElement("script");
+//   script.id = "tawk-script";
+//   script.async = true;
+//   script.src = import.meta.env.VITE_LIVE_CHAT;
+//   script.charset = "UTF-8";
+//   script.setAttribute("crossorigin", "*");
 
-  document.body.appendChild(script);
-};
+//   document.body.appendChild(script);
+// };
 onMounted(async () => {
   // Load media once app starts
   await Promise.all([
@@ -71,7 +72,7 @@ onMounted(async () => {
         phoneNumber: setting?.contactNumber || "919870443528",
       },
     });
-    loadTawkTo();
+    // loadTawkTo();
   };
 
   document.body.appendChild(script);
@@ -99,4 +100,6 @@ watch(
   <router-view />
 
   <Footer v-if="!route.meta.hideLayout" />
+  <!-- ✅ Tawk.to widget -->
+  <TawkMessenger />
 </template>

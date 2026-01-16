@@ -376,14 +376,14 @@
                 :alt="college.name"
                 class="w-full h-48 object-cover rounded-xl shadow-md"
               />
-              <!-- <div class="mt-4 p-3 bg-blue-50 rounded-lg text-center">
+              <div class="mt-4 p-3 bg-blue-50 rounded-lg text-center">
                 <div class="text-xs text-gray-600 font-medium">
                   Annual Fee (Avg.)
                 </div>
                 <div class="text-xl font-bold text-red-600">
                   {{ formatFee(college.fees) }}
                 </div>
-              </div> -->
+              </div>
             </div>
 
             <div class="flex-1">
@@ -787,26 +787,37 @@ async function fetchColleges() {
 
     if (Array.isArray(data.data)) {
       // Transform API data to match our component structure
-      allColleges.value = data.data.map((college) => ({
-        id: college.id,
-        name: college.name,
-        stateId: college.state?.id ? String(college.state.id) : "",
-        cityId: college.city?.id ? String(college.city.id) : "",
-        state: college.state?.name || "",
-        city: college.city?.name || "",
-        stream: "Engineering", // Default value - you can update this based on actual data
-        type: mapOwnershipToType(college.ownership), // This is the key fix
-        degree: "UG", // Default value
-        exam: "None", // Default value
-        programMode: "Offline", // Default value
-        fees: generateRandomFee(), // Generate random fee for now
-        rating: generateRandomRating(), // Generate random rating for now
-        placement: generateRandomPlacement(), // Generate random placement for now
-        image:
-          college.details?.image ||
-          "https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-        description: generateDescription(college.name, college.ownership),
-      }));
+      allColleges.value = data.data.map((college) => {
+        const parsedFee = parseFeeRange(college.feesRange);
+
+        return {
+          id: college.id,
+          name: college.name,
+          stateId: college.state?.id ? String(college.state.id) : "",
+          cityId: college.city?.id ? String(college.city.id) : "",
+          state: college.state?.name || "",
+          city: college.city?.name || "",
+          stream: "Engineering",
+          type: mapOwnershipToType(college.ownership),
+          degree: "UG",
+          exam: "None",
+          programMode: "Offline",
+
+          // 🔥 FIXED LOGIC
+          fees: parsedFee ?? generateRandomFee(),
+
+          rating: college.details?.rating || generateRandomRating(),
+          placement: generateRandomPlacement(),
+
+          image:
+            college.details?.image ||
+            "https://images.unsplash.com/photo-1562774053-701939374585",
+
+          description:
+            college.description ||
+            generateDescription(college.name, college.ownership),
+        };
+      });
     } else {
       throw new Error("Invalid data format received from API");
     }
@@ -1174,6 +1185,20 @@ watch(
     }
   }
 );
+
+function parseFeeRange(feesRange) {
+  if (!feesRange || typeof feesRange !== "string") return null;
+
+  // Example: "3444444444 - 3444444444"
+  const parts = feesRange.split("-").map((v) => Number(v.trim()));
+
+  if (parts.length === 2 && !isNaN(parts[0])) {
+    // Return average fee
+    return Math.round((parts[0] + parts[1]) / 2);
+  }
+
+  return null;
+}
 
 const fetchStates = async () => {
   try {

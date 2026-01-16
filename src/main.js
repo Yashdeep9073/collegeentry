@@ -5,10 +5,13 @@ import router from "./router";
 import { createPinia } from "pinia";
 
 import { useCompanySettingStore } from "./store/companySettingStore";
+import tawk from "./plugin/tawk";
 
 const app = createApp(App);
 
 const pinia = createPinia();
+app.use(tawk);
+
 app.use(pinia);
 app.use(router);
 

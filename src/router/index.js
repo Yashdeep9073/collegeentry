@@ -49,6 +49,9 @@ import MasterArticle from "../pages/Article/MasterArticle.vue";
 import ExamDetails from "../pages/Exams/ExamDetails.vue";
 import SingleScholarship from "../pages/Scholarship/SingleScholarship.vue";
 
+import { fetchSeoByPath } from "../services/seoServices";
+import { applySeo } from "../utils/applySeo";
+
 const routes = [
   {
     path: "/",
@@ -211,6 +214,18 @@ const router = createRouter({
       return { top: 0 };
     }
   },
+});
+router.afterEach(async (to) => {
+  const path = to.path;
+
+  const seo = await fetchSeoByPath(path);
+
+  if (seo) {
+    applySeo(seo);
+  } else {
+    // fallback
+    document.title = to.meta?.title || "College Entry";
+  }
 });
 
 export default router;
