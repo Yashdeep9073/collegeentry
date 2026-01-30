@@ -2,40 +2,48 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
+import CountryWiseScholarships from "/CountryWiseScholarships.png";
+import GenderWiseScholarships from "/GenderWiseScholarships.png";
+import TypeWiseScholarships from "/TypeWiseScholarships.png";
+import CourseWiseScholarships from "/CourseWiseScholarships.png";
+import StateeWiseScholarships from "/StateWiseScholarships.png";
+import ClasseWiseScholarships from "/ClassWiseScholarships.png";
+import DisciplineWiseScholarships from "/DisciplineWiseScholarships.png";
+import CategoryWiseScholarships from "/CategoryWiseScholarships.png";
 
 // Scholarship categories data
 const scholarships = [
   {
     title: "State Wise Scholarships",
-    icon: "fa-solid fa-map-location-dot",
+    image: StateeWiseScholarships,
   },
   {
     title: "Class Wise Scholarships",
-    icon: "fa-solid fa-graduation-cap",
+    image: ClasseWiseScholarships,
   },
   {
     title: "Discipline Wise Scholarships",
-    icon: "fa-solid fa-brain",
+    image: DisciplineWiseScholarships,
   },
   {
     title: "Course Wise Scholarships",
-    icon: "fa-solid fa-flask",
+    image: CourseWiseScholarships,
   },
   {
     title: "Category Wise Scholarships",
-    icon: "fa-solid fa-hands-praying",
+    image: CategoryWiseScholarships,
   },
   {
     title: "Type Wise Scholarships",
-    icon: "fa-solid fa-coins",
+    image: TypeWiseScholarships,
   },
   {
     title: "Gender Wise Scholarships",
-    icon: "fa-solid fa-people-line",
+    image: GenderWiseScholarships,
   },
   {
     title: "Country Wise Scholarships",
-    icon: "fa-solid fa-flag",
+    image: CountryWiseScholarships,
   },
 ];
 
@@ -67,11 +75,14 @@ function goToScholarship() {
           class="group w-full bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 p-8 flex flex-col items-center justify-center cursor-pointer"
         >
           <!-- Icon -->
-          <div
-            class="text-red-600 text-5xl mb-4 transition-transform duration-300 group-hover:scale-110"
-          >
-            <i :class="item.icon"></i>
+          <div class="mb-4">
+            <img
+              :src="item.image"
+              alt=""
+              class="w-16 h-16 object-contain mx-auto transition-transform duration-300 group-hover:scale-110"
+            />
           </div>
+
           <!-- Title -->
           <h3
             class="text-gray-800 font-medium text-lg leading-snug group-hover:text-blue-700 transition-colors"

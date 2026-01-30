@@ -193,7 +193,7 @@ const store = useCompanySettingStore();
 const Name = computed(() => store.setting?.organizationName || "College Entry");
 const Logo = computed(() => store.setting?.whiteLogo || fallbackLogo);
 const AddressLine = computed(
-  () => store.setting?.addressLine || "College Entry"
+  () => store.setting?.addressLine || "College Entry",
 );
 // 🔹 Courses state
 const courses = ref([]);
@@ -292,6 +292,7 @@ const footerLinks = ref([
       { name: "Advertise With Us", url: "#" },
       { name: "Terms & Conditions", url: "/terms-and-conditions" },
       { name: "Privacy Policy", url: "/privacy-policy" },
+      { name: "Add College", url: "/college-login" },
     ],
   },
 ]);

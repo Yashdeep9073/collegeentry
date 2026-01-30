@@ -1,4 +1,4 @@
-<script setup>
+<!-- <script setup>
 import { ref, computed } from "vue";
 
 // --- Data for LPU Course Fees 2025 Table ---
@@ -299,4 +299,174 @@ const paymentGuidelines = ref([
 
 <style scoped>
 /* Add any specific styles here, or rely on global Tailwind imports */
-</style>
+</style> -->
+
+<script setup>
+import { computed, ref } from "vue";
+import { useCollegeStore } from "../../../store/collegeNameStore";
+import { useRouter } from "vue-router";
+
+const collegeStore = useCollegeStore();
+const router = useRouter();
+
+const courses = computed(() => {
+  return collegeStore.college?.courses || [];
+});
+
+/* Filters (optional but ready) */
+const selectedMode = ref("ALL");
+const selectedDegree = ref("ALL");
+
+const filteredCourses = computed(() => {
+  return courses.value.filter((c) => {
+    const modeOk =
+      selectedMode.value === "ALL" || c.modeOfOperation === selectedMode.value;
+
+    const degreeOk =
+      selectedDegree.value === "ALL" || c.degreeType === selectedDegree.value;
+
+    return modeOk && degreeOk;
+  });
+});
+
+const goToApply = (course) => {
+  // later connect with lead / form page
+  router.push("/contact-us");
+};
+</script>
+
+<template>
+  <div class="max-w-6xl mx-auto px-4 py-8 space-y-8">
+    <!-- Page Header -->
+    <div>
+      <h1 class="text-3xl font-bold text-gray-800 flex items-center gap-3">
+        📚 Courses Offered
+      </h1>
+      <p class="text-gray-600 mt-1">
+        Explore all programs with complete fee structure & admission details
+      </p>
+    </div>
+
+    <!-- Filters -->
+    <div
+      class="bg-white p-5 rounded-xl shadow border border-gray-200 flex flex-col sm:flex-row gap-4"
+    >
+      <select
+        v-model="selectedMode"
+        class="border rounded-lg px-4 py-2 text-sm focus:outline-none"
+      >
+        <option value="ALL">All Modes</option>
+        <option value="ONLINE">Online</option>
+        <option value="OFFLINE">Offline</option>
+      </select>
+
+      <select
+        v-model="selectedDegree"
+        class="border rounded-lg px-4 py-2 text-sm focus:outline-none"
+      >
+        <option value="ALL">All Degree Types</option>
+        <option value="INTEGRATED">Integrated</option>
+        <option value="UG">UG</option>
+        <option value="PG">PG</option>
+        <option value="DIPLOMA">Diploma</option>
+      </select>
+    </div>
+
+    <!-- Courses List -->
+    <div class="space-y-6">
+      <div
+        v-for="course in filteredCourses"
+        :key="course.id"
+        class="bg-white rounded-2xl shadow border border-gray-200 p-6 hover:shadow-lg transition"
+      >
+        <!-- Top Section -->
+        <div class="flex flex-col md:flex-row justify-between gap-6">
+          <div class="space-y-2">
+            <h2 class="text-xl font-bold text-gray-800">
+              {{ course.name }}
+            </h2>
+
+            <div class="flex flex-wrap gap-3 text-sm text-gray-600">
+              <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
+                {{ course.degreeType }}
+              </span>
+
+              <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full">
+                {{ course.modeOfOperation }}
+              </span>
+
+              <span
+                class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full"
+              >
+                Duration: {{ course.duration }} Years
+              </span>
+            </div>
+          </div>
+
+          <!-- Fees Box -->
+          <div
+            class="bg-red-50 border border-red-100 rounded-xl px-6 py-4 text-center"
+          >
+            <p class="text-sm text-gray-600">Average Fees</p>
+            <p class="text-2xl font-bold text-red-600">₹{{ course.fees }}</p>
+          </div>
+        </div>
+
+        <!-- Details Grid -->
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-6 text-sm"
+        >
+          <div>
+            <p class="font-semibold text-gray-700">Eligibility</p>
+            <p class="text-gray-600">{{ course.eligibility }}</p>
+          </div>
+
+          <div>
+            <p class="font-semibold text-gray-700">Seats Available</p>
+            <p class="text-gray-600">{{ course.seatsAvailable }}</p>
+          </div>
+
+          <div>
+            <p class="font-semibold text-gray-700">Admission Process</p>
+            <p class="text-gray-600">{{ course.admissionProcess }}</p>
+          </div>
+
+          <div>
+            <p class="font-semibold text-gray-700">Start Date</p>
+            <p class="text-gray-600">{{ course.startDate }}</p>
+          </div>
+
+          <div>
+            <p class="font-semibold text-gray-700">End Date</p>
+            <p class="text-gray-600">{{ course.endDate }}</p>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="mt-5">
+          <p class="font-semibold text-gray-700 mb-1">Course Description</p>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            {{ course.description }}
+          </p>
+        </div>
+
+        <!-- Action -->
+        <div class="mt-6 flex justify-end">
+          <button
+            class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition"
+          >
+            Apply Now
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div
+      v-if="!filteredCourses.length"
+      class="bg-white p-10 rounded-xl border text-center text-gray-500"
+    >
+      No courses found for selected filters.
+    </div>
+  </div>
+</template>

@@ -5,11 +5,11 @@ import "swiper/css/navigation"; // ✅ important
 import "swiper/css/pagination"; // ✅ important if we add dots later
 import { Navigation, Autoplay } from "swiper/modules";
 import { ref } from "vue";
-import cityImage from "../../assets/download.jpg";
-import mumbai from "../../assets/mumbai.jpg";
-import bangalore from "../../assets/bangalore.avif";
-import chennai from "../../assets/chennai.avif";
-import pune from "../../assets/pune.avif";
+import cityImage from "/Dehli.jpg";
+import mumbai from "/Mumbai.jpg";
+import bangalore from "/Bangalore.jpg";
+import chennai from "/Chennai.jpg";
+import pune from "/Pune.jpg";
 import { useRouter } from "vue-router";
 
 const router = useRouter();

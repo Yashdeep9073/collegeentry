@@ -79,11 +79,11 @@
             </h4>
             <div class="grid grid-cols-2 gap-2">
               <label
-                v-for="(s, i) in streams"
-                :key="i"
+                v-for="s in apiStreams"
+                :key="s.id"
                 class="flex items-center gap-3 px-3 py-2 rounded-lg border cursor-pointer transition"
                 :class="
-                  filters.stream.includes(s)
+                  filters.stream.includes(s.name)
                     ? 'bg-[#ff4d4f] text-white border-[#ff4d4f] shadow-md'
                     : 'bg-white text-gray-700 border-gray-200 hover:bg-[#ffebeb] hover:text-[#ff4d4f]'
                 "
@@ -91,10 +91,10 @@
                 <input
                   type="checkbox"
                   v-model="filters.stream"
-                  :value="s"
+                  :value="s.name"
                   class="hidden"
                 />
-                <span class="text-sm font-medium">{{ s }}</span>
+                <span class="text-sm font-medium">{{ s.name }}</span>
               </label>
             </div>
           </div>
@@ -266,15 +266,24 @@
             </h4>
             <div class="flex flex-wrap gap-2">
               <button
-                v-for="deg in ['UG', 'PG', 'Diploma']"
-                :key="deg"
-                @click="toggleValue('degree', deg)"
-                :class="btnClass(filters.degree, deg, 'blue')"
+                v-for="deg in visibleDegrees"
+                :key="deg.value"
+                @click="toggleValue('degree', deg.value)"
+                :class="btnClass(filters.degree, deg.value)"
                 class="px-4 py-2 rounded-full text-sm font-medium transition duration-200"
               >
-                {{ deg }}
+                {{ deg.label }}
               </button>
             </div>
+
+            <!-- Show More / Less -->
+            <button
+              v-if="DEGREE_OPTIONS.length > 4"
+              @click="showAllDegrees = !showAllDegrees"
+              class="mt-2 text-sm text-[#ff4d4f] hover:underline"
+            >
+              {{ showAllDegrees ? "Show Less" : "Show More" }}
+            </button>
           </div>
 
           <div class="filter-group">
@@ -292,13 +301,13 @@
             </h4>
             <div class="flex flex-wrap gap-2">
               <button
-                v-for="mode in ['Online', 'Offline', 'Distance']"
-                :key="mode"
-                @click="toggleValue('programMode', mode)"
-                :class="btnClass(filters.programMode, mode, 'blue')"
+                v-for="mode in MODE_OPTIONS"
+                :key="mode.value"
+                @click="toggleValue('programMode', mode.value)"
+                :class="btnClass(filters.programMode, mode.value)"
                 class="px-4 py-2 rounded-full text-sm font-medium transition duration-200"
               >
-                {{ mode }}
+                {{ mode.label }}
               </button>
             </div>
           </div>
@@ -430,16 +439,17 @@
 
               <div class="mt-4 flex flex-wrap gap-2 items-center">
                 <span class="tag-badge bg-blue-100 text-blue-800">
-                  <span class="font-semibold">{{ college.stream }}</span>
+                  <span class="font-semibold">
+                    {{ getDisplayStream(college) }}
+                  </span>
                 </span>
+
                 <span class="tag-badge bg-gray-100 text-gray-700">
-                  Degree: {{ college.degree }}
+                  Degree: {{ getDisplayDegree(college) }}
                 </span>
+
                 <span class="tag-badge bg-gray-100 text-gray-700">
-                  Exam: {{ college.exam }}
-                </span>
-                <span class="tag-badge bg-gray-100 text-gray-700">
-                  Mode: {{ college.programMode }}
+                  Mode: {{ getDisplayMode(college) }}
                 </span>
               </div>
 
@@ -716,14 +726,6 @@ const allColleges = ref([]);
 const loading = ref(false);
 const error = ref(null);
 
-/* ------------ Filter Options ------------ */
-const streams = [
-  "Engineering",
-  "Management",
-  "Medical",
-  "Arts & Commerce",
-  "Design",
-];
 const apiStates = ref([]);
 const apiCities = ref([]);
 
@@ -738,6 +740,28 @@ const exams = [
   "SRMJEE",
   "None",
 ];
+const DEGREE_OPTIONS = [
+  { value: "BACHELORS", label: "Bachelors" },
+  { value: "INTEGRATED", label: "Integrated" },
+  { value: "MASTERS", label: "Masters" },
+  { value: "DOCTORATE", label: "Doctorate" },
+  { value: "DIPLOMA", label: "Diploma" },
+  { value: "POSTGRADUATE_DIPLOMA", label: "Postgraduate Diploma" },
+  { value: "CERTIFICATE", label: "Certificate" },
+];
+
+const MODE_OPTIONS = [
+  { value: "ONLINE", label: "Online" },
+  { value: "OFFLINE", label: "Offline" },
+  { value: "DISTANCE", label: "Distance" },
+];
+
+const showAllDegrees = ref(false);
+
+const visibleDegrees = computed(() => {
+  return showAllDegrees.value ? DEGREE_OPTIONS : DEGREE_OPTIONS.slice(0, 4); // show first 4 initially
+});
+
 const feeRanges = [
   { label: "Under ₹50K", min: 0, max: 50000 },
   { label: "₹50K – ₹3L", min: 50000, max: 300000 },
@@ -752,8 +776,8 @@ const filters = ref({
   stateId: "",
   cityId: "",
   collegeType: [],
-  degree: "",
-  programMode: "",
+  degree: [],
+  programMode: [],
   exams: [],
   feeRange: { label: "All", min: 0, max: 9999999 },
   rating: 0,
@@ -797,11 +821,13 @@ async function fetchColleges() {
           cityId: college.city?.id ? String(college.city.id) : "",
           state: college.state?.name || "",
           city: college.city?.name || "",
-          stream: "Engineering",
+          stream: college.streams || [],
+
           type: mapOwnershipToType(college.ownership),
-          degree: "UG",
-          exam: "None",
-          programMode: "Offline",
+          degree: college.degreeTypes || [],
+          // degreeTypes: college.degreeTypes || [],
+          // exam: "None",
+          programMode: college.modes || [],
 
           // 🔥 FIXED LOGIC
           fees: parsedFee ?? generateRandomFee(),
@@ -859,7 +885,7 @@ watch(
       applyFilters();
     }
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 function generateRandomFee() {
@@ -919,11 +945,12 @@ const filtered = computed(() => {
   // 1. Search
   if (q) {
     list = list.filter((c) =>
-      [c.name, c.city, c.state, c.stream, c.description]
+      [c.name, c.city, c.state, ...(c.stream || []), c.description]
         .filter(Boolean)
-        .some((field) => field.toString().toLowerCase().includes(q))
+        .some((field) => field.toString().toLowerCase().includes(q)),
     );
   }
+
   if (f.stateId !== "") {
     list = list.filter((c) => c.stateId === f.stateId);
   }
@@ -933,7 +960,9 @@ const filtered = computed(() => {
   }
 
   // 2. Multi-select filters
-  if (f.stream.length) list = list.filter((c) => f.stream.includes(c.stream));
+  if (f.stream.length) {
+    list = list.filter((c) => c.stream.some((s) => f.stream.includes(s)));
+  }
   if (f.collegeType.length) {
     list = list.filter((c) => f.collegeType.includes(c.type));
   }
@@ -941,13 +970,19 @@ const filtered = computed(() => {
 
   // 3. Single-select filters
 
-  if (f.degree) list = list.filter((c) => c.degree === f.degree);
-  if (f.programMode) list = list.filter((c) => c.programMode === f.programMode);
+  if (f.degree.length) {
+    list = list.filter((c) => c.degree.some((d) => f.degree.includes(d)));
+  }
+  if (f.programMode.length) {
+    list = list.filter((c) =>
+      c.programMode.some((m) => f.programMode.includes(m)),
+    );
+  }
 
   // 4. Fee Range
   if (f.feeRange && f.feeRange.label !== "All") {
     list = list.filter(
-      (c) => c.fees >= f.feeRange.min && c.fees <= f.feeRange.max
+      (c) => c.fees >= f.feeRange.min && c.fees <= f.feeRange.max,
     );
   }
 
@@ -970,12 +1005,12 @@ console.table(
     id: c.id,
     stateId: c.stateId,
     cityId: c.cityId,
-  }))
+  })),
 );
 
 /* ------------ Pagination Computed ------------ */
 const totalPages = computed(() =>
-  Math.max(1, Math.ceil(filtered.value.length / perPage.value))
+  Math.max(1, Math.ceil(filtered.value.length / perPage.value)),
 );
 
 const paged = computed(() => {
@@ -996,7 +1031,7 @@ const paginationRange = computed(() => {
 
   let start = Math.max(
     2,
-    current - Math.floor(max / 2) + (max % 2 === 0 ? 0 : 1)
+    current - Math.floor(max / 2) + (max % 2 === 0 ? 0 : 1),
   );
   let end = Math.min(total - 1, current + Math.floor(max / 2));
 
@@ -1025,6 +1060,45 @@ function applyFilters() {
   page.value = 1;
 }
 
+const getDisplayStream = (college) => {
+  const selected = filters.value.stream;
+
+  // If user selected streams → show matching stream
+  if (selected.length) {
+    const match = college.stream.find((s) => selected.includes(s));
+    return match || college.stream[0]; // fallback
+  }
+
+  // Otherwise show first stream by default
+  return college.stream[0] || "";
+};
+const getDisplayDegree = (college) => {
+  const selected = filters.value.degree;
+
+  const degreeValue = selected.length
+    ? college.degree.find((d) => selected.includes(d))
+    : college.degree[0];
+
+  if (!degreeValue) return "";
+
+  const found = DEGREE_OPTIONS.find((d) => d.value === degreeValue);
+
+  return found ? found.label : degreeValue;
+};
+const getDisplayMode = (college) => {
+  const selected = filters.value.programMode;
+
+  const modeValue = selected.length
+    ? college.programMode.find((m) => selected.includes(m))
+    : college.programMode[0];
+
+  if (!modeValue) return "";
+
+  const found = MODE_OPTIONS.find((m) => m.value === modeValue);
+
+  return found ? found.label : modeValue;
+};
+
 function clearFilters() {
   filters.value = {
     search: "",
@@ -1032,8 +1106,9 @@ function clearFilters() {
     stateId: "",
     cityId: "",
     collegeType: [],
-    degree: "",
-    programMode: "",
+    degree: [],
+    programMode: [],
+
     exams: [],
     feeRange: { label: "All", min: 0, max: 9999999 },
     rating: 0,
@@ -1054,6 +1129,7 @@ const nextPage = () => {
 onMounted(() => {
   fetchColleges();
   fetchStates();
+  fetchStreams();
 });
 
 const openApplyModal = () => {
@@ -1183,7 +1259,7 @@ watch(
     } catch (err) {
       console.error("Failed to fetch cities", err);
     }
-  }
+  },
 );
 
 function parseFeeRange(feesRange) {
@@ -1242,7 +1318,7 @@ const submitLead = async () => {
     } else {
       toast.error(
         error.response?.data?.message ||
-          "Something went wrong. Please try again."
+          "Something went wrong. Please try again.",
       );
     }
   } finally {

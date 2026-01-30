@@ -79,7 +79,7 @@ function goToCollege(college) {
 <style scoped>
 .featured-container {
   text-align: center;
-  padding: 50px 0;
+  padding: 15px 0;
 }
 
 .section-header {

@@ -7,7 +7,7 @@
       >
         <div class="absolute inset-0 bg-black opacity-65"></div>
       </div>
-      
+
       <div class="relative z-10 max-w-6xl mx-auto px-6 text-center text-white">
         <h1
           class="text-5xl md:text-7xl font-extrabold mb-6 drop-shadow-lg animate-fade-in-down tracking-tight"
@@ -26,7 +26,7 @@
     <div class="max-w-6xl mx-auto py-16 px-6">
       <div class="grid md:grid-cols-2 gap-12 items-center">
         <img
-          src="../../assets/1.webp"
+          src="/counterSection/WhoWeAreImage.jpg"
           alt="Modern College Campus Building"
           class="rounded-3xl shadow-xl transform transition-transform duration-500 hover:scale-[1.02] object-cover w-full h-72 md:h-full"
         />
@@ -58,7 +58,7 @@
         </h2>
         <div class="grid md:grid-cols-2 gap-10 text-left">
           <div
-            class=" p-10 rounded-3xl shadow-lg border-l-8 border-red-600 hover:shadow-xl transition duration-300 transform hover:-translate-y-1"
+            class="p-10 rounded-3xl shadow-lg border-l-8 border-red-600 hover:shadow-xl transition duration-300 transform hover:-translate-y-1"
           >
             <div class="flex items-center mb-4">
               <div class="bg-red-600 rounded-full p-3 mr-4">
@@ -86,7 +86,7 @@
             </p>
           </div>
           <div
-            class=" p-10 rounded-3xl shadow-lg border-l-8 border-red-600 hover:shadow-xl transition duration-300 transform hover:-translate-y-1"
+            class="p-10 rounded-3xl shadow-lg border-l-8 border-red-600 hover:shadow-xl transition duration-300 transform hover:-translate-y-1"
           >
             <div class="flex items-center mb-4">
               <div class="bg-red-600 rounded-full p-3 mr-4">
@@ -198,34 +198,33 @@
         </div>
       </div>
     </div>
-
-    </section>
+  </section>
 </template>
 
 <script setup>
 // IMPORTANT: For the best results, replace 'about-us-page.png' with an image that has NO TEXT.
 // For example, a picture of students on campus or a college building.
-import bannerImg from "/about-us-page.png"; // Placeholder: Update this path!
+import bannerImg from "/counterSection/AboutOurCollege.png"; // Placeholder: Update this path!
 
 const faculty = [
   {
     name: "Dr. Ananya Mehta",
     role: "Principal",
-    image: "https://randomuser.me/api/portraits/women/44.jpg",
+    image: "/MaleImage.jpg",
     description:
       "Leading the institution with a focus on innovation and excellence in education. Dr. Mehta champions interdisciplinary research and community engagement.",
   },
   {
     name: "Prof. Rajesh Sharma",
     role: "Head of Computer Science",
-    image: "https://randomuser.me/api/portraits/men/45.jpg",
+    image: "/MaleImage.jpg",
     description:
       "Dedicated to empowering students through cutting-edge research and mentorship in AI and Machine Learning.",
   },
   {
     name: "Dr. Neha Kapoor",
     role: "Dean of Academics",
-    image: "https://randomuser.me/api/portraits/women/46.jpg",
+    image: "/FemaleImage.jpg",
     description:
       "Striving to foster academic brilliance and holistic growth in students, overseeing curriculum development and faculty training.",
   },

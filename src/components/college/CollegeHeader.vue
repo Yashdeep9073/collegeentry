@@ -77,7 +77,7 @@
           </button>
 
           <button
-            @click="openApplyModal"
+            @click="handleDownloadBrochure"
             class="px-5 py-2.5 border border-white text-white rounded-lg hover:bg-white hover:text-black transition font-semibold"
           >
             <i class="fas fa-download mr-1"></i> Download Brochure
@@ -262,6 +262,20 @@
       </div>
     </div>
   </div>
+
+  <LoginModal
+    :isOpen="authStore.showLoginModal"
+    @close="authStore.closeLoginModal()"
+    @submit="loginUser"
+    @switch-to-register="authStore.openRegisterModal"
+  />
+
+  <RegisterModal
+    :isOpen="authStore.showRegisterModal"
+    @close="authStore.closeRegisterModal()"
+    @submit="handleRegister"
+    @switch-to-login="authStore.openLoginModal"
+  />
 </template>
 
 <script setup>
@@ -273,7 +287,12 @@ import { onMounted, computed, ref, watch, reactive } from "vue";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import { useRouter } from "vue-router";
+import { useAuthStore } from "../../store/useAuthStore";
+import LoginModal from "../auth/LoginModal.vue";
+import RegisterModal from "../auth/RegisterModal.vue";
 const router = useRouter();
+
+const authStore = useAuthStore();
 
 const VITE_ADD_LEAD = import.meta.env.VITE_ADD_LEAD_COLLEGE_API;
 const VITE_FETCH_STREAM = import.meta.env.VITE_FETCH_ALL_STREAM;
@@ -281,6 +300,8 @@ const route = useRoute();
 const collegeStore = useCollegeStore();
 const slug = route.params.slug;
 const collegeName = slug.replace(/-/g, " ");
+const API_URL_LOGIN = import.meta.env.VITE_LOGIN;
+const API_URL_REGISTER = import.meta.env.VITE_REGISTER;
 
 const streams = ref([]);
 const isStreamLoading = ref(false);
@@ -303,9 +324,51 @@ const fetchStreams = async () => {
   }
 };
 
+const loginUser = async (formData) => {
+  try {
+    const res = await axios.post(API_URL_LOGIN, formData);
+    const token = res.data.token;
+
+    localStorage.setItem("token", token);
+    await authStore.fetchUser();
+
+    authStore.closeLoginModal();
+
+    toast.success("Login successful!");
+  } catch (err) {
+    toast.error(err.response?.data?.message || "Login failed. Try again.");
+  }
+};
+
+const handleRegister = async (formData) => {
+  try {
+    const res = await axios.post(API_URL_REGISTER, formData);
+    toast.success(
+      "Registration Successful! Please check your email to verify.",
+    );
+    authStore.closeRegisterModal();
+  } catch (err) {
+    toast.error(
+      err.response?.data?.message || "Registration failed. Try again.",
+    );
+  }
+};
+
 onMounted(() => {
   collegeStore.fetchCollegeByName(collegeName);
 });
+
+const handleDownloadBrochure = () => {
+  if (authStore.isAuthenticated) {
+    if (university.value?.brochure) {
+      window.open(university.value.brochure, "_blank");
+    } else {
+      toast.error("Brochure not available");
+    }
+  } else {
+    authStore.openLoginModal();
+  }
+};
 
 const university = computed(() => collegeStore.college);
 
@@ -442,7 +505,7 @@ const submitLead = async () => {
     } else {
       toast.error(
         error.response?.data?.message ||
-          "Something went wrong. Please try again."
+          "Something went wrong. Please try again.",
       );
     }
   } finally {
@@ -463,8 +526,6 @@ const submitLead = async () => {
 .hide-scrollbar::-webkit-scrollbar {
   display: none; /* Chrome, Safari */
 }
-
-
 
 @keyframes fadeInUp {
   from {

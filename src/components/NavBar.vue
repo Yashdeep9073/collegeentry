@@ -98,7 +98,7 @@
       </ul>
 
       <div class="hidden lg:flex gap-3 items-center">
-        <template v-if="!user.name">
+        <template v-if="!authStore.isAuthenticated">
           <button
             @click="openRegister"
             class="border border-white px-4 py-1.5 rounded-lg font-semibold cursor-pointer hover:bg-white hover:text-[#FF5C00] transition duration-200"
@@ -118,7 +118,8 @@
           <span
             class="flex items-center text-sm font-semibold p-2 rounded-lg hover:bg-[#E05000]"
           >
-            Hi, {{ user.name.split(" ")[0] }}
+            Hi, {{ authStore.user?.name?.split(" ")[0] }}
+
             <i class="fas fa-user-circle ml-2 text-xl"></i>
           </span>
 
@@ -126,8 +127,24 @@
             class="absolute right-0 top-full bg-white text-gray-800 w-48 mt-2 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50"
           >
             <li
-              @click="logoutUser"
-              class="px-4 py-2 hover:bg-red-50 text-red-600 cursor-pointer text-sm"
+              @click="router.push('/profile')"
+              class="px-4 py-2 hover:bg-red-50 text-black-600 cursor-pointer text-sm"
+            >
+              <i class="fas fa-user mr-2"></i> Profile
+            </li>
+            <li
+              @click="router.push('/user-reveiw')"
+              class="px-4 py-2 hover:bg-red-50 text-black-600 cursor-pointer text-sm"
+            >
+              <i class="fas fa-star mr-2"></i>
+              Write a Reveiw
+            </li>
+            <li
+              @click="
+                authStore.logout();
+                router.push('/');
+              "
+              class="px-4 py-2 hover:bg-red-50 text-black-600 cursor-pointer text-sm"
             >
               <i class="fas fa-sign-out-alt mr-2"></i> Logout
             </li>
@@ -178,8 +195,9 @@
           Scholarships
         </router-link>
 
-        <li class="py-1">Admission 2025</li>
-        <li class="py-1">Article</li>
+        <li>
+          <router-link to="/article" class="block py-1"> Article </router-link>
+        </li>
 
         <!-- Career Assessment (Mobile Dropdown) -->
         <details class="bg-[#E45400] rounded-lg px-4 py-2">
@@ -213,38 +231,61 @@
 
       <!-- LOGIN / REGISTER (Mobile) -->
       <ul class="space-y-2 text-sm font-medium">
-        <li
-          v-if="!user.name"
-          class="py-2 cursor-pointer"
-          @click="
-            openRegister();
-            mobileOpen = false;
-          "
-        >
-          Register
-        </li>
+        <!-- NOT LOGGED IN -->
+        <template v-if="!authStore.isAuthenticated">
+          <li
+            class="py-2 cursor-pointer"
+            @click="
+              openRegister();
+              mobileOpen = false;
+            "
+          >
+            Register
+          </li>
 
-        <li
-          v-if="!user.name"
-          class="py-2 cursor-pointer"
-          @click="
-            openLogin();
-            mobileOpen = false;
-          "
-        >
-          Login
-        </li>
+          <li
+            class="py-2 cursor-pointer"
+            @click="
+              openLogin();
+              mobileOpen = false;
+            "
+          >
+            Login
+          </li>
+        </template>
 
-        <li
-          v-else
-          class="py-2 cursor-pointer text-red-200"
-          @click="
-            logoutUser();
-            mobileOpen = false;
-          "
-        >
-          <i class="fas fa-sign-out-alt mr-2"></i> Logout
-        </li>
+        <!-- LOGGED IN -->
+        <template v-else>
+          <li
+            class="py-2 cursor-pointer"
+            @click="
+              router.push('/profile');
+              mobileOpen = false;
+            "
+          >
+            <i class="fas fa-user mr-2"></i> Profile
+          </li>
+          <li
+            class="py-2 cursor-pointer"
+            @click="
+              router.push('/user-reveiw');
+              mobileOpen = false;
+            "
+          >
+            <i class="fas fa-user mr-2"></i> Write Review
+          </li>
+
+          <li
+            class="py-2 cursor-pointer text-red-200"
+            @click="
+              authStore.logout();
+              router.push('/');
+              mobileOpen = false;
+            "
+          >
+            <i class="fas fa-sign-out-alt mr-2"></i> Logout
+          </li>
+        </template>
       </ul>
     </div>
   </header>
@@ -276,13 +317,18 @@ const showLogin = ref(false);
 // API Endpoints
 const API_URL_REGISTER = import.meta.env.VITE_REGISTER;
 const API_URL_LOGIN = import.meta.env.VITE_LOGIN;
-const API_GET_USER_DETAILS = import.meta.env.VITE_GET_USER_DETAILS_API;
+import { useAuthStore } from "../store/useAuthStore";
+const authStore = useAuthStore();
 
 import fallbackLogo from "../assets/white-logo.svg";
 
 const onLogoError = (event) => {
   event.target.src = fallbackLogo;
 };
+
+onMounted(() => {
+  authStore.fetchUser();
+});
 
 // --- Modal Functions ---
 const openRegister = () => {
@@ -313,48 +359,16 @@ const goHomeWithHash = () => {
   router.push("/");
 };
 
-// --- API & Auth Functions ---
-
-// 1. Fetch user details on component load/login
-const getUserDetails = async () => {
-  const token = sessionStorage.getItem("token");
-  if (!token) {
-    user.value = { name: null, email: null }; // Ensure user state is empty
-    return;
-  }
-
-  try {
-    const res = await axios.get(API_GET_USER_DETAILS, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    // Update the reactive user state with required data
-    const userData = res.data.data;
-    user.value = {
-      name: userData.name || "User", // Fallback name
-      email: userData.email,
-    };
-  } catch (err) {
-    console.log("User fetch failed or token invalid:", err);
-    // Clear invalid token and log out if fetching fails
-    sessionStorage.removeItem("token");
-    user.value = { name: null, email: null };
-  }
-};
-
 // 2. Handle Login
 const loginUser = async (formData) => {
   try {
     const res = await axios.post(API_URL_LOGIN, formData);
     const token = res.data.token;
 
-    sessionStorage.setItem("token", token);
-    toast.success("Login Successful!");
-    showLogin.value = false;
+    localStorage.setItem("token", token);
+    await authStore.fetchUser();
 
-    await getUserDetails(); // Fetch user details and update UI
+    showLogin.value = false;
   } catch (err) {
     toast.error(err.response?.data?.message || "Login failed. Try again.");
   }
@@ -365,31 +379,17 @@ const handleRegister = async (formData) => {
   try {
     const res = await axios.post(API_URL_REGISTER, formData);
     toast.success(
-      "Registration Successful! Please check your email to verify."
+      "Registration Successful! Please check your email to verify.",
     );
     showRegister.value = false;
   } catch (err) {
     toast.error(
-      err.response?.data?.message || "Registration failed. Try again."
+      err.response?.data?.message || "Registration failed. Try again.",
     );
   }
 };
 
 // 4. Logout Function
-const logoutUser = () => {
-  sessionStorage.removeItem("token");
-  user.value = { name: null, email: null }; // Clear user state
-  toast.info("You have been logged out", {
-    position: "top-center",
-    autoClose: 1000,
-  });
-  router.push("/"); // Redirect to homepage
-};
-
-onMounted(() => {
-  // Check for existing session token and fetch user details when the component mounts
-  getUserDetails();
-});
 </script>
 
 <style scoped>

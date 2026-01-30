@@ -51,6 +51,8 @@ import SingleScholarship from "../pages/Scholarship/SingleScholarship.vue";
 
 import { fetchSeoByPath } from "../services/seoServices";
 import { applySeo } from "../utils/applySeo";
+import Profile from "../pages/Profile/Profile.vue";
+import Review from "../pages/Reveiw/Review.vue";
 
 const routes = [
   {
@@ -83,6 +85,10 @@ const routes = [
     },
   },
   { path: "/verify-email", name: "VerifyEmail", component: Verify },
+
+  // profile
+  { path: "/profile", name: "profile", component: Profile },
+  { path: "/user-reveiw", name: "user-review", component: Review },
   {
     path: "/contact-us",
     name: "ContactUs",

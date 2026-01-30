@@ -27,6 +27,13 @@ const tabs = computed(() => {
   ];
 
   // ✅ Show Articles tab ONLY if articles exist
+
+  if (collegeStore.college?.rankings?.length > 0) {
+    baseTabs.push({ label: "Ranking", path: "ranking" });
+  }
+  if (collegeStore.college?.courses?.length > 0) {
+    baseTabs.push({ label: "Courses & Fees", path: "courses-fees" });
+  }
   if (collegeStore.college?.articles?.length > 0) {
     baseTabs.push({ label: "Articles & News", path: "articles" });
   }
