@@ -5,12 +5,12 @@
     <nav
       class="max-w-[1300px] mx-auto flex items-center justify-between px-6 py-4"
     >
-      <div
+      <router-link
+        to="/"
         class="flex items-center gap-2 font-bold text-xl cursor-pointer"
-        @click="goHomeWithHash"
       >
         <img :src="logo" alt="Logo" class="h-10" @error="onLogoError" />
-      </div>
+      </router-link>
 
       <ul class="hidden lg:flex items-center gap-6 text-sm font-medium">
         <router-link to="/colleges" class="hover:text-gray-200 cursor-pointer">
