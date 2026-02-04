@@ -1,89 +1,33 @@
 <template>
   <footer class="bg-gray-900 text-gray-300 py-10 md:py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-12">
-        <div>
+      <div
+        class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-8 md:gap-12"
+      >
+        <div class="lg:col-span-1">
           <div class="flex items-center mb-4">
             <img :src="Logo" alt="Logo" class="h-10" @error="onLogoError" />
           </div>
-
           <address class="not-italic text-sm space-y-1">
             <p>
               {{
                 AddressLine ||
-                "Office No: 36, Second Floor, D-185, Phase 8B,  Industrial Area, Sector 74,"
-              }},
+                "Office No: 36, Second Floor, D-185, Phase 8B, Industrial Area, Sector 74,"
+              }}
             </p>
-
             <span>{{ State || "Punjab" }},</span>
             <span>{{ city || "Mohali" }},</span>
             <span>{{ postalCode || "160055" }}</span>
           </address>
-
-          <div class="flex space-x-4 mt-6">
-            <!-- Facebook -->
-            <a
-              v-if="facebookUrl"
-              :href="facebookUrl"
-              target="_blank"
-              aria-label="Facebook"
-              class="hover:text-white transition duration-150"
-            >
-              <i class="fab fa-facebook-f"></i>
-            </a>
-
-            <!-- Instagram -->
-            <a
-              v-if="instagramUrl"
-              :href="instagramUrl"
-              target="_blank"
-              aria-label="Instagram"
-              class="hover:text-white transition duration-150"
-            >
-              <i class="fab fa-instagram"></i>
-            </a>
-
-            <!-- Twitter / X -->
-            <a
-              v-if="twitterUrl"
-              :href="twitterUrl"
-              target="_blank"
-              aria-label="Twitter"
-              class="hover:text-white transition duration-150"
-            >
-              <i class="fab fa-x-twitter"></i>
-            </a>
-
-            <!-- LinkedIn -->
-            <a
-              v-if="linkedinUrl"
-              :href="linkedinUrl"
-              target="_blank"
-              aria-label="LinkedIn"
-              class="hover:text-white transition duration-150"
-            >
-              <i class="fab fa-linkedin-in"></i>
-            </a>
-
-            <!-- YouTube -->
-            <a
-              v-if="youtubeUrl"
-              :href="youtubeUrl"
-              target="_blank"
-              aria-label="YouTube"
-              class="hover:text-white transition duration-150"
-            >
-              <i class="fab fa-youtube"></i>
-            </a>
-          </div>
+          <div class="flex space-x-4 mt-6"></div>
         </div>
+
         <div>
           <h4
             class="text-lg font-semibold text-white mb-4 uppercase border-b-2 border-orange-500 inline-block pb-1"
           >
             Top Colleges
           </h4>
-
           <ul class="space-y-2 text-sm">
             <li
               v-for="college in topColleges"
@@ -95,13 +39,13 @@
             </li>
           </ul>
         </div>
+
         <div>
           <h4
             class="text-lg font-semibold text-white mb-4 uppercase border-b-2 border-orange-500 inline-block pb-1"
           >
             Top Exams
           </h4>
-
           <ul class="space-y-2 text-sm">
             <li
               v-for="exam in topExams"
@@ -111,19 +55,15 @@
             >
               {{ exam.shortName || exam.name }}
             </li>
-
-            <li v-if="!topExams.length && !isExamLoading" class="text-gray-400">
-              No exams available
-            </li>
           </ul>
         </div>
+
         <div>
           <h4
             class="text-lg font-semibold text-white mb-4 uppercase border-b-2 border-orange-500 inline-block pb-1"
           >
             Top Courses
           </h4>
-
           <ul class="space-y-2 text-sm">
             <li
               v-for="course in topCourses"
@@ -133,14 +73,29 @@
             >
               {{ course.name }}
             </li>
-
-            <li
-              v-if="!topCourses.length && !isCourseLoading"
-              class="text-gray-400"
-            >
-              No courses available
-            </li>
           </ul>
+        </div>
+
+        <div>
+          <h4
+            class="text-lg font-semibold text-white mb-4 uppercase border-b-2 border-orange-500 inline-block pb-1"
+          >
+            Institutions
+          </h4>
+          <p class="text-xs text-gray-400 mb-4">
+            Are you a college representative?
+          </p>
+          <a
+            :href="enterpriseUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 rounded-md transition duration-300 shadow-sm group"
+          >
+            <span>Add College</span>
+            <i
+              class="fas fa-plus-circle ml-2 group-hover:rotate-90 transition-transform duration-300"
+            ></i>
+          </a>
         </div>
 
         <div v-for="(section, index) in footerLinks" :key="index">
@@ -162,16 +117,8 @@
         </div>
       </div>
     </div>
-
-    <div class="mt-10 pt-6 text-center text-sm text-white">
-      <hr class="mb-3" />
-      &copy; 2026 {{ Name || "College Entry" }} | All Rights Reserved
-    </div>
-
-    <slot name="floating-buttons"></slot>
   </footer>
 </template>
-
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { useCollegeStore } from "../store/collegeStore";
@@ -185,6 +132,9 @@ import fallbackLogo from "../assets/white-logo.svg";
 const onLogoError = (event) => {
   event.target.src = fallbackLogo;
 };
+const enterpriseUrl = computed(
+  () => import.meta.env.VITE_ENTERPRISE_URL || "#",
+);
 
 import { useCompanySettingStore } from "../store/companySettingStore";
 const router = useRouter();
@@ -292,7 +242,6 @@ const footerLinks = ref([
       { name: "Advertise With Us", url: "#" },
       { name: "Terms & Conditions", url: "/terms-and-conditions" },
       { name: "Privacy Policy", url: "/privacy-policy" },
-      { name: "Add College", url: "/college-login" },
     ],
   },
 ]);
