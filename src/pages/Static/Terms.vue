@@ -19,79 +19,198 @@
         </h1>
 
         <section class="text-gray-900 text-sm leading-relaxed space-y-6">
-          <div class="space-y-4">
-            <p class="font-medium">
-              1. The definitions and rules of interpretation in this clause
-              apply in this agreement.
+          <p>
+            Welcome to
+            <span class="font-semibold">Collegentry</span>
+            <a
+              href="https://collegeentry.in"
+              target="_blank"
+              class="text-blue-600 hover:underline ml-1"
+            >
+              https://collegeentry.in/ </a
+            >. These Terms and Conditions ("Terms") govern your use of our
+            website, services, and tools. By accessing or using Collegentry, you
+            agree to be bound by these Terms. If you do not agree, please do not
+            use our services.
+          </p>
+
+          <!-- 1 -->
+          <div class="space-y-2">
+            <h2 class="font-semibold">1. Acceptance of Terms</h2>
+            <ul class="list-disc pl-6 space-y-1">
+              <li>You are at least 18 years old, or</li>
+              <li>
+                You are using the Website under the supervision of a parent or
+                legal guardian.
+              </li>
+            </ul>
+            <p>
+              Your continued use of the Website constitutes acceptance of these
+              Terms and any future updates or modifications.
+            </p>
+          </div>
+
+          <!-- 2 -->
+          <div class="space-y-2">
+            <h2 class="font-semibold">2. Nature of Services</h2>
+            <p>
+              Collegentry is an educational discovery and information platform
+              that provides:
             </p>
 
-            <dl class="space-y-3 pl-4">
-              <dt>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum
-                deserunt suscipit deleniti, eligendi, nemo modi quos voluptate
-                est tempora sit nulla quam perferendis. Possimus aliquam
-                adipisci quam quod repellendus assumenda perferendis reiciendis,
-                error soluta nulla laborum ex numquam harum repellat cumque,
-                dolorem aperiam architecto vel placeat, sapiente alias. Ab illo
-                hic enim accusantium eum sunt qui reiciendis dignissimos atque
-                aspernatur temporibus quas, tempora animi perferendis cupiditate
-                sequi minima sit quis. Amet velit soluta quod repudiandae sit
-                pariatur officia animi? Esse, temporibus? Illo quibusdam
-                doloribus molestiae! Laborum veniam eius eveniet molestiae at
-                recusandae modi sequi sit, ab, nihil architecto magnam cumque
-                minus pariatur omnis delectus iste, facilis doloribus officia
-                consequatur quisquam maiores a fuga culpa. Facilis deserunt
-                voluptatem ipsa nobis commodi aspernatur error voluptas nulla
-                expedita animi perferendis aliquam quod est, repudiandae earum
-                corporis tempora porro sed culpa minima cupiditate in illum ex
-                et. Quibusdam cumque suscipit debitis cupiditate? Totam nesciunt
-                provident explicabo ipsa commodi, officiis pariatur earum a
-                harum saepe ipsum, impedit nostrum dolores vel amet unde,
-                praesentium placeat maxime alias! Officia facere rerum adipisci
-                recusandae sit nesciunt hic excepturi? Error assumenda ipsam
-                reiciendis ullam incidunt minus eveniet laborum quas natus
-                culpa, deserunt perferendis quo. Sit est, minima architecto ut
-                sint, mollitia corporis praesentium aliquam debitis deleniti
-                quisquam, ipsam ex ratione consequatur quas. Magni ab modi
-                possimus voluptates accusantium repellendus reprehenderit
-                dolorem inventore neque beatae voluptatem laborum iure, maiores
-                voluptas dolores quos ratione corrupti voluptate fugit a
-                nesciunt necessitatibus. Repellat eaque vitae alias
-                reprehenderit, quam adipisci similique, saepe autem ullam, harum
-                molestias reiciendis facilis. Dolorum eaque ea impedit
-                blanditiis eos dignissimos sit ab excepturi deserunt consequatur
-                neque, earum id, officiis dolorem aperiam autem assumenda quae
-                temporibus tempora natus, minima est. Odit cupiditate illum
-                natus aperiam veritatis odio accusamus quaerat aliquam nostrum
-                dolorum fugit error iste iure dolore nulla, commodi fuga
-                accusantium illo praesentium similique, hic ullam est. Illo, ex
-                labore quo sint rem beatae quaerat impedit earum id in
-                consectetur adipisci similique debitis laudantium libero qui
-                voluptates dolor laboriosam perferendis exercitationem tempora
-                distinctio possimus? Aspernatur repellat magnam illo in iusto,
-                ducimus cum distinctio quia sed officia iste eum quas maxime
-                ipsum repudiandae dolore, fugiat sint quis. Sed natus molestias,
-                fuga error optio dolorem officiis porro dignissimos sint nihil,
-                quod sequi rem laborum, cupiditate eligendi exercitationem
-                praesentium nostrum perferendis hic nobis voluptatum architecto
-                asperiores tempore eveniet. Esse necessitatibus veritatis
-                corporis, numquam suscipit neque repellat unde odio eveniet hic
-                praesentium blanditiis facere, possimus eum natus repellendus
-                commodi! Modi expedita repellat repudiandae atque doloremque
-                tempore veritatis cupiditate illo mollitia laboriosam, autem
-                perspiciatis ex suscipit? Possimus sequi voluptatibus distinctio
-                quis libero quidem ab fugit, eligendi harum non dolor, modi
-                repellat eum. Inventore officiis, est eaque in ipsa aspernatur
-                quasi repudiandae accusamus veniam perspiciatis sunt dicta
-                exercitationem velit obcaecati quidem sint voluptate repellendus
-                unde nulla quos incidunt iure natus? Eos tempora distinctio
-                laboriosam rerum unde delectus, praesentium quae ex, ab
-                explicabo omnis doloribus veniam aliquam maxime sapiente
-                recusandae itaque. Consequatur, veritatis rerum labore
-                perspiciatis maxime, recusandae molestiae, cumque quas repellat
-                eius provident. Temporibus, saepe vero.
-              </dt>
-            </dl>
+            <ul class="list-disc pl-6 space-y-1">
+              <li>College profiles</li>
+              <li>Course information</li>
+              <li>Fee estimates</li>
+              <li>Admission timelines</li>
+              <li>Counseling or support services (where applicable)</li>
+            </ul>
+
+            <p class="font-medium mt-2">Disclaimer:</p>
+            <p>
+              All information is provided for informational purposes only. We
+              strive for accuracy but do not guarantee completeness,
+              correctness, or real-time updates, as data may be provided by
+              third-party institutions.
+            </p>
+          </div>
+
+          <!-- 3 -->
+          <div class="space-y-2">
+            <h2 class="font-semibold">3. User Responsibilities</h2>
+
+            <p class="font-medium">Account Security</p>
+            <p>
+              Maintain the confidentiality of your login credentials and accept
+              responsibility for all activities under your account.
+            </p>
+
+            <p class="font-medium">Accurate Information</p>
+            <p>
+              Provide true, complete, and accurate details when submitting forms
+              or applications.
+            </p>
+
+            <p class="font-medium">Prohibited Conduct</p>
+            <ul class="list-disc pl-6 space-y-1">
+              <li>Post harmful, illegal, or defamatory content</li>
+              <li>Use bots, scraping tools, or automated systems</li>
+              <li>Attempt to breach security or disrupt services</li>
+              <li>Misuse the platform for fraudulent purposes</li>
+            </ul>
+          </div>
+
+          <!-- 4 -->
+          <div class="space-y-2">
+            <h2 class="font-semibold">4. Intellectual Property Rights</h2>
+            <p>
+              All Website content including text, graphics, logos, design,
+              software, and data is the property of Collegentry or its licensors
+              and protected by intellectual property laws.
+            </p>
+            <p>
+              You may not copy, reproduce, distribute, modify, or commercially
+              use any content without prior written permission.
+            </p>
+          </div>
+
+          <!-- 5 -->
+          <div class="space-y-2">
+            <h2 class="font-semibold">5. Fees and Payments</h2>
+
+            <p class="font-medium">Free Access</p>
+            <p>Basic browsing and college discovery features are free.</p>
+
+            <p class="font-medium">Paid Services</p>
+            <p>
+              Premium services (such as counseling or application assistance)
+              may be offered for a fee, clearly communicated before purchase.
+            </p>
+
+            <ul class="list-disc pl-6 space-y-1">
+              <li>Fees are non-refundable</li>
+              <li>Payments are final</li>
+            </ul>
+
+            <p class="font-medium">Third-Party Payments</p>
+            <p>
+              Collegentry is not responsible for payments or transactions made
+              directly between users and colleges or institutions.
+            </p>
+          </div>
+
+          <!-- 6 -->
+          <div class="space-y-2">
+            <h2 class="font-semibold">6. Limitation of Liability</h2>
+            <ul class="list-disc pl-6 space-y-1">
+              <li>Errors or outdated college information</li>
+              <li>Decisions made based on Website content</li>
+              <li>Admission outcomes</li>
+              <li>Financial losses</li>
+              <li>Website downtime or technical issues</li>
+              <li>Third-party actions or services</li>
+            </ul>
+          </div>
+
+          <!-- 7 -->
+          <div class="space-y-2">
+            <h2 class="font-semibold">7. Third-Party Links</h2>
+            <p>
+              Our Website may contain links to external websites or partners. We
+              do not control or endorse their content and are not responsible
+              for their practices. Users access third-party sites at their own
+              discretion.
+            </p>
+          </div>
+
+          <!-- 8 -->
+          <div class="space-y-2">
+            <h2 class="font-semibold">8. Privacy</h2>
+            <p>
+              Your use of Collegentry is also governed by our Privacy Policy,
+              which explains how we collect, use, and protect your personal
+              data.
+            </p>
+          </div>
+
+          <!-- 9 -->
+          <div class="space-y-2">
+            <h2 class="font-semibold">9. Termination</h2>
+            <p>
+              We reserve the right to suspend or terminate your access to the
+              Website at any time without notice if you violate these Terms or
+              engage in harmful activities.
+            </p>
+          </div>
+
+          <!-- 10 -->
+          <div class="space-y-2">
+            <h2 class="font-semibold">10. Changes to Terms</h2>
+            <p>
+              We may update these Terms periodically. Continued use of the
+              Website after updates indicates acceptance of the revised Terms.
+            </p>
+          </div>
+
+          <!-- 11 -->
+          <div class="space-y-2">
+            <h2 class="font-semibold">11. Governing Law & Jurisdiction</h2>
+            <p>
+              These Terms shall be governed by the laws of India. Any disputes
+              shall be subject to the exclusive jurisdiction of the courts
+              located in
+              <span class="italic">[Insert City/State]</span>.
+            </p>
+          </div>
+
+          <!-- 12 -->
+          <div class="space-y-2">
+            <h2 class="font-semibold">12. Contact Us</h2>
+            <p>Email: info@collegeentry.in</p>
+            <p>
+              Address: D-185, Phase 8B, Industrial Area, Sector 74, Punjab,
+              Mohali, 160055
+            </p>
           </div>
         </section>
       </main>

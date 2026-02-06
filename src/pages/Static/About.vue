@@ -17,8 +17,8 @@
         <p
           class="text-xl md:text-2xl text-red-100 max-w-3xl mx-auto leading-relaxed animate-fade-in-up font-light"
         >
-          Empowering students with innovation, integrity, and excellence to
-          shape a brighter future.
+          Welcome to Collegentry — your trusted partner in navigating the world
+          of higher education.
         </p>
       </div>
     </div>
@@ -33,19 +33,25 @@
 
         <div>
           <h2 class="text-4xl font-bold mb-6 text-gray-900 leading-tight">
-            Who We Are: A Legacy of Learning
+            Who We Are
           </h2>
           <p class="text-gray-700 leading-relaxed mb-4 text-lg">
-            Founded in **1995**, our college has been a pioneer in delivering
-            quality education, fostering an environment where innovation meets
-            opportunity. Our mission is to shape the leaders of tomorrow through
-            excellence in teaching, cutting-edge research, and dedicated
-            community service.
+            We are a comprehensive discovery platform created to bridge the gap
+            between aspiring students and their ideal academic institutions.
+            From exploring colleges to securing admissions, Collegentry makes
+            every step simple, transparent, and stress-free.
           </p>
+
           <p class="text-gray-700 leading-relaxed text-lg">
-            With **state-of-the-art infrastructure**, a globally recognized
-            faculty, and a vibrant student life, we proudly stand among the top
-            institutions committed to holistic development and student success.
+            Choosing a college isn’t just a search — it’s a life-defining
+            decision. That’s why we provide reliable data, clear insights, and
+            personalized guidance to help students make confident choices about
+            their future.
+          </p>
+
+          <p class="text-gray-700 leading-relaxed text-lg mt-3">
+            At Collegentry, we don’t just help you find a college. We help you
+            find the right campus to launch your career and shape your future.
           </p>
         </div>
       </div>
@@ -80,9 +86,12 @@
               <h3 class="text-3xl font-bold text-red-800">Our Mission</h3>
             </div>
             <p class="text-gray-700 text-lg">
-              To provide world-class education that inspires innovation,
-              cultivates creativity, and builds a strong foundation for lifelong
-              learning and professional success.
+              To democratize access to higher education through a transparent,
+              data-driven platform that simplifies college discovery and
+              admissions. We empower students with verified, reliable
+              information — from fee structures to career outcomes — ensuring
+              that no financial or informational barrier stands in the way of
+              academic success.
             </p>
           </div>
           <div
@@ -114,9 +123,11 @@
               <h3 class="text-3xl font-bold text-red-800">Our Vision</h3>
             </div>
             <p class="text-gray-700 text-lg">
-              To be a globally recognized institution renowned for academic
-              excellence, groundbreaking research, and significant contributions
-              to society through advanced technology and profound knowledge.
+              To become the world’s most trusted gateway to higher education,
+              helping every student navigate their future with clarity and
+              confidence. We envision a world where the journey from aspiration
+              to enrollment is seamless, unbiased, and personalized to each
+              student’s unique potential.
             </p>
           </div>
         </div>
