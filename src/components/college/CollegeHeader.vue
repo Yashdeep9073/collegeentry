@@ -290,6 +290,7 @@ import { useRouter } from "vue-router";
 import { useAuthStore } from "../../store/useAuthStore";
 import LoginModal from "../auth/LoginModal.vue";
 import RegisterModal from "../auth/RegisterModal.vue";
+import { getUTMParams } from "../../utils/UTM_Tracking_Module";
 const router = useRouter();
 
 const authStore = useAuthStore();
@@ -483,9 +484,13 @@ const submitLead = async () => {
   try {
     // ✅ Transform data for backend
     const payload = {
-      ...formState,
+      name: formState.name,
+      email: formState.email,
+      phone: formState.phone,
+      collegeId: university.value?.id ? Number(university.value.id) : null,
       degreeType: formState.degreeType?.id || "",
-      streamId: formState.streamId?.id || null,
+      streamId: formState.streamId?.id ? Number(formState.streamId.id) : null,
+      ...getUTMParams(),
     };
 
     const response = await axios.post(VITE_ADD_LEAD, payload);

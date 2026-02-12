@@ -2,6 +2,16 @@ import { createApp } from "vue";
 import "./style.css";
 import App from "./App.vue";
 import router from "./router";
+import { initUTMTracking } from "./utils/UTM_Tracking_Module";
+
+// Initialize UTM tracking
+router.isReady().then(() => {
+  initUTMTracking();
+});
+
+router.afterEach(() => {
+  initUTMTracking();
+});
 import { createPinia } from "pinia";
 
 import { useCompanySettingStore } from "./store/companySettingStore";

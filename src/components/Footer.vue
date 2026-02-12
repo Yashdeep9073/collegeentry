@@ -76,28 +76,6 @@
           </ul>
         </div>
 
-        <div>
-          <h4
-            class="text-lg font-semibold text-white mb-4 uppercase border-b-2 border-orange-500 inline-block pb-1"
-          >
-            Institutions
-          </h4>
-          <p class="text-xs text-gray-400 mb-4">
-            Are you a college representative?
-          </p>
-          <a
-            :href="enterpriseUrl"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 rounded-md transition duration-300 shadow-sm group"
-          >
-            <span>Add College</span>
-            <i
-              class="fas fa-plus-circle ml-2 group-hover:rotate-90 transition-transform duration-300"
-            ></i>
-          </a>
-        </div>
-
         <div v-for="(section, index) in footerLinks" :key="index">
           <h4
             class="text-lg font-semibold text-white mb-4 uppercase border-b-2 border-orange-500 inline-block pb-1"
@@ -113,6 +91,19 @@
                 {{ link.name }}
               </router-link>
             </li>
+            <div class="mt-15" >
+              <a
+                :href="enterpriseUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="cursor-pointer hover:text-white transition duration-150"
+              >
+                <span>Add College</span>
+                <i
+                  class="fas fa-plus-circle ml-2 group-hover:rotate-90 transition-transform duration-300"
+                ></i>
+              </a>
+            </div>
           </ul>
         </div>
       </div>
