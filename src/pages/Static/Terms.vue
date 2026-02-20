@@ -21,13 +21,13 @@
         <section class="text-gray-900 text-sm leading-relaxed space-y-6">
           <p>
             Welcome to
-            <span class="font-semibold">Collegentry</span>
+            <span class="font-semibold"></span>
             <a
               href="https://collegeentry.in"
               target="_blank"
               class="text-blue-600 hover:underline ml-1"
             >
-              https://collegeentry.in/ </a
+              Collegentry </a
             >. These Terms and Conditions ("Terms") govern your use of our
             website, services, and tools. By accessing or using Collegentry, you
             agree to be bound by these Terms. If you do not agree, please do not

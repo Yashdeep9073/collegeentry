@@ -100,8 +100,8 @@ const dynamicHighlights = computed(() => {
     { label: "Affiliation", value: u.affiliation, icon: "fa-scroll" },
     { label: "Accredited by", value: u.accreditation, icon: "fa-certificate" },
     {
-      label: "Approved By",
-      value: u.isApproved ? "Yes" : "No",
+      label: "Approved ",
+      value: u?.details?.isApproved ? "Yes" : "No",
       icon: "fa-check-circle",
     },
     {

@@ -296,6 +296,14 @@ import { ref, onMounted } from "vue";
 import { computed } from "vue";
 import { useCompanySettingStore } from "../store/companySettingStore";
 
+import { watch } from "vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+
+watch(route, () => {
+  mobileOpen.value = false;
+});
 import axios from "axios";
 import { useRouter } from "vue-router";
 // Replaced Heroicons imports with Font Awesome icons for consistency
