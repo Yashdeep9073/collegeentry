@@ -3,6 +3,7 @@ import { ref } from "vue";
 
 export const useCollegeStore = defineStore("collegeStore", () => {
   const collegeList = ref([]);
+  const featuredColleges = ref([]);
   const isLoaded = ref(false);
   const loading = ref(false);
   const error = ref(null);
@@ -27,5 +28,21 @@ export const useCollegeStore = defineStore("collegeStore", () => {
     }
   }
 
-  return { collegeList, fetchColleges, isLoaded, loading, error };
+  async function fetchFeaturedColleges() {
+    loading.value = true;
+    error.value = null;
+
+    try {
+      const res = await fetch(import.meta.env.VITE_FETCH_FEATURED_COLLEGES);
+      const data = await res.json();
+      featuredColleges.value = data.data || [];
+    } catch (err) {
+      console.error("Featured college fetch failed:", err);
+      error.value = err.message || "Failed to fetch featured colleges";
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  return { collegeList, featuredColleges, fetchColleges, fetchFeaturedColleges, isLoaded, loading, error };
 });

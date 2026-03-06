@@ -2,7 +2,7 @@
   <footer class="bg-gray-900 text-gray-300 py-10 md:py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div
-        class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-8 md:gap-12"
+        class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8 md:gap-12"
       >
         <div class="lg:col-span-1">
           <div class="flex items-center mb-4">

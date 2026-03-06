@@ -775,6 +775,7 @@ const filters = ref({
   stream: [],
   stateId: "",
   cityId: "",
+  city: "", // Added for consistency with watcher
   collegeType: [],
   degree: [],
   programMode: [],
@@ -876,16 +877,36 @@ function mapOwnershipToType(ownership) {
   if (ownership === "PRIVATE") return "Private";
   return ownership; // fallback
 }
+// Watch for query parameters to apply filters from URL
 watch(
-  () => route.query.city,
-  (city) => {
-    if (city) {
-      filters.value.city = city;
-      filters.value.search = city; // optional but powerful
+  () => route.query,
+  (query) => {
+    let hasChanged = false;
+
+    // Handle Search / City
+    if (query.city || query.search) {
+      const searchValue = query.city || query.search;
+      filters.value.city = searchValue;
+      filters.value.search = searchValue;
+      hasChanged = true;
+    }
+
+    // Handle Stream / Category / Course
+    const rawStreams = query.category || query.stream || query.course;
+    if (rawStreams) {
+      const streamArray = Array.isArray(rawStreams) ? rawStreams : [rawStreams];
+      // Only update if different to avoid infinite loops or unnecessary updates
+      if (JSON.stringify(filters.value.stream) !== JSON.stringify(streamArray)) {
+        filters.value.stream = streamArray;
+        hasChanged = true;
+      }
+    }
+
+    if (hasChanged) {
       applyFilters();
     }
   },
-  { immediate: true },
+  { immediate: true, deep: true },
 );
 
 function generateRandomFee() {

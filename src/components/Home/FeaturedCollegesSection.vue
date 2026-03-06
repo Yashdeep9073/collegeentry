@@ -15,7 +15,7 @@ const collegeStore = useCollegeStore();
 
 // Fetch colleges when the component mounts
 onMounted(async () => {
-  await collegeStore.fetchColleges();
+  await collegeStore.fetchFeaturedColleges();
 });
 
 
@@ -57,9 +57,7 @@ function goToCollege(college) {
       }"
     >
       <SwiperSlide
-        v-for="(college, index) in collegeStore.collegeList
-          // .filter((college) => college.isFeatured === true)
-          .slice(0, 10)"
+        v-for="(college, index) in collegeStore.featuredColleges"
         :key="college.id || index"
       >
         <div class="college-card mb-1 mt-1" @click="goToCollege(college)">
