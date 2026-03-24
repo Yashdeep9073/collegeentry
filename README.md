@@ -1,5 +1,40 @@
-# Vue 3 + Vite
+# 🎓 College Listing Website
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+A web platform that allows users to explore, search, and compare colleges based on various criteria like location, courses, and ratings.
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+## 🚀 Live Demo
+👉 [View Website](https://collegeentry.in/)
+
+---
+
+## 📌 Features
+
+- 🏫 Browse colleges with detailed information
+- 🔍 Search & filter by location, courses, fees
+- ⭐ Ratings and reviews system
+- 📄 College detail pages
+- ❤️ Save / bookmark colleges
+- 📱 Fully responsive UI
+
+---
+
+## 🏗️ Tech Stack
+
+*Frontend:*
+- Vue.js 
+- Tailwind CSS 
+
+*Backend:*
+- Node.js
+- Express.js
+
+*Database:*
+- PostgreSQL
+
+*Other Tools:*
+- REST API
+- JWT Authentication (optional)
+
+---
+
+## 📂 Project Structure
