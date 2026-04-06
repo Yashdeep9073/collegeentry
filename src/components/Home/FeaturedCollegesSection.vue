@@ -15,9 +15,8 @@ const collegeStore = useCollegeStore();
 
 // Fetch colleges when the component mounts
 onMounted(async () => {
-  await collegeStore.fetchFeaturedColleges();
+  await collegeStore.fetchColleges();
 });
-
 
 function goToCollege(college) {
   const slug = college.name.toLowerCase().replace(/\s+/g, "-"); // convert name → slug
@@ -26,7 +25,7 @@ function goToCollege(college) {
 </script>
 
 <template>
-  <div class="featured-container ">
+  <div class="featured-container">
     <div class="section-header">
       <h2>Featured Colleges</h2>
     </div>
@@ -57,7 +56,7 @@ function goToCollege(college) {
       }"
     >
       <SwiperSlide
-        v-for="(college, index) in collegeStore.featuredColleges"
+        v-for="(college, index) in collegeStore.collegeList.slice(0, 10)"
         :key="college.id || index"
       >
         <div class="college-card mb-1 mt-1" @click="goToCollege(college)">
