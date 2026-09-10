@@ -75,13 +75,13 @@ const routes = [
   {
     path: "/exams",
     component: AllExams,
-    meta: { title: "Top Exams in India 2026 - College Entry" },
+    meta: { title: "Top Exams in India 2026 - College Enroll" },
   },
   {
     path: "/scholarships",
     component: Scholarship,
     meta: {
-      title: "Top Scholarships in India and Abroad 2026 - College Entry",
+      title: "Top Scholarships in India and Abroad 2026 - College Enroll",
     },
   },
   { path: "/verify-email", name: "VerifyEmail", component: Verify },
@@ -170,7 +170,7 @@ const routes = [
     path: "/article",
     name: "Article",
     component: MasterArticle,
-    meta: { title: "Top Article in India 2026 - College Entry" },
+    meta: { title: "Top Article in India 2026 - College Enroll" },
   },
   {
     path: "/courses/:slug",
@@ -230,7 +230,7 @@ router.afterEach(async (to) => {
     applySeo(seo);
   } else {
     // fallback
-    document.title = to.meta?.title || "College Entry";
+    document.title = to.meta?.title || "College Enroll";
   }
 });
 

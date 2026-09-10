@@ -7,8 +7,8 @@ import { useCompanySettingStore } from "../store/companySettingStore";
 
 const API_URL = import.meta.env.VITE_ADD_CONTACT_API;
 const store = useCompanySettingStore();
-const email = computed(() => store.setting?.email || "College Entry");
-const phone = computed(() => store.setting?.contactNumber || "College Entry");
+const email = computed(() => store.setting?.email || "College Enroll");
+const phone = computed(() => store.setting?.contactNumber || "College Enroll");
 const facebookUrl = computed(() => store.setting?.facebookUrl || "");
 const instagramUrl = computed(() => store.setting?.instagramUrl || "");
 const twitterUrl = computed(() => store.setting?.twitterUrl || "");

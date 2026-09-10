@@ -60,7 +60,7 @@ onMounted(async () => {
         position: "left",
       },
       brandSetting: {
-        brandName: setting?.organizationName || "College Entry",
+        brandName: setting?.organizationName || "College Enroll",
         brandSubTitle: "Typically replies within a day",
         brandImg: setting?.favicon || "/admin/logo/fav-print.jpg",
         welcomeText: "Hi there!\nHow can I help you?",

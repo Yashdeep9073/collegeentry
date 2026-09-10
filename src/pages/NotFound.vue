@@ -3,8 +3,10 @@ import { computed } from "vue";
 
 import { useCompanySettingStore } from "../store/companySettingStore";
 const store = useCompanySettingStore();
-const Name = computed(() => store.setting?.organizationName || "College Entry");
-const Logo = computed(() => store.setting?.logo || "College Entry");
+const Name = computed(
+  () => store.setting?.organizationName || "College Enroll",
+);
+const Logo = computed(() => store.setting?.logo || "College Enroll");
 </script>
 
 <template>

@@ -75,7 +75,7 @@
               ><span>★</span>
             </div>
             <p class="text-gray-600 text-lg leading-relaxed italic mb-6">
-              "College Entry' career assessment test was a game changer. It
+              "College Enroll' career assessment test was a game changer. It
               helped me gain clarity about my strengths and interests exactly
               when I was confused about my future path."
             </p>

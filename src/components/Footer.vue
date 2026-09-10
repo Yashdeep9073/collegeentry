@@ -131,19 +131,19 @@ import { useCompanySettingStore } from "../store/companySettingStore";
 const router = useRouter();
 const collegeStore = useCollegeStore();
 const store = useCompanySettingStore();
-const Name = computed(() => store.setting?.organizationName || "College Entry");
+const Name = computed(() => store.setting?.organizationName || "College Enroll");
 const Logo = computed(() => store.setting?.whiteLogo || fallbackLogo);
 const AddressLine = computed(
-  () => store.setting?.addressLine || "College Entry",
+  () => store.setting?.addressLine || "College Enroll",
 );
 // 🔹 Courses state
 const courses = ref([]);
 const isCourseLoading = ref(false);
 
-const Country = computed(() => store.setting?.country || "College Entry");
-const State = computed(() => store.setting?.state || "College Entry");
-const city = computed(() => store.setting?.city || "College Entry");
-const postalCode = computed(() => store.setting?.postalCode || "College Entry");
+const Country = computed(() => store.setting?.country || "College Enroll");
+const State = computed(() => store.setting?.state || "College Enroll");
+const city = computed(() => store.setting?.city || "College Enroll");
+const postalCode = computed(() => store.setting?.postalCode || "College Enroll");
 const facebookUrl = computed(() => store.setting?.facebookUrl || "");
 const instagramUrl = computed(() => store.setting?.instagramUrl || "");
 const twitterUrl = computed(() => store.setting?.twitterUrl || "");

@@ -9,7 +9,7 @@ const courseStore = useCourseStore();
 const course = computed(() => courseStore.course?.[0] || null);
 const details = computed(() => course.value?.courseDetails?.[0] || null);
 
-const authorName = "CollegeEntry Expert";
+const authorName = "CollegeEnroll Expert";
 
 /* ---------------- FORMATTING HELPERS ---------------- */
 const formatCurrency = (val) => {
@@ -37,7 +37,7 @@ const tableOfContents = computed(() => {
   return toc;
 });
 const adminName = computed(
-  () => course.value?.admin?.name || "CollegeEntry Expert"
+  () => course.value?.admin?.name || "CollegeEnroll Expert"
 );
 </script>
 

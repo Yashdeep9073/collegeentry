@@ -6,7 +6,7 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 const store = useCompanySettingStore();
-const Name = computed(() => store.setting?.organizationName || "College Entry");
+const Name = computed(() => store.setting?.organizationName || "College Enroll");
 // ✅ Import Local Images
 import banner1 from "../../assets/slider3.webp";
 import banner2 from "../../assets/2.webp";

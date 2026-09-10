@@ -27,7 +27,7 @@ onMounted(async () => {
   }
 });
 const store = useCompanySettingStore();
-const Name = computed(() => store.setting?.organizationName || "College Entry");
+const Name = computed(() => store.setting?.organizationName || "College Enroll");
 const onSwiper = (swiper) => (swiperInstance.value = swiper);
 const slidePrev = () => swiperInstance.value?.slidePrev();
 const slideNext = () => swiperInstance.value?.slideNext();

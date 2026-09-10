@@ -683,7 +683,7 @@
           </p>
 
           <p class="text-[11px] text-gray-500">
-            By proceeding forward, I agree to CollegeEntry
+            By proceeding forward, I agree to CollegeEnroll
             <span
               class="text-red-600 cursor-pointer hover:underline"
               @click="goToTermsAndConditions"

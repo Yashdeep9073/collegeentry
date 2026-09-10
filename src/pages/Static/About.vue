@@ -17,8 +17,8 @@
         <p
           class="text-xl md:text-2xl text-red-100 max-w-3xl mx-auto leading-relaxed animate-fade-in-up font-light"
         >
-          Welcome to Collegentry — your trusted partner in navigating the world
-          of higher education.
+          Welcome to CollegeEnroll — your trusted partner in navigating the
+          world of higher education.
         </p>
       </div>
     </div>
@@ -38,7 +38,7 @@
           <p class="text-gray-700 leading-relaxed mb-4 text-lg">
             We are a comprehensive discovery platform created to bridge the gap
             between aspiring students and their ideal academic institutions.
-            From exploring colleges to securing admissions, Collegentry makes
+            From exploring colleges to securing admissions, CollegeEnroll makes
             every step simple, transparent, and stress-free.
           </p>
 
@@ -50,7 +50,7 @@
           </p>
 
           <p class="text-gray-700 leading-relaxed text-lg mt-3">
-            At Collegentry, we don’t just help you find a college. We help you
+            At CollegeEnroll, we don’t just help you find a college. We help you
             find the right campus to launch your career and shape your future.
           </p>
         </div>

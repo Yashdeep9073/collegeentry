@@ -91,7 +91,7 @@ watch(
   article,
   (newArticle) => {
     if (newArticle?.title) {
-      document.title = `${newArticle.title} | College Entry`;
+      document.title = `${newArticle.title} | College Enroll`;
     }
   },
   { immediate: true }

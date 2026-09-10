@@ -8,7 +8,7 @@
           </li>
           <span>/</span>
           <li class="font-medium text-gray-700">
-            College Entry Privacy Policy
+            College Enroll Privacy Policy
           </li>
         </ol>
       </nav>

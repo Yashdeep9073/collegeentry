@@ -7,9 +7,11 @@ const activeTab = ref("support");
 const tabs = [{ id: "support", name: "Support", icon: "fa-solid fa-headset" }];
 
 const store = useCompanySettingStore();
-const Name = computed(() => store.setting?.organizationName || "College Entry");
-const phone = computed(() => store.setting?.contactNumber || "College Entry");
-const email = computed(() => store.setting?.email || "College Entry");
+const Name = computed(
+  () => store.setting?.organizationName || "College Enroll",
+);
+const phone = computed(() => store.setting?.contactNumber || "College Enroll");
+const email = computed(() => store.setting?.email || "College Enroll");
 const supportContacts = [
   {
     type: "New Student",
@@ -66,7 +68,7 @@ const callNumber = (number) => {
 
 const sendEmail = () => {
   console.log("Sending email");
-  window.location.href = "mailto:info@collegeentry.in";
+  window.location.href = "mailto:info@collegeenroll.in";
 };
 </script>
 
@@ -245,7 +247,9 @@ const sendEmail = () => {
 <style scoped>
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
 }
 .fade-enter-from {
   opacity: 0;

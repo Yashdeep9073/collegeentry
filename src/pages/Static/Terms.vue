@@ -8,7 +8,7 @@
           </li>
           <span>/</span>
           <li class="font-medium text-gray-700">
-            College Entry Terms & Conditions
+            College Enroll Terms & Conditions
           </li>
         </ol>
       </nav>
@@ -23,13 +23,13 @@
             Welcome to
             <span class="font-semibold"></span>
             <a
-              href="https://collegeentry.in"
+              href="https://collegeenroll.in"
               target="_blank"
               class="text-blue-600 hover:underline ml-1"
             >
-              Collegentry </a
+              CollegeEnroll </a
             >. These Terms and Conditions ("Terms") govern your use of our
-            website, services, and tools. By accessing or using Collegentry, you
+            website, services, and tools. By accessing or using CollegeEnroll, you
             agree to be bound by these Terms. If you do not agree, please do not
             use our services.
           </p>
@@ -54,7 +54,7 @@
           <div class="space-y-2">
             <h2 class="font-semibold">2. Nature of Services</h2>
             <p>
-              Collegentry is an educational discovery and information platform
+              College Enroll is an educational discovery and information platform
               that provides:
             </p>
 
@@ -105,7 +105,7 @@
             <h2 class="font-semibold">4. Intellectual Property Rights</h2>
             <p>
               All Website content including text, graphics, logos, design,
-              software, and data is the property of Collegentry or its licensors
+              software, and data is the property of College Enroll or its licensors
               and protected by intellectual property laws.
             </p>
             <p>
@@ -134,7 +134,7 @@
 
             <p class="font-medium">Third-Party Payments</p>
             <p>
-              Collegentry is not responsible for payments or transactions made
+              College Enroll is not responsible for payments or transactions made
               directly between users and colleges or institutions.
             </p>
           </div>
@@ -167,7 +167,7 @@
           <div class="space-y-2">
             <h2 class="font-semibold">8. Privacy</h2>
             <p>
-              Your use of Collegentry is also governed by our Privacy Policy,
+              Your use of College Enroll is also governed by our Privacy Policy,
               which explains how we collect, use, and protect your personal
               data.
             </p>
@@ -206,7 +206,7 @@
           <!-- 12 -->
           <div class="space-y-2">
             <h2 class="font-semibold">12. Contact Us</h2>
-            <p>Email: info@collegeentry.in</p>
+            <p>Email: info@collegeenroll.in</p>
             <p>
               Address: D-185, Phase 8B, Industrial Area, Sector 74, Punjab,
               Mohali, 160055

@@ -76,7 +76,7 @@ watch(
   examName,
   () => {
     if (examName.value) {
-      document.title = `${examName.value} | College Entry`;
+      document.title = `${examName.value} | College Enroll`;
     }
   },
   { immediate: true }

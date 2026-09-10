@@ -84,7 +84,7 @@ watch(
   () => scholarshipData.value.title,
   (title) => {
     if (title) {
-      document.title = `${title} | College Entry`;
+      document.title = `${title} | College Enroll`;
     }
   },
   { immediate: true }

@@ -3,7 +3,7 @@
 A web platform that allows users to explore, search, and compare colleges based on various criteria like location, courses, and ratings.
 
 ## 🚀 Live Demo
-👉 [View Website](https://collegeentry.in/)
+👉 [View Website](https://collegeenroll.in/)
 
 ---
 

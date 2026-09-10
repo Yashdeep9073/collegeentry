@@ -74,7 +74,7 @@ function closeModal() {
     :style="`background-image: url('${images[currentIndex]}')`"
   >
     <div class="overlay">
-      <h1>College Entry: One Platform. Endless Educational Possibilities</h1>
+      <h1>College Enroll: One Platform. Endless Educational Possibilities</h1>
 
       <!-- Tabs -->
       <div class="tabs">
