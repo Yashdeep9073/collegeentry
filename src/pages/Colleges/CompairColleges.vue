@@ -54,9 +54,11 @@
     <div class="text-center mt-6">
       <button
         @click="compareColleges"
-        class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded-lg shadow-md transition"
+        :disabled="loading"
+        class="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-medium px-6 py-2 rounded-lg shadow-md transition flex items-center gap-2 mx-auto"
       >
-        Compare
+        <span v-if="loading" class="animate-spin inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full"></span>
+        {{ loading ? "Comparing..." : "Compare" }}
       </button>
     </div>
 
@@ -65,6 +67,11 @@
       v-if="comparisonData"
       class="bg-white mt-8 rounded-xl shadow-md overflow-hidden"
     >
+      <div class="px-6 py-4 bg-blue-50 border-b border-blue-100 grid grid-cols-1 md:grid-cols-3 gap-6 font-bold text-gray-800">
+        <div>Metric</div>
+        <div class="text-blue-700">{{ comparisonData.college1.name }}</div>
+        <div class="text-blue-700">{{ comparisonData.college2.name }}</div>
+      </div>
       <div
         v-for="(section, index) in sections"
         :key="index"
@@ -124,11 +131,14 @@ const comparisonData = ref(null);
 const openSection = ref(null);
 const loading = ref(false);
 
-const College_by_name = import.meta.env.VITE_SEARCH_COLLEGE_COURSE;
+const College_by_name =
+  import.meta.env.VITE_SEARCH_COLLEGE_COURSE ||
+  import.meta.env.VITE_FETCH_COLLEGE_BY_NAME ||
+  "https://api.collegeenroll.in/common/college/read/name/";
 
-const formatName = (name) => {
-  return name.trim().toLowerCase().replace(/\s+/g, "");
-};
+const College_all =
+  import.meta.env.VITE_FETCH_COLLEGES_MEDIA ||
+  "https://api.collegeenroll.in/common/college/read";
 
 const sections = [
   { title: "Location", key: "location" },
@@ -147,6 +157,7 @@ const toggleSection = (index) => {
 
 const normalizeCollege = (raw) => {
   return {
+    name: raw.name || "N/A",
     location: raw.location || "N/A",
     ranking: raw.details?.ranking || "N/A",
     placements: raw.placements?.length
@@ -160,17 +171,71 @@ const normalizeCollege = (raw) => {
   };
 };
 
+const clean = (s) => (s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+
 const fetchCollege = async (name) => {
+  if (!name || !name.trim()) return null;
+
   try {
-    const formatted = formatName(name);
-    const url = `${College_by_name}${formatted}`;
+    const rawName = name.trim();
+    const slugName = rawName.toLowerCase().replace(/\s+/g, "-");
+    const spaceName = rawName.replace(/-/g, " ");
 
-    console.log("Calling:", url);
+    const variants = [...new Set([slugName, rawName, spaceName])];
 
-    const res = await axios.get(url);
+    // 1. Try direct API calls with variants
+    for (const v of variants) {
+      try {
+        const url = `${College_by_name}${encodeURIComponent(v)}`;
+        const res = await axios.get(url);
+        if (res.data?.data) {
+          const item = Array.isArray(res.data.data) ? res.data.data[0] : res.data.data;
+          if (item && item.name) {
+            return normalizeCollege(item);
+          }
+        }
+      } catch (err) {
+        // continue
+      }
+    }
 
-    if (res.data?.data?.length > 0) {
-      return normalizeCollege(res.data.data[0]);
+    // 2. Fallback to list search
+    try {
+      const listRes = await axios.get(College_all);
+      const allColleges = Array.isArray(listRes.data)
+        ? listRes.data
+        : listRes.data?.data || [];
+
+      const target = clean(rawName);
+      const matched = allColleges.find((c) => {
+        if (!c?.name) return false;
+        const cName = clean(c.name);
+        const cShort = clean(c.shortName);
+        return (
+          cName === target ||
+          cShort === target ||
+          cName.includes(target) ||
+          target.includes(cName)
+        );
+      });
+
+      if (matched?.name) {
+        try {
+          const detailRes = await axios.get(
+            `${College_by_name}${encodeURIComponent(matched.name.trim())}`
+          );
+          if (detailRes.data?.data) {
+            const item = Array.isArray(detailRes.data.data)
+              ? detailRes.data.data[0]
+              : detailRes.data.data;
+            if (item) return normalizeCollege(item);
+          }
+        } catch (e) {}
+
+        return normalizeCollege(matched);
+      }
+    } catch (err) {
+      console.error("Fallback list search error:", err);
     }
 
     return null;
@@ -188,19 +253,24 @@ const compareColleges = async () => {
 
   loading.value = true;
 
-  const [c1, c2] = await Promise.all([
-    fetchCollege(selectedCollege1.value),
-    fetchCollege(selectedCollege2.value),
-  ]);
+  try {
+    const [c1, c2] = await Promise.all([
+      fetchCollege(selectedCollege1.value),
+      fetchCollege(selectedCollege2.value),
+    ]);
 
-  loading.value = false;
+    if (!c1 || !c2) {
+      toast.error("One or both colleges not found!");
+      return;
+    }
 
-  if (!c1 || !c2) {
-    toast.error("One or both colleges not found!");
-    return;
+    comparisonData.value = { college1: c1, college2: c2 };
+    openSection.value = 0; // open first section by default
+  } catch (err) {
+    toast.error("An error occurred while comparing colleges.");
+  } finally {
+    loading.value = false;
   }
-
-  comparisonData.value = { college1: c1, college2: c2 };
 };
 </script>
 
