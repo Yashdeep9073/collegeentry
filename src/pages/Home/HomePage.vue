@@ -14,7 +14,7 @@ import TopSchoolExams from '../../components/Home/TopSchoolExams.vue';
 import TrandingNow from '../../components/Home/TrandingNow.vue';
 import TrendingCourses from '../../components/Home/TrendingCourses.vue';
 import TrendingExam from '../../components/Home/TrendingExam.vue';
-
+import FAQ from '../../components/Home/Faq.vue'
 </script>
 
 <template>
@@ -33,4 +33,5 @@ import TrendingExam from '../../components/Home/TrendingExam.vue';
  <TestimonialSection />
  <TalkToExpertSection />
  <CollegeEntryMedia />
+ <FAQ />
 </template>
